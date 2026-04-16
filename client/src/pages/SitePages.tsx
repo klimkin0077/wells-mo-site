@@ -37,6 +37,7 @@ import {
   priorityServiceCities,
   priorityServiceCityPages,
   processSteps,
+  serviceGalleryItems,
   serviceOrder,
   services,
   siteMeta,
@@ -709,6 +710,101 @@ function HeroPageBlock({
   );
 }
 
+function ServiceGallerySection({ defaultServiceSlug }: { defaultServiceSlug: string }) {
+  const [activeFilter, setActiveFilter] = useState(defaultServiceSlug);
+
+  useEffect(() => {
+    setActiveFilter(defaultServiceSlug);
+  }, [defaultServiceSlug]);
+
+  const galleryFilters = useMemo(
+    () => [{ slug: "all", label: "Все работы" }, ...services.map((item) => ({ slug: item.slug, label: item.shortTitle }))],
+    [],
+  );
+
+  const serviceTitles = useMemo(
+    () =>
+      Object.fromEntries(
+        services.map((item) => [item.slug, { shortTitle: item.shortTitle, title: item.title }]),
+      ) as Record<string, { shortTitle: string; title: string }>,
+    [],
+  );
+
+  const visibleGalleryItems = useMemo(() => {
+    const filtered =
+      activeFilter === "all"
+        ? serviceGalleryItems
+        : serviceGalleryItems.filter((item) => item.serviceSlug === activeFilter);
+
+    return [...filtered].sort((left, right) => {
+      const leftPriority = Number(left.serviceSlug === defaultServiceSlug);
+      const rightPriority = Number(right.serviceSlug === defaultServiceSlug);
+
+      return rightPriority - leftPriority;
+    });
+  }, [activeFilter, defaultServiceSlug]);
+
+  return (
+    <section className="py-18 lg:py-24">
+      <div className="container space-y-10">
+        <SectionHeading
+          eyebrow="Фотогалерея"
+          title="Примеры выполненных работ по всем ключевым услугам"
+          description="На сервисной странице важно не только объяснить, как работает услуга, но и показать реальные визуальные сценарии. Галерея помогает быстро переключаться между типами работ и смотреть примеры без выхода из маршрута."
+        />
+        <div className="flex flex-wrap gap-3">
+          {galleryFilters.map((filter) => {
+            const isActive = filter.slug === activeFilter;
+
+            return (
+              <button
+                key={filter.slug}
+                type="button"
+                onClick={() => setActiveFilter(filter.slug)}
+                className={cn(
+                  "rounded-full border px-4 py-2 text-sm font-semibold transition",
+                  isActive
+                    ? "border-primary/35 bg-primary/12 text-primary shadow-[0_10px_30px_rgba(193,145,71,0.18)]"
+                    : "border-white/10 bg-white/4 text-white/74 hover:border-white/20 hover:bg-white/7 hover:text-white",
+                )}
+              >
+                {filter.label}
+              </button>
+            );
+          })}
+        </div>
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          {visibleGalleryItems.map((item) => {
+            const serviceInfo = serviceTitles[item.serviceSlug];
+
+            return (
+              <article key={item.id} className="page-frame card-hover overflow-hidden rounded-[1.8rem]">
+                <div className="image-mask min-h-[220px] border-b border-white/8">
+                  <img src={item.image} alt={item.title} className="absolute inset-0 h-full w-full object-cover" />
+                </div>
+                <div className="space-y-4 p-5">
+                  <div className="flex items-center justify-between gap-3 text-xs uppercase tracking-[0.2em] text-white/45">
+                    <span>{serviceInfo?.shortTitle ?? "Услуга"}</span>
+                    <span>{item.location}</span>
+                  </div>
+                  <div className="text-xl font-semibold leading-tight text-white">{item.title}</div>
+                  <p className="text-sm leading-7 text-white/62">{item.result}</p>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm leading-7 text-white/54">
+            По умолчанию выше показаны работы, максимально близкие к текущей услуге. При необходимости можно сразу переключиться на другие типы задач.
+          </p>
+          <SecondaryLink href="/nashi-raboty">Открыть страницу работ</SecondaryLink>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function ServiceContent({ slug }: { slug: string }) {
   const service = useMemo(() => services.find((item) => item.slug === slug), [slug]);
 
@@ -800,6 +896,8 @@ function ServiceContent({ slug }: { slug: string }) {
           </div>
         </div>
       </section>
+
+      <ServiceGallerySection defaultServiceSlug={service.slug} />
 
       <FaqSection items={service.faq} />
 

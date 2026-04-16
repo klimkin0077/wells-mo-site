@@ -13,6 +13,15 @@ export type ServiceItem = {
   faq: { question: string; answer: string }[];
 };
 
+export type ServiceGalleryItem = {
+  id: string;
+  serviceSlug: ServiceItem["slug"];
+  title: string;
+  location: string;
+  result: string;
+  image: string;
+};
+
 export const siteMeta = {
   name: "WELLS-MO",
   phone: "+7 (999) 123-45-67",
@@ -35,6 +44,14 @@ export const assets = {
     "https://d2xsxph8kpxj0f.cloudfront.net/310519663042042500/htP6tJcWEMcp6qhKGuYmV6/well-repair-premium-TjQHxpiySMR4F2KY3nMoBA.webp",
   waterSupply:
     "https://d2xsxph8kpxj0f.cloudfront.net/310519663042042500/htP6tJcWEMcp6qhKGuYmV6/water-supply-house-fiuQm5sukfvefyF9WamyAo.webp",
+  galleryCleaningDetail:
+    "https://d2xsxph8kpxj0f.cloudfront.net/310519663042042500/htP6tJcWEMcp6qhKGuYmV6/gallery-cleaning-02_cc0ec886.jpeg",
+  galleryRepairDetail:
+    "https://d2xsxph8kpxj0f.cloudfront.net/310519663042042500/htP6tJcWEMcp6qhKGuYmV6/gallery-repair-02_677faca1.png",
+  galleryDeepeningDetail:
+    "https://d2xsxph8kpxj0f.cloudfront.net/310519663042042500/htP6tJcWEMcp6qhKGuYmV6/gallery-deepening-02_32aeaf84.jpeg",
+  galleryWaterSupplyDetail:
+    "https://d2xsxph8kpxj0f.cloudfront.net/310519663042042500/htP6tJcWEMcp6qhKGuYmV6/gallery-water-02_bdc20feb.jpg",
 } as const;
 
 export const navigation = [
@@ -391,6 +408,73 @@ export const cases = [
     image: assets.waterSupply,
   },
 ] as const;
+
+export const serviceGalleryItems: ServiceGalleryItem[] = [
+  {
+    id: "cleaning-01",
+    serviceSlug: "chistka-kolodcev",
+    title: "Комплексная чистка колодца после заиливания",
+    location: "Истринский район",
+    result: "Удалили донные отложения, очистили стенки шахты и стабилизировали качество воды.",
+    image: assets.cleaning,
+  },
+  {
+    id: "cleaning-02",
+    serviceSlug: "chistka-kolodcev",
+    title: "Глубокая очистка шахты с диагностикой дна",
+    location: "Дмитровский округ",
+    result: "Промыли внутренние поверхности, убрали загрязнения и подготовили колодец к дальнейшей эксплуатации.",
+    image: assets.galleryCleaningDetail,
+  },
+  {
+    id: "repair-01",
+    serviceSlug: "remont-kolodcev",
+    title: "Восстановление швов и укрепление колец",
+    location: "Одинцово",
+    result: "Герметизировали проблемные участки и вернули конструкции стабильность без лишнего объёма работ.",
+    image: assets.repair,
+  },
+  {
+    id: "repair-02",
+    serviceSlug: "remont-kolodcev",
+    title: "Локальный ремонт колодца с усилением узлов",
+    location: "Красногорск",
+    result: "Подготовили рабочую зону, выполнили восстановление и устранили критичные дефекты конструкции.",
+    image: assets.galleryRepairDetail,
+  },
+  {
+    id: "deepening-01",
+    serviceSlug: "uglublenie-kolodcev",
+    title: "Оценка и углубление шахты при падении уровня воды",
+    location: "Раменский округ",
+    result: "Проверили состояние источника, согласовали безопасную технологию и вернули рабочий объём воды.",
+    image: assets.hero,
+  },
+  {
+    id: "deepening-02",
+    serviceSlug: "uglublenie-kolodcev",
+    title: "Углубление колодца с контролем состояния ствола",
+    location: "Чехов",
+    result: "Провели работы по согласованной схеме и сохранили устойчивость конструкции на каждом этапе.",
+    image: assets.galleryDeepeningDetail,
+  },
+  {
+    id: "water-01",
+    serviceSlug: "vodosnabzhenie-iz-kolodca-v-dom",
+    title: "Подводка воды в дом с настройкой автоматики",
+    location: "Домодедово",
+    result: "Собрали линию подачи воды из колодца и подключили дом к стабильной инженерной системе.",
+    image: assets.waterSupply,
+  },
+  {
+    id: "water-02",
+    serviceSlug: "vodosnabzhenie-iz-kolodca-v-dom",
+    title: "Монтаж гидробака и узла давления для частного дома",
+    location: "Мытищи",
+    result: "Смонтировали оборудование в помещении и добились ровной подачи воды для бытовых сценариев.",
+    image: assets.galleryWaterSupplyDetail,
+  },
+];
 
 export const testimonials = [
   {
