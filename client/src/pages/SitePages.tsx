@@ -8,9 +8,11 @@ import { type ReactNode, useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "wouter";
 import {
   ArrowRight,
+  Building2,
   ChevronDown,
   Droplets,
   Hammer,
+  MapPin,
   Menu,
   MoveDown,
   Phone,
@@ -21,8 +23,12 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
+  allSeoLocations,
   assets,
   cases,
+  citySeoLocations,
+  districtSeoLocations,
+  featuredSeoLocations,
   globalFaq,
   navigation,
   pricing,
@@ -32,6 +38,7 @@ import {
   siteMeta,
   testimonials,
   trustMetrics,
+  type LocalSeoLocation,
   whyChooseUs,
 } from "@/lib/site-content";
 
@@ -201,7 +208,7 @@ function Footer() {
             Навигация
           </div>
           <div className="grid gap-3 text-sm text-white/70">
-            {navigation.map((item) => (
+            {[...navigation, { href: "/rajony-rabot", label: "Районы" }].map((item) => (
               <Link key={item.href} href={item.href} className="transition hover:text-white">
                 {item.label}
               </Link>
@@ -549,6 +556,67 @@ function FaqSection({ items = globalFaq }: { items?: readonly { question: string
   );
 }
 
+function LocationHubSection() {
+  return (
+    <section className="py-18 lg:py-24">
+      <div className="container space-y-10">
+        <SectionHeading
+          eyebrow="Города и районы"
+          title="Отдельные локальные страницы для SEO и удобной навигации"
+          description="Для усиления локального SEO сайт получает самостоятельные посадочные страницы по городам и районам Московской области. Внутри — единый стиль, локальные заголовки, точные мета-теги и связка с ключевыми услугами."
+        />
+        <div className="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
+          <div className="page-frame rounded-[2rem] p-6 lg:p-8">
+            <div className="flex items-center gap-3 text-primary">
+              <MapPin className="size-5" />
+              <div className="section-kicker">Приоритетные локации</div>
+            </div>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+              {featuredSeoLocations.map((location) => (
+                <Link
+                  key={location.slug}
+                  href={`${location.type === "city" ? "/goroda" : "/rajony"}/${location.slug}`}
+                  className="glass-panel card-hover rounded-[1.5rem] p-4"
+                >
+                  <div className="text-xs uppercase tracking-[0.18em] text-primary/85">
+                    {location.type === "city" ? "Город" : "Район"}
+                  </div>
+                  <div className="mt-3 text-xl font-semibold text-white">{location.name}</div>
+                  <p className="mt-3 text-sm leading-6 text-white/62">{location.focus}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+          <div className="page-frame rounded-[2rem] p-6 lg:p-8">
+            <div className="section-kicker">Масштаб покрытия</div>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              <div className="glass-panel rounded-[1.5rem] p-5">
+                <div className="metric-value text-primary">{citySeoLocations.length}</div>
+                <div className="mt-2 text-lg font-semibold text-white">Страницы по городам</div>
+                <p className="mt-3 text-sm leading-7 text-white/62">
+                  Под отдельные городские запросы с локальными заголовками и перелинковкой.
+                </p>
+              </div>
+              <div className="glass-panel rounded-[1.5rem] p-5">
+                <div className="metric-value text-primary">{districtSeoLocations.length}</div>
+                <div className="mt-2 text-lg font-semibold text-white">Страницы по районам</div>
+                <p className="mt-3 text-sm leading-7 text-white/62">
+                  Под округа и районные кластеры, чтобы расширить поисковое покрытие.
+                </p>
+              </div>
+            </div>
+            <div className="mt-5 rounded-[1.5rem] border border-white/8 bg-white/4 p-5 text-sm leading-7 text-white/68">
+              Каждая локальная страница связана с основными услугами, формой заявки и общим хабом
+              локаций. Это делает структуру сайта понятной и для пользователя, и для поисковых
+              систем.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function CtaSection() {
   return (
     <section className="pb-18 pt-10 lg:pb-24">
@@ -770,6 +838,7 @@ export function HomePage() {
       <PricingSection />
       <TestimonialsSection />
       <FaqSection />
+      <LocationHubSection />
       <CtaSection />
     </SiteLayout>
   );
@@ -1001,42 +1070,198 @@ export function WaterSupplyPage() {
   return <ServiceContent slug="vodosnabzhenie-iz-kolodca-v-dom" />;
 }
 
-export function SeoAreasPage() {
+function LocalSeoPageContent({ location }: { location: LocalSeoLocation | undefined }) {
   usePageSeo(
-    `Районы работ по Московской области | ${siteMeta.name}`,
-    "Структура локальных страниц для продвижения услуг по колодцам и водоснабжению по районам и городам Московской области.",
+    location
+      ? `Чистка и ремонт колодцев — ${location.name} | ${siteMeta.name}`
+      : `Локальная страница не найдена | ${siteMeta.name}`,
+    location
+      ? `Чистка колодцев, ремонт шахты, углубление и подводка воды в дом — ${location.name}, Московская область. Отдельная локальная страница с услугами, FAQ и заявкой.`
+      : "Локальная SEO-страница не найдена.",
   );
 
-  const areas = [
-    "Одинцово",
-    "Истра",
-    "Раменское",
-    "Подольск",
-    "Наро-Фоминск",
-    "Серпухов",
-  ];
+  if (!location) {
+    return (
+      <SiteLayout>
+        <section className="container py-28">
+          <div className="page-frame rounded-[2rem] p-10">
+            <h1 className="text-4xl font-bold text-white">Локация не найдена</h1>
+            <p className="mt-4 text-white/65">
+              Нужная локальная страница пока отсутствует в текущей структуре сайта.
+            </p>
+          </div>
+        </section>
+      </SiteLayout>
+    );
+  }
+
+  const targetHref = location.type === "city" ? "/goroda" : "/rajony";
+  const siblingLocations = (location.type === "city" ? citySeoLocations : districtSeoLocations)
+    .filter((item) => item.slug !== location.slug)
+    .slice(0, 6);
+
+  return (
+    <SiteLayout>
+      <HeroPageBlock
+        eyebrow={location.type === "city" ? "Городская страница" : "Районная страница"}
+        title={`Чистка, ремонт и вода в доме — ${location.name}`}
+        description={`Отдельная локальная страница под запросы по локации ${location.name}. Здесь сохранён единый премиальный стиль сайта, а контент сфокусирован на чистке колодцев, ремонте, углублении и водоснабжении для частных домов и дач.`}
+        image={location.asset}
+        price={location.officialName}
+      />
+
+      <section className="py-18 lg:py-24">
+        <div className="container grid gap-8 xl:grid-cols-[1.05fr_0.95fr]">
+          <div className="space-y-8">
+            <div className="page-frame rounded-[2rem] p-6 lg:p-8">
+              <div className="section-kicker">Локальная релевантность</div>
+              <h2 className="mt-4 text-3xl font-bold text-white md:text-4xl">
+                Страница собрана под запросы по локации {location.name}
+              </h2>
+              <p className="story-copy mt-5">
+                Такая посадочная страница помогает сайту лучше работать по геозависимым запросам.
+                Пользователь сразу видит, что выезжают именно по его направлению, а поисковая
+                структура становится глубже и понятнее.
+              </p>
+            </div>
+            <div className="page-frame rounded-[2rem] p-6 lg:p-8">
+              <div className="section-kicker">Что можно заказать</div>
+              <div className="mt-6 grid gap-4 md:grid-cols-2">
+                {services.map((service) => (
+                  <Link
+                    key={service.slug}
+                    href={`/${service.slug}`}
+                    className="rounded-[1.4rem] border border-white/8 bg-white/4 p-4 transition hover:border-primary/25 hover:bg-white/6"
+                  >
+                    <div className="text-lg font-semibold text-white">{service.title}</div>
+                    <p className="mt-2 text-sm leading-7 text-white/62">
+                      {service.shortTitle} — {location.name}. {service.price}
+                    </p>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-5">
+            <div className="page-frame rounded-[2rem] p-6 lg:p-8">
+              <div className="section-kicker">Фокус страницы</div>
+              <p className="story-copy mt-5">{location.focus}</p>
+              <div className="mt-6 rounded-[1.5rem] border border-primary/18 bg-primary/8 p-4 text-sm leading-7 text-white/78">
+                Основные запросы: чистка колодцев {location.name}, ремонт колодцев {location.name},
+                вода из колодца в дом {location.name}.
+              </div>
+            </div>
+            <div className="page-frame rounded-[2rem] p-6 lg:p-8">
+              <div className="section-kicker">Переходы по локациям</div>
+              <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                {siblingLocations.map((item) => (
+                  <Link
+                    key={item.slug}
+                    href={`${targetHref}/${item.slug}`}
+                    className="rounded-[1.2rem] border border-white/8 bg-white/4 px-4 py-3 text-sm text-white/70 transition hover:border-primary/25 hover:text-white"
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-18 lg:py-24">
+        <div className="container grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+          <div>
+            <div className="section-kicker">Как это работает</div>
+            <h2 className="section-title mt-4 text-white">От локального запроса к заявке</h2>
+            <p className="story-copy mt-5">
+              На локальной странице пользователь не теряется в общей структуре сайта. Он получает
+              понятный вход: видит свои услуги, свою локацию и быстрый путь к заявке или звонку.
+            </p>
+          </div>
+          <div className="grid gap-5 lg:grid-cols-3">
+            {[
+              `Отдельный локальный заголовок под ${location.name}`,
+              `Связка с услугами и общим разделом работ`,
+              `Перелинковка на соседние города и районы для расширения охвата`,
+            ].map((item) => (
+              <div key={item} className="glass-panel rounded-[1.7rem] p-5 text-sm leading-7 text-white/72">
+                {item}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <FaqSection />
+      <CtaSection />
+    </SiteLayout>
+  );
+}
+
+export function LocalCityPage({ slug }: { slug: string }) {
+  const location = citySeoLocations.find((item) => item.slug === slug);
+  return <LocalSeoPageContent location={location} />;
+}
+
+export function LocalDistrictPage({ slug }: { slug: string }) {
+  const location = districtSeoLocations.find((item) => item.slug === slug);
+  return <LocalSeoPageContent location={location} />;
+}
+
+export function SeoAreasPage() {
+  usePageSeo(
+    `Города и районы работ по Московской области | ${siteMeta.name}`,
+    "Отдельные SEO-страницы по городам и районам Московской области для услуг по колодцам, ремонту и водоснабжению из колодца в дом.",
+  );
 
   return (
     <SiteLayout>
       <HeroPageBlock
         eyebrow="Локальное SEO"
-        title="Страницы по районам и городам"
-        description="В архитектуре сайта уже предусмотрен блок локальных посадочных страниц, чтобы расширять присутствие по районам Московской области без выпадения из общего дизайна."
+        title="Города и районы Московской области"
+        description="В этом разделе собраны отдельные страницы по локациям. Каждая страница помогает лучше отрабатывать локальные запросы и вести посетителя к нужной услуге без потери общего премиального стиля."
         image={assets.hero}
-        price="Готово к масштабированию"
+        price={`${allSeoLocations.length} локальных страниц`}
       />
+      <LocationHubSection />
       <section className="py-18 lg:py-24">
-        <div className="container grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {areas.map((area) => (
-            <div key={area} className="glass-panel rounded-[1.7rem] p-6">
-              <div className="section-kicker">Шаблон страницы</div>
-              <div className="mt-4 text-2xl font-semibold text-white">Чистка колодцев в {area}</div>
-              <p className="mt-4 text-sm leading-7 text-white/62">
-                На такой странице повторяется фирменный визуальный язык, а текст адаптируется под
-                конкретную услугу и локацию без ощущения машинного дублирования.
-              </p>
+        <div className="container grid gap-8 xl:grid-cols-2">
+          <div className="page-frame rounded-[2rem] p-6 lg:p-8">
+            <div className="mb-6 flex items-center gap-3 text-primary">
+              <Building2 className="size-5" />
+              <div className="section-kicker">Города</div>
             </div>
-          ))}
+            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              {citySeoLocations.map((location) => (
+                <Link
+                  key={location.slug}
+                  href={`/goroda/${location.slug}`}
+                  className="rounded-[1.2rem] border border-white/8 bg-white/4 px-4 py-3 text-sm text-white/70 transition hover:border-primary/25 hover:text-white"
+                >
+                  {location.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+          <div className="page-frame rounded-[2rem] p-6 lg:p-8">
+            <div className="mb-6 flex items-center gap-3 text-primary">
+              <MapPin className="size-5" />
+              <div className="section-kicker">Районы и округа</div>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              {districtSeoLocations.map((location) => (
+                <Link
+                  key={location.slug}
+                  href={`/rajony/${location.slug}`}
+                  className="rounded-[1.2rem] border border-white/8 bg-white/4 px-4 py-3 text-sm text-white/70 transition hover:border-primary/25 hover:text-white"
+                >
+                  {location.name}
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
       <CtaSection />
@@ -1045,5 +1270,5 @@ export function SeoAreasPage() {
 }
 
 export function SiteMapHint() {
-  return <>{serviceOrder.length}</>;
+  return <>{serviceOrder.length + allSeoLocations.length}</>;
 }

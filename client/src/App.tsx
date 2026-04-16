@@ -16,6 +16,8 @@ import {
   DeepeningPage,
   FAQPage,
   HomePage,
+  LocalCityPage,
+  LocalDistrictPage,
   PricingPage,
   RepairPage,
   SeoAreasPage,
@@ -38,6 +40,8 @@ function Router() {
       <Route path="/o-kompanii" component={AboutPage} />
       <Route path="/faq" component={FAQPage} />
       <Route path="/rajony-rabot" component={SeoAreasPage} />
+      <Route path="/goroda/:slug">{(params) => <LocalCityPage slug={params.slug} />}</Route>
+      <Route path="/rajony/:slug">{(params) => <LocalDistrictPage slug={params.slug} />}</Route>
       <Route path="/kontakty" component={ContactsPage} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
