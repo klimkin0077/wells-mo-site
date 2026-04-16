@@ -1,35 +1,54 @@
+/*
+Design reminder for this file:
+Маршрутизация должна поддерживать полноценный многостраничный сайт с тёмной премиальной темой как базовой средой для всех экранов.
+*/
+
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import Home from "./pages/Home";
-
+import {
+  AboutPage,
+  CleaningPage,
+  ContactsPage,
+  DeepeningPage,
+  FAQPage,
+  HomePage,
+  PricingPage,
+  RepairPage,
+  SeoAreasPage,
+  ServicesPage,
+  WaterSupplyPage,
+  WorksPage,
+} from "./pages/SitePages";
 
 function Router() {
   return (
     <Switch>
-      <Route path={"/"} component={Home} />
-      <Route path={"/404"} component={NotFound} />
-      {/* Final fallback route */}
+      <Route path="/" component={HomePage} />
+      <Route path="/uslugi" component={ServicesPage} />
+      <Route path="/chistka-kolodcev" component={CleaningPage} />
+      <Route path="/remont-kolodcev" component={RepairPage} />
+      <Route path="/uglublenie-kolodcev" component={DeepeningPage} />
+      <Route path="/vodosnabzhenie-iz-kolodca-v-dom" component={WaterSupplyPage} />
+      <Route path="/ceny" component={PricingPage} />
+      <Route path="/nashi-raboty" component={WorksPage} />
+      <Route path="/o-kompanii" component={AboutPage} />
+      <Route path="/faq" component={FAQPage} />
+      <Route path="/rajony-rabot" component={SeoAreasPage} />
+      <Route path="/kontakty" component={ContactsPage} />
+      <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
   );
 }
 
-// NOTE: About Theme
-// - First choose a default theme according to your design style (dark or light bg), than change color palette in index.css
-//   to keep consistent foreground/background color across components
-// - If you want to make theme switchable, pass `switchable` ThemeProvider and use `useTheme` hook
-
 function App() {
   return (
     <ErrorBoundary>
-      <ThemeProvider
-        defaultTheme="light"
-        // switchable
-      >
+      <ThemeProvider defaultTheme="dark">
         <TooltipProvider>
           <Toaster />
           <Router />
