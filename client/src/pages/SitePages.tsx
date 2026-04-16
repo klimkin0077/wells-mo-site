@@ -28,10 +28,14 @@ import {
   cases,
   citySeoLocations,
   districtSeoLocations,
+  featuredPriorityServiceCityPages,
   featuredSeoLocations,
+  findPriorityServiceCityPage,
   globalFaq,
   navigation,
   pricing,
+  priorityServiceCities,
+  priorityServiceCityPages,
   processSteps,
   serviceOrder,
   services,
@@ -39,6 +43,7 @@ import {
   testimonials,
   trustMetrics,
   type LocalSeoLocation,
+  type PriorityServiceCityPage,
   whyChooseUs,
 } from "@/lib/site-content";
 
@@ -730,6 +735,9 @@ function ServiceContent({ slug }: { slug: string }) {
   }
 
   const related = services.filter((item) => item.slug !== slug).slice(0, 3);
+  const priorityPagesForService = priorityServiceCities
+    .map((city) => ({ city, page: findPriorityServiceCityPage(city.slug, slug) }))
+    .filter((item): item is { city: LocalSeoLocation; page: PriorityServiceCityPage } => Boolean(item.page));
 
   return (
     <SiteLayout>
@@ -794,6 +802,28 @@ function ServiceContent({ slug }: { slug: string }) {
       </section>
 
       <FaqSection items={service.faq} />
+
+      <section className="py-18 lg:py-24">
+        <div className="container space-y-10">
+          <SectionHeading
+            eyebrow="Приоритетные города"
+            title={`${service.title} в ключевых городах Подмосковья`}
+            description="Для усиления локального SEO у ключевых услуг появляются отдельные посадочные страницы под самые важные города. Это помогает работать точнее и по сервисным, и по геозависимым запросам."
+          />
+          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {priorityPagesForService.map(({ city, page }) => (
+              <Link key={page.path} href={page.path} className="glass-panel card-hover rounded-[1.8rem] p-6">
+                <div className="section-kicker">{city.officialName}</div>
+                <div className="mt-4 text-2xl font-semibold text-white">{page.title}</div>
+                <p className="mt-4 text-sm leading-7 text-white/62">{page.focus}</p>
+                <div className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary">
+                  Открыть локальную страницу <ArrowRight className="size-4" />
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <section className="py-18 lg:py-24">
         <div className="container space-y-10">
@@ -1099,6 +1129,9 @@ function LocalSeoPageContent({ location }: { location: LocalSeoLocation | undefi
   const siblingLocations = (location.type === "city" ? citySeoLocations : districtSeoLocations)
     .filter((item) => item.slug !== location.slug)
     .slice(0, 6);
+  const priorityPagesForCity = services
+    .map((service) => ({ service, page: findPriorityServiceCityPage(location.slug, service.slug) }))
+    .filter((item): item is { service: (typeof services)[number]; page: PriorityServiceCityPage } => Boolean(item.page));
 
   return (
     <SiteLayout>
@@ -1127,18 +1160,27 @@ function LocalSeoPageContent({ location }: { location: LocalSeoLocation | undefi
             <div className="page-frame rounded-[2rem] p-6 lg:p-8">
               <div className="section-kicker">Что можно заказать</div>
               <div className="mt-6 grid gap-4 md:grid-cols-2">
-                {services.map((service) => (
-                  <Link
-                    key={service.slug}
-                    href={`/${service.slug}`}
-                    className="rounded-[1.4rem] border border-white/8 bg-white/4 p-4 transition hover:border-primary/25 hover:bg-white/6"
-                  >
-                    <div className="text-lg font-semibold text-white">{service.title}</div>
-                    <p className="mt-2 text-sm leading-7 text-white/62">
-                      {service.shortTitle} — {location.name}. {service.price}
-                    </p>
-                  </Link>
-                ))}
+                {services.map((service) => {
+                  const priorityPage = findPriorityServiceCityPage(location.slug, service.slug);
+
+                  return (
+                    <Link
+                      key={service.slug}
+                      href={priorityPage?.path ?? `/${service.slug}`}
+                      className="rounded-[1.4rem] border border-white/8 bg-white/4 p-4 transition hover:border-primary/25 hover:bg-white/6"
+                    >
+                      <div className="text-lg font-semibold text-white">{service.title}</div>
+                      <p className="mt-2 text-sm leading-7 text-white/62">
+                        {service.shortTitle} — {location.name}. {service.price}
+                      </p>
+                      {priorityPage ? (
+                        <div className="mt-3 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary/85">
+                          Отдельная SEO-страница <ArrowRight className="size-3.5" />
+                        </div>
+                      ) : null}
+                    </Link>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -1166,6 +1208,23 @@ function LocalSeoPageContent({ location }: { location: LocalSeoLocation | undefi
                 ))}
               </div>
             </div>
+            {priorityPagesForCity.length ? (
+              <div className="page-frame rounded-[2rem] p-6 lg:p-8">
+                <div className="section-kicker">Приоритетные страницы услуг</div>
+                <div className="mt-5 grid gap-3">
+                  {priorityPagesForCity.map(({ service, page }) => (
+                    <Link
+                      key={page.path}
+                      href={page.path}
+                      className="rounded-[1.2rem] border border-primary/18 bg-primary/8 px-4 py-4 text-sm leading-7 text-white/78 transition hover:border-primary/35 hover:bg-primary/12"
+                    >
+                      <div className="font-semibold text-white">{page.title}</div>
+                      <div className="mt-1 text-white/62">{page.focus}</div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : null}
           </div>
         </div>
       </section>
@@ -1198,6 +1257,143 @@ function LocalSeoPageContent({ location }: { location: LocalSeoLocation | undefi
       <CtaSection />
     </SiteLayout>
   );
+}
+
+function LocalServiceCityPageContent({
+  citySlug,
+  serviceSlug,
+}: {
+  citySlug: string;
+  serviceSlug: string;
+}) {
+  const city = citySeoLocations.find((item) => item.slug === citySlug);
+  const service = services.find((item) => item.slug === serviceSlug);
+  const page = findPriorityServiceCityPage(citySlug, serviceSlug);
+
+  usePageSeo(
+    page ? page.seoTitle : `Страница услуги по городу не найдена | ${siteMeta.name}`,
+    page ? page.seoDescription : "Нужная локальная страница услуги пока не добавлена.",
+  );
+
+  if (!city || !service || !page) {
+    return (
+      <SiteLayout>
+        <section className="container py-28">
+          <div className="page-frame rounded-[2rem] p-10">
+            <h1 className="text-4xl font-bold text-white">Страница не найдена</h1>
+            <p className="mt-4 text-white/65">
+              Нужная связка услуги и города пока отсутствует в текущей структуре сайта.
+            </p>
+          </div>
+        </section>
+      </SiteLayout>
+    );
+  }
+
+  const siblingPages = priorityServiceCityPages
+    .filter((item) => item.serviceSlug === serviceSlug && item.citySlug !== citySlug)
+    .slice(0, 5)
+    .map((item) => ({
+      ...item,
+      city: citySeoLocations.find((location) => location.slug === item.citySlug),
+    }))
+    .filter((item): item is PriorityServiceCityPage & { city: LocalSeoLocation } => Boolean(item.city));
+
+  const relatedPagesInCity = services
+    .filter((item) => item.slug !== serviceSlug)
+    .map((item) => ({ service: item, page: findPriorityServiceCityPage(citySlug, item.slug) }))
+    .filter((item): item is { service: (typeof services)[number]; page: PriorityServiceCityPage } => Boolean(item.page));
+
+  return (
+    <SiteLayout>
+      <HeroPageBlock
+        eyebrow="Приоритетная связка"
+        title={page.title}
+        description={page.lead}
+        image={service.image}
+        price={page.badge}
+      />
+
+      <section className="py-18 lg:py-24">
+        <div className="container grid gap-8 xl:grid-cols-[1.02fr_0.98fr]">
+          <div className="space-y-8">
+            <div className="page-frame rounded-[2rem] p-6 lg:p-8">
+              <div className="section-kicker">Что закрывает страница</div>
+              <h2 className="mt-4 text-3xl font-bold text-white md:text-4xl">{service.title} в {city.name} без общей шаблонности</h2>
+              <p className="story-copy mt-5">{page.description}</p>
+              <p className="story-copy mt-5">{page.focus}</p>
+            </div>
+            <div className="page-frame rounded-[2rem] p-6 lg:p-8">
+              <div className="section-kicker">Что входит в услугу</div>
+              <div className="mt-6 grid gap-4 md:grid-cols-2">
+                {service.includes.map((item) => (
+                  <div key={item} className="rounded-[1.4rem] border border-white/8 bg-white/4 p-4 text-sm leading-7 text-white/74">
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-5">
+            <div className="page-frame rounded-[2rem] p-6 lg:p-8">
+              <div className="section-kicker">Локальный фокус</div>
+              <div className="mt-4 text-2xl font-semibold text-white">{city.officialName}</div>
+              <p className="story-copy mt-5">
+                Для этой связки важно соединить конкретную услугу с конкретной локацией: пользователь
+                сразу понимает, что страница отвечает именно на его запрос по {city.name}, а не
+                ведёт на общий обзор без географического акцента.
+              </p>
+            </div>
+            <div className="page-frame rounded-[2rem] p-6 lg:p-8">
+              <div className="section-kicker">Соседние города по услуге</div>
+              <div className="mt-5 grid gap-3">
+                {siblingPages.map((item) => (
+                  <Link
+                    key={item.path}
+                    href={item.path}
+                    className="rounded-[1.2rem] border border-white/8 bg-white/4 px-4 py-4 text-sm leading-7 text-white/74 transition hover:border-primary/25 hover:text-white"
+                  >
+                    <div className="font-semibold text-white">{item.title}</div>
+                    <div className="text-white/62">{item.city.officialName}</div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-18 lg:py-24">
+        <div className="container grid gap-8 lg:grid-cols-[0.92fr_1.08fr]">
+          <div>
+            <div className="section-kicker">Перелинковка внутри города</div>
+            <h2 className="section-title mt-4 text-white">Другие услуги в {city.name}</h2>
+            <p className="story-copy mt-5">
+              Приоритетные города получают не одну, а группу сервисных страниц. Это позволяет
+              аккуратно разводить запросы и усиливать внутреннюю SEO-структуру без потери удобства.
+            </p>
+          </div>
+          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {relatedPagesInCity.map(({ service: relatedService, page: relatedPage }) => (
+              <Link key={relatedPage.path} href={relatedPage.path} className="glass-panel card-hover rounded-[1.7rem] p-5">
+                <div className="section-kicker">{city.name}</div>
+                <div className="mt-3 text-xl font-semibold text-white">{relatedService.title}</div>
+                <p className="mt-3 text-sm leading-7 text-white/62">{relatedPage.focus}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <FaqSection items={service.faq} />
+      <CtaSection />
+    </SiteLayout>
+  );
+}
+
+export function LocalCityServicePage({ citySlug, serviceSlug }: { citySlug: string; serviceSlug: string }) {
+  return <LocalServiceCityPageContent citySlug={citySlug} serviceSlug={serviceSlug} />;
 }
 
 export function LocalCityPage({ slug }: { slug: string }) {
@@ -1264,11 +1460,29 @@ export function SeoAreasPage() {
           </div>
         </div>
       </section>
+      <section className="py-18 lg:py-24">
+        <div className="container space-y-10">
+          <SectionHeading
+            eyebrow="Приоритетные связки"
+            title="Отдельные страницы услуг в самых важных городах"
+            description="Для ключевых городов сайт получает не только общие городские страницы, но и отдельные посадочные под конкретные услуги. Это усиливает локальное SEO и делает навигацию точнее."
+          />
+          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+            {featuredPriorityServiceCityPages.map((page) => (
+              <Link key={page.path} href={page.path} className="glass-panel card-hover rounded-[1.7rem] p-5">
+                <div className="section-kicker">Приоритетная посадочная</div>
+                <div className="mt-3 text-xl font-semibold text-white">{page.title}</div>
+                <p className="mt-3 text-sm leading-7 text-white/62">{page.focus}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
       <CtaSection />
     </SiteLayout>
   );
 }
 
 export function SiteMapHint() {
-  return <>{serviceOrder.length + allSeoLocations.length}</>;
+  return <>{serviceOrder.length + allSeoLocations.length + priorityServiceCityPages.length}</>;
 }

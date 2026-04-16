@@ -591,3 +591,89 @@ export const featuredSeoLocations = [
 ].map((slug) => [...citySeoLocations, ...districtSeoLocations].find((item) => item.slug === slug)).filter(Boolean) as LocalSeoLocation[];
 
 export const allSeoLocations = [...citySeoLocations, ...districtSeoLocations];
+
+export type PriorityServiceCityPage = {
+  serviceSlug: string;
+  citySlug: string;
+  path: string;
+  title: string;
+  description: string;
+  lead: string;
+  seoTitle: string;
+  seoDescription: string;
+  badge: string;
+  focus: string;
+};
+
+const priorityCitySlugSet = new Set([
+  "odincovo",
+  "krasnogorsk",
+  "podolsk",
+  "himki",
+  "mytischi",
+  "domodedovo",
+]);
+
+export const priorityServiceCities = citySeoLocations.filter((item) => priorityCitySlugSet.has(item.slug));
+
+const cityNameInMap: Record<string, string> = {
+  odincovo: "Одинцово",
+  krasnogorsk: "Красногорске",
+  podolsk: "Подольске",
+  himki: "Химках",
+  mytischi: "Мытищах",
+  domodedovo: "Домодедово",
+};
+
+const getCityNameIn = (city: LocalSeoLocation) => cityNameInMap[city.slug] ?? city.name;
+
+const serviceCityLeadMap: Record<string, string> = {
+  "chistka-kolodcev": "Отдельная локальная посадочная страница под запросы по чистке колодцев с акцентом на состояние воды, обслуживание шахты и аккуратный выезд по объекту.",
+  "remont-kolodcev": "Локальная страница под ремонт колодцев с фокусом на герметизацию швов, укрепление колец и спокойное объяснение технического решения.",
+  "uglublenie-kolodcev": "Страница для запросов по углублению колодцев, где важны диагностика, оценка конструкции и взвешенный подход без поспешных обещаний.",
+  "vodosnabzhenie-iz-kolodca-v-dom": "Локальная инженерная посадочная страница по подводке воды из колодца в дом, подбору схемы и аккуратному монтажу системы.",
+};
+
+const serviceCityFocusMap: Record<string, string> = {
+  "chistka-kolodcev": "Подходит для запросов, где вода помутнела, появился запах, накопились отложения и нужен понятный формат обслуживания без лишних слов.",
+  "remont-kolodcev": "Усиливает запросы, связанные с течами, швами, смещением колец и восстановлением нормальной работы шахты.",
+  "uglublenie-kolodcev": "Закрывает сложные запросы по снижению уровня воды, сезонным просадкам и оценке целесообразности углубления на конкретном объекте.",
+  "vodosnabzhenie-iz-kolodca-v-dom": "Ориентирована на владельцев домов и дач, которым нужна стабильная подача воды из колодца в дом как целостная инженерная система.",
+};
+
+const buildPriorityServiceCityPage = (
+  service: ServiceItem,
+  city: LocalSeoLocation,
+): PriorityServiceCityPage => {
+  const cityNameIn = getCityNameIn(city);
+
+  return {
+    serviceSlug: service.slug,
+    citySlug: city.slug,
+    path: `/goroda/${city.slug}/${service.slug}`,
+    title: `${service.title} в ${cityNameIn}`,
+    description: `${service.title} в ${cityNameIn}, Московская область. ${service.intro}`,
+    lead: serviceCityLeadMap[service.slug] ?? service.intro,
+    seoTitle: `${service.title} в ${cityNameIn} | ${siteMeta.name}`,
+    seoDescription: `${service.title} в ${cityNameIn}, Московская область. ${service.description}`,
+    badge: `${city.name} · ${service.price}`,
+    focus: serviceCityFocusMap[service.slug] ?? city.focus,
+  };
+};
+
+export const priorityServiceCityPages = priorityServiceCities.flatMap((city) =>
+  services.map((service) => buildPriorityServiceCityPage(service, city)),
+);
+
+export const featuredPriorityServiceCityPages = priorityServiceCityPages.filter(
+  (page) =>
+    (page.citySlug === "odincovo" && page.serviceSlug === "chistka-kolodcev") ||
+    (page.citySlug === "krasnogorsk" && page.serviceSlug === "remont-kolodcev") ||
+    (page.citySlug === "podolsk" && page.serviceSlug === "vodosnabzhenie-iz-kolodca-v-dom") ||
+    (page.citySlug === "himki" && page.serviceSlug === "uglublenie-kolodcev"),
+);
+
+export const findPriorityServiceCityPage = (citySlug: string, serviceSlug: string) =>
+  priorityServiceCityPages.find(
+    (page) => page.citySlug === citySlug && page.serviceSlug === serviceSlug,
+  );
