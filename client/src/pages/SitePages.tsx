@@ -232,6 +232,7 @@ function Footer() {
             <a href={`mailto:${siteMeta.email}`} className="block transition hover:text-white">
               {siteMeta.email}
             </a>
+            <div>На связи — {siteMeta.ownerName}</div>
             <div>{siteMeta.region}</div>
           </div>
         </div>
@@ -1065,8 +1066,8 @@ export function ContactsPage() {
                 {siteMeta.email}
               </a>
               <p className="story-copy">
-                Опишите район, задачу и текущее состояние колодца. Такой формат позволяет сразу
-                перейти к нормальной оценке работ без длинных уточнений.
+                На связи — {siteMeta.ownerName}. Опишите район, задачу и текущее состояние колодца,
+                чтобы быстрее перейти к нормальной оценке работ без длинных уточнений.
               </p>
             </div>
             <div className="mt-8 grid gap-4">
@@ -1108,8 +1109,8 @@ export function ContactsPage() {
                 <ArrowRight className="size-4" />
               </button>
               <p className="text-sm leading-7 text-white/45">
-                Форма работает как визуальный сценарий. При подключении реальных контактов можно
-                связать её с выбранным способом приёма заявок.
+                Для быстрого контакта можно сразу связаться с {siteMeta.ownerName}: позвонить по
+                номеру {siteMeta.phone} или написать на {siteMeta.email}.
               </p>
             </form>
           </div>

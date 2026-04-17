@@ -24,8 +24,9 @@ export type ServiceGalleryItem = {
 
 export const siteMeta = {
   name: "WELLS-MO",
-  phone: "+7 (999) 123-45-67",
-  phoneHref: "tel:+79991234567",
+  ownerName: "Денис",
+  phone: "+7 (981) 666-66-70",
+  phoneHref: "tel:+79816666670",
   region: "Московская область",
   email: "info@wells-mo.ru",
   tagline: "Чистка, ремонт и водоснабжение из колодца",
