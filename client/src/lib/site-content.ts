@@ -53,6 +53,18 @@ export const assets = {
     "https://d2xsxph8kpxj0f.cloudfront.net/310519663042042500/htP6tJcWEMcp6qhKGuYmV6/gallery-deepening-02_32aeaf84.jpeg",
   galleryWaterSupplyDetail:
     "https://d2xsxph8kpxj0f.cloudfront.net/310519663042042500/htP6tJcWEMcp6qhKGuYmV6/gallery-water-02_bdc20feb.jpg",
+  userReviews: "/manus-storage/reviews-real_b8f4aaf4.png",
+  userBottomShield: "/manus-storage/bottom-shield-installation_63fdd0fd.png",
+  userAfterWashing: "/manus-storage/after-washing_c921d0c4.png",
+  userLogo: "/manus-storage/site-logo-round_8fff2fa5.png",
+  userGravelBackfill: "/manus-storage/gravel-washing-backfill_8ab3f108.png",
+  userCurrentJointProblem: "/manus-storage/current-joint-problem_4ced24f1.png",
+  userShiftedRingRepair: "/manus-storage/shifted-ring-repair_67c5034b.png",
+  userShaftWashing: "/manus-storage/shaft-washing_a169e4ad.png",
+  userFinishedWell: "/manus-storage/finished-well_7b5c4ebe.png",
+  userJointWaterproofing: "/manus-storage/joint-waterproofing_5d4e4f5b.png",
+  userWellCleaningMain: "/manus-storage/well-cleaning-main_539a53ac.png",
+  userShaftDiagnostics: "/manus-storage/shaft-diagnostics_66073b34.png",
 } as const;
 
 export const navigation = [
@@ -84,7 +96,7 @@ export const services: ServiceItem[] = [
     description:
       "Если вода стала мутной, появился запах или на дне скопились отложения, колодцу нужна не просто откачка, а комплексная чистка. Мы приводим шахту в рабочее состояние и даём понятную картину её реального состояния.",
     price: "от 16 000 ₽",
-    image: assets.cleaning,
+    image: assets.userWellCleaningMain,
     highlights: [
       "Удаление ила, песка и органических отложений",
       "Очистка стенок и внутренних поверхностей",
@@ -143,7 +155,7 @@ export const services: ServiceItem[] = [
     description:
       "Когда в колодец попадает верховодка, швы расходятся, а кольца смещаются, важно не маскировать проблему, а устранить её причину. Мы выполняем ремонт аккуратно и по реальному состоянию конструкции.",
     price: "от 3 000 ₽ за шов",
-    image: assets.repair,
+    image: assets.userShiftedRingRepair,
     highlights: [
       "Герметизация и восстановление швов",
       "Скобирование и укрепление колец",
@@ -202,7 +214,7 @@ export const services: ServiceItem[] = [
     description:
       "Если уровень воды снизился, это не всегда означает, что нужен новый колодец. Мы сначала оцениваем шахту и только после этого предлагаем целесообразный вариант углубления.",
     price: "по результатам осмотра",
-    image: assets.hero,
+    image: assets.userBottomShield,
     highlights: [
       "Оценка состояния существующей шахты",
       "Подбор безопасного решения под конкретный объект",
@@ -391,22 +403,22 @@ export const processSteps = [
 
 export const cases = [
   {
-    title: "Чистка колодца после длительного простоя",
+    title: "Чистка колодца после полной мойки шахты",
     location: "Истринский район",
-    result: "Удалили отложения, очистили стенки шахты и вернули колодец в рабочее состояние.",
-    image: assets.cleaning,
+    result: "Промыли ствол, убрали загрязнения и вернули колодцу аккуратный рабочий вид после комплексной чистки.",
+    image: assets.userAfterWashing,
   },
   {
-    title: "Герметизация швов и укрепление колец",
+    title: "Гидроизоляция швов после локального ремонта",
     location: "Одинцовский район",
-    result: "Устранили течи через швы, усилили проблемные участки и восстановили стабильность конструкции.",
-    image: assets.repair,
+    result: "Разобрали проблемные участки, выполнили герметизацию и восстановили надёжность шахты без лишних работ.",
+    image: assets.userJointWaterproofing,
   },
   {
-    title: "Подводка воды из колодца в дом",
+    title: "Готовый колодец после восстановительных работ",
     location: "Раменский район",
-    result: "Собрали аккуратную систему подачи воды и подключили дом к стабильному источнику.",
-    image: assets.waterSupply,
+    result: "Провели этапы очистки и доработки конструкции, после чего вывели объект в стабильное эксплуатационное состояние.",
+    image: assets.userFinishedWell,
   },
 ] as const;
 
@@ -414,50 +426,82 @@ export const serviceGalleryItems: ServiceGalleryItem[] = [
   {
     id: "cleaning-01",
     serviceSlug: "chistka-kolodcev",
-    title: "Комплексная чистка колодца после заиливания",
+    title: "Основная чистка колодца перед обслуживанием",
     location: "Истринский район",
-    result: "Удалили донные отложения, очистили стенки шахты и стабилизировали качество воды.",
-    image: assets.cleaning,
+    result: "Провели ключевой этап очистки шахты и подготовили колодец к дальнейшей промывке и диагностике.",
+    image: assets.userWellCleaningMain,
   },
   {
     id: "cleaning-02",
     serviceSlug: "chistka-kolodcev",
-    title: "Глубокая очистка шахты с диагностикой дна",
+    title: "Диагностика ствола перед началом работ",
     location: "Дмитровский округ",
-    result: "Промыли внутренние поверхности, убрали загрязнения и подготовили колодец к дальнейшей эксплуатации.",
-    image: assets.galleryCleaningDetail,
+    result: "Проверили состояние стенок, дна и проблемных зон, чтобы собрать точный объём работ до чистки.",
+    image: assets.userShaftDiagnostics,
+  },
+  {
+    id: "cleaning-03",
+    serviceSlug: "chistka-kolodcev",
+    title: "Мойка шахты после откачки воды",
+    location: "Солнечногорск",
+    result: "Промыли внутренние поверхности и убрали остаточные загрязнения по всей рабочей высоте ствола.",
+    image: assets.userShaftWashing,
+  },
+  {
+    id: "cleaning-04",
+    serviceSlug: "chistka-kolodcev",
+    title: "Колодец после полной мойки и очистки",
+    location: "Истра",
+    result: "После завершения мойки шахта приобрела аккуратный вид, а состояние объекта стало понятным для дальнейшей эксплуатации.",
+    image: assets.userAfterWashing,
   },
   {
     id: "repair-01",
     serviceSlug: "remont-kolodcev",
-    title: "Восстановление швов и укрепление колец",
+    title: "Проблемный шов до начала ремонта",
     location: "Одинцово",
-    result: "Герметизировали проблемные участки и вернули конструкции стабильность без лишнего объёма работ.",
-    image: assets.repair,
+    result: "Зафиксировали зону дефекта и локализовали источник проблемы перед герметизацией и усилением конструкции.",
+    image: assets.userCurrentJointProblem,
   },
   {
     id: "repair-02",
     serviceSlug: "remont-kolodcev",
-    title: "Локальный ремонт колодца с усилением узлов",
+    title: "Ремонт смещённого кольца в шахте",
     location: "Красногорск",
-    result: "Подготовили рабочую зону, выполнили восстановление и устранили критичные дефекты конструкции.",
-    image: assets.galleryRepairDetail,
+    result: "Восстановили геометрию ствола и устранили последствия смещения без лишней переделки всего колодца.",
+    image: assets.userShiftedRingRepair,
+  },
+  {
+    id: "repair-03",
+    serviceSlug: "remont-kolodcev",
+    title: "Гидроизоляция швов после восстановления",
+    location: "Химки",
+    result: "Загерметизировали проблемные участки и снизили риск повторного поступления верховодки в шахту.",
+    image: assets.userJointWaterproofing,
   },
   {
     id: "deepening-01",
     serviceSlug: "uglublenie-kolodcev",
-    title: "Оценка и углубление шахты при падении уровня воды",
+    title: "Спуск донного щита на рабочую глубину",
     location: "Раменский округ",
-    result: "Проверили состояние источника, согласовали безопасную технологию и вернули рабочий объём воды.",
-    image: assets.hero,
+    result: "Подготовили нижнюю часть шахты и выполнили этап работ, важный для дальнейшего восстановления источника.",
+    image: assets.userBottomShield,
   },
   {
     id: "deepening-02",
     serviceSlug: "uglublenie-kolodcev",
-    title: "Углубление колодца с контролем состояния ствола",
+    title: "Промывка щебёнки и обратная засыпка",
     location: "Чехов",
-    result: "Провели работы по согласованной схеме и сохранили устойчивость конструкции на каждом этапе.",
-    image: assets.galleryDeepeningDetail,
+    result: "Привели в порядок нижний слой, обновили рабочую зону и собрали устойчивое основание после вмешательства.",
+    image: assets.userGravelBackfill,
+  },
+  {
+    id: "deepening-03",
+    serviceSlug: "uglublenie-kolodcev",
+    title: "Готовый колодец после восстановительных этапов",
+    location: "Сергиев Посад",
+    result: "Зафиксировали итоговое состояние объекта после комплекса работ по стволу и нижней части шахты.",
+    image: assets.userFinishedWell,
   },
   {
     id: "water-01",
@@ -478,6 +522,13 @@ export const serviceGalleryItems: ServiceGalleryItem[] = [
 ];
 
 export const testimonials = [
+  {
+    quote:
+      "Реальные отзывы клиентов и переписка по объектам усиливают доверие лучше любых деклараций на первом экране.",
+    author: "Подтверждённая обратная связь по работам",
+    image: assets.userReviews,
+    alt: "Скриншот реальных отзывов клиентов WELLS-MO",
+  },
   {
     quote:
       "Нужно было не просто почистить колодец, а понять, почему вода снова быстро мутнела. Получили нормальное объяснение и понятный результат без лишних работ.",

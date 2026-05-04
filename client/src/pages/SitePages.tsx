@@ -123,8 +123,12 @@ function Header() {
       <div className="container flex items-center justify-between gap-4 py-4">
         <Link href="/" className="min-w-0">
           <div className="flex items-center gap-3">
-            <div className="flex size-11 items-center justify-center rounded-2xl border border-primary/25 bg-primary/10 text-primary">
-              <Droplets className="size-5" />
+            <div className="flex size-11 overflow-hidden rounded-2xl border border-primary/25 bg-primary/10 shadow-[0_10px_24px_rgba(199,154,63,0.18)]">
+              <img
+                src={assets.userLogo}
+                alt={`${siteMeta.name} — логотип компании`}
+                className="h-full w-full object-cover"
+              />
             </div>
             <div className="min-w-0">
               <div className="font-heading text-lg font-bold tracking-[-0.04em] text-white">{siteMeta.name}</div>
@@ -520,15 +524,32 @@ function TestimonialsSection() {
           title="Тон сайта — сдержанный, а отзывы усиливают решение"
           description="Клиенту важно услышать не рекламный лозунг, а подтверждение того, что задачу действительно разобрали и решили по делу."
         />
-        <div className="grid gap-5 lg:grid-cols-3">
-          {testimonials.map((item) => (
-            <blockquote key={item.quote} className="glass-panel rounded-[1.8rem] p-6">
-              <p className="text-base leading-8 text-white/78">“{item.quote}”</p>
-              <footer className="mt-6 text-sm uppercase tracking-[0.18em] text-primary/85">
-                {item.author}
-              </footer>
-            </blockquote>
-          ))}
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          {testimonials.map((item) =>
+            "image" in item && item.image ? (
+              <figure key={item.quote} className="page-frame overflow-hidden rounded-[1.8rem]">
+                <div className="image-mask min-h-[280px] border-b border-white/8 bg-[#0f141d]">
+                  <img
+                    src={item.image}
+                    alt={item.alt ?? item.author}
+                    className="absolute inset-0 h-full w-full object-cover"
+                  />
+                </div>
+                <figcaption className="space-y-3 p-6">
+                  <div className="text-xs uppercase tracking-[0.2em] text-primary/90">Визуальное подтверждение</div>
+                  <p className="text-sm leading-7 text-white/70">{item.quote}</p>
+                  <div className="text-sm uppercase tracking-[0.18em] text-primary/85">{item.author}</div>
+                </figcaption>
+              </figure>
+            ) : (
+              <blockquote key={item.quote} className="glass-panel rounded-[1.8rem] p-6">
+                <p className="text-base leading-8 text-white/78">“{item.quote}”</p>
+                <footer className="mt-6 text-sm uppercase tracking-[0.18em] text-primary/85">
+                  {item.author}
+                </footer>
+              </blockquote>
+            ),
+          )}
         </div>
       </div>
     </section>
