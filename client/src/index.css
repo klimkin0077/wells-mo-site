@@ -138,6 +138,7 @@ Design reminder for this file:
       radial-gradient(circle at 50% 100%, rgba(193, 145, 71, 0.12) 0%, transparent 30%);
     background-color: #11141d;
     min-height: 100vh;
+    overflow-x: hidden;
   }
 
   body::before {
@@ -250,10 +251,11 @@ Design reminder for this file:
   }
 
   .hero-title {
-    font-size: clamp(3rem, 7vw, 6.7rem);
+    font-size: clamp(2.7rem, 10vw, 6.7rem);
     line-height: 0.95;
     font-weight: 700;
     letter-spacing: -0.06em;
+    text-wrap: balance;
   }
 
   .text-gradient-metal {
@@ -264,9 +266,10 @@ Design reminder for this file:
   }
 
   .section-title {
-    font-size: clamp(2rem, 4.4vw, 4rem);
+    font-size: clamp(1.9rem, 7vw, 4rem);
     line-height: 1;
     font-weight: 700;
+    text-wrap: balance;
   }
 
   .metal-line {
@@ -277,6 +280,7 @@ Design reminder for this file:
   .card-hover {
     transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1), border-color 320ms ease, box-shadow 320ms ease;
     transform: translateZ(0);
+    will-change: transform;
   }
 
   .card-hover:hover {
@@ -316,7 +320,32 @@ Design reminder for this file:
 
   .hero-grid {
     display: grid;
-    gap: 1.5rem;
+    gap: 2rem;
+  }
+
+  @keyframes rise-in {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 22px, 0);
+    }
+
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  .reveal-rise {
+    opacity: 0;
+    animation: rise-in 720ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .reveal-rise-delay-1 {
+    animation-delay: 100ms;
+  }
+
+  .reveal-rise-delay-2 {
+    animation-delay: 180ms;
   }
 
   .nav-link-active {
@@ -325,8 +354,8 @@ Design reminder for this file:
 
   .story-copy {
     color: rgba(226, 230, 235, 0.78);
-    font-size: 1.02rem;
-    line-height: 1.75;
+    font-size: 0.98rem;
+    line-height: 1.72;
   }
 
   .metric-value {
@@ -376,6 +405,62 @@ Design reminder for this file:
   .site-link:focus-visible::after,
   .nav-link-active::after {
     transform: scaleX(1);
+  }
+
+  @media (max-width: 639px) {
+    body::before {
+      background-size: 84px 84px;
+    }
+
+    .container {
+      padding-left: 0.875rem;
+      padding-right: 0.875rem;
+    }
+
+    .glass-panel,
+    .page-frame {
+      backdrop-filter: blur(14px);
+    }
+
+    .copper-chip {
+      padding: 0.45rem 0.75rem;
+      font-size: 0.66rem;
+      letter-spacing: 0.16em;
+    }
+
+    .section-kicker {
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+    }
+
+    .image-mask {
+      border-radius: 1.5rem;
+    }
+  }
+
+  @media (hover: none) {
+    .card-hover:hover {
+      transform: none;
+      border-color: rgba(255, 255, 255, 0.1);
+      box-shadow: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+
+    .reveal-rise {
+      opacity: 1;
+    }
   }
 
   @media (min-width: 640px) {

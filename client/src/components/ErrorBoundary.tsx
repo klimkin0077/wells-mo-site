@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
-import { AlertTriangle, RotateCcw } from "lucide-react";
+import { AlertTriangle, Home, RotateCcw } from "lucide-react";
 import { Component, ReactNode } from "react";
+import { siteMeta } from "@/lib/site-content";
 
 interface Props {
   children: ReactNode;
@@ -24,32 +25,46 @@ class ErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="flex items-center justify-center min-h-screen p-8 bg-background">
-          <div className="flex flex-col items-center w-full max-w-2xl p-8">
-            <AlertTriangle
-              size={48}
-              className="text-destructive mb-6 flex-shrink-0"
-            />
-
-            <h2 className="text-xl mb-4">An unexpected error occurred.</h2>
-
-            <div className="p-4 w-full rounded bg-muted overflow-auto mb-6">
-              <pre className="text-sm text-muted-foreground whitespace-break-spaces">
-                {this.state.error?.stack}
-              </pre>
+        <div className="site-shell flex min-h-screen items-center justify-center px-4 py-12">
+          <div className="page-frame w-full max-w-3xl rounded-[2rem] p-8 text-center lg:p-12">
+            <div className="mx-auto flex size-16 items-center justify-center rounded-full border border-destructive/25 bg-destructive/10 text-destructive">
+              <AlertTriangle className="size-8" />
             </div>
 
-            <button
-              onClick={() => window.location.reload()}
-              className={cn(
-                "flex items-center gap-2 px-4 py-2 rounded-lg",
-                "bg-primary text-primary-foreground",
-                "hover:opacity-90 cursor-pointer"
-              )}
+            <div className="section-kicker mt-6">Техническая пауза</div>
+            <h2 className="mt-4 text-4xl font-bold text-white md:text-5xl">
+              Страница временно перезагружается
+            </h2>
+            <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-white/68 md:text-lg">
+              Иногда браузер или соединение могут дать краткий сбой. Обновите страницу и
+              продолжите просмотр. Если проблема повторится, лучше сразу связаться по телефону.
+            </p>
+
+            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <button
+                onClick={() => window.location.reload()}
+                className={cn(
+                  "inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:translate-y-[-1px]"
+                )}
+              >
+                <RotateCcw size={16} />
+                Обновить страницу
+              </button>
+              <a
+                href="/"
+                className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/4 px-6 py-3 text-sm font-semibold text-white/88 transition hover:border-primary/35 hover:text-white"
+              >
+                <Home size={16} className="text-primary" />
+                На главную
+              </a>
+            </div>
+
+            <a
+              href={siteMeta.phoneHref}
+              className="mt-5 inline-flex items-center justify-center rounded-full border border-white/10 bg-white/4 px-5 py-3 text-sm font-semibold text-white/82 transition hover:border-primary/30 hover:text-white"
             >
-              <RotateCcw size={16} />
-              Reload Page
-            </button>
+              {siteMeta.phone}
+            </a>
           </div>
         </div>
       );

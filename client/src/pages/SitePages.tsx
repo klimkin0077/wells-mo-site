@@ -110,6 +110,23 @@ function SecondaryLink({ href, children }: { href: string; children: ReactNode }
   );
 }
 
+function MobileStickyBar() {
+  return (
+    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-[#0b0f15]/92 backdrop-blur-xl lg:hidden">
+      <div className="container grid grid-cols-[1fr_auto] gap-3 py-3">
+        <a
+          href={siteMeta.phoneHref}
+          className="inline-flex min-w-0 items-center justify-center gap-2 rounded-full border border-primary/18 bg-primary/10 px-4 py-3 text-sm font-semibold text-primary"
+        >
+          <Phone className="size-4 shrink-0" />
+          <span className="truncate">Позвонить</span>
+        </a>
+        <PrimaryLink href="/kontakty">Заявка</PrimaryLink>
+      </div>
+    </div>
+  );
+}
+
 function Header() {
   const [location] = useLocation();
   const [open, setOpen] = useState(false);
@@ -252,7 +269,8 @@ function SiteLayout({ children }: { children: ReactNode }) {
       <div className="mesh-glow left-[-8rem] top-24 h-72 w-72 bg-primary/18" />
       <div className="mesh-glow right-[-4rem] top-[30rem] h-64 w-64 bg-sky-400/8" />
       <Header />
-      <main>{children}</main>
+      <main className="pb-24 lg:pb-0">{children}</main>
+      <MobileStickyBar />
       <Footer />
     </div>
   );
@@ -278,9 +296,9 @@ function SectionHeading({
 
 function HomeHero() {
   return (
-    <section className="relative overflow-hidden pb-16 pt-14 lg:pb-24 lg:pt-20">
+    <section className="relative overflow-hidden pb-14 pt-10 lg:pb-24 lg:pt-20">
       <div className="container hero-grid">
-        <div className="space-y-8 pb-8 lg:pb-0">
+        <div className="reveal-rise space-y-8 pb-8 lg:pb-0">
           <div className="copper-chip">
             <span className="inline-block size-2 rounded-full bg-primary" />
             {siteMeta.coverage}
@@ -291,10 +309,10 @@ function HomeHero() {
               <br />
               из колодца
             </h1>
-            <p className="max-w-2xl text-lg leading-8 text-white/68 lg:text-xl">
-              Возвращаем колодцу нормальную работу, устраняем течи и загрязнение,
-              организуем стабильную подачу воды в дом и показываем решение без лишних
-              обещаний и визуального шума.
+            <p className="max-w-2xl text-base leading-8 text-white/68 sm:text-lg lg:text-xl">
+              Чистим колодцы, устраняем течи, восстанавливаем шахту и подключаем воду в дом.
+              Клиент заранее понимает, что будет сделано, сколько это примерно стоит и какой
+              результат он получит по своему объекту.
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row">
@@ -304,7 +322,7 @@ function HomeHero() {
             </PrimaryLink>
             <SecondaryLink href="/uslugi">Посмотреть услуги</SecondaryLink>
           </div>
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
             {trustMetrics.map((item) => (
               <div key={item.value} className="hero-stat p-4">
                 <div className="metric-value text-primary">{item.value}</div>
@@ -314,8 +332,8 @@ function HomeHero() {
           </div>
         </div>
 
-        <div className="page-frame overflow-hidden rounded-[2rem] p-3">
-          <div className="image-mask min-h-[460px] lg:min-h-[620px]">
+        <div className="reveal-rise reveal-rise-delay-1 page-frame overflow-hidden rounded-[2rem] p-3">
+          <div className="image-mask min-h-[380px] sm:min-h-[460px] lg:min-h-[620px]">
             <img
               src={assets.hero}
               alt="Премиальный объект с колодцем и работой специалистов"
@@ -403,11 +421,12 @@ function WhyChooseSection() {
         <div className="page-frame rounded-[2rem] p-6 lg:p-8">
           <div className="section-kicker">Почему доверяют</div>
           <h2 className="mt-4 text-4xl font-bold text-white md:text-5xl">
-            Премиальность через <span className="text-gradient-metal">ясность и детали</span>
+            Почему клиенты <span className="text-gradient-metal">доверяют работу</span>
           </h2>
           <p className="story-copy mt-5">
-            Здесь нет громких заявлений ради эффекта. Доверие строится на понятной логике,
-            спокойном объяснении работ, реальных фото и аккуратном результате на объекте.
+            Решение о заказе принимают не по красивым словам, а по тому, насколько спокойно и
+            понятно объяснены работы, показаны реальные объекты и соблюдена аккуратность на
+            участке.
           </p>
           <div className="metal-line my-8" />
           <div className="space-y-5">
@@ -437,8 +456,8 @@ function ProcessSection() {
       <div className="container space-y-10">
         <SectionHeading
           eyebrow="Как проходит работа"
-          title="Маршрут от первого звонка до готового результата"
-          description="Порядок действий помогает сразу понять логику работ, спокойнее принять решение и увидеть, как задача доводится до нормального результата без хаоса."
+          title="От обращения до готового результата"
+          description="Сначала разбираемся в проблеме, затем согласовываем объём работ и только после этого приступаем к объекту. Такой порядок снимает лишние вопросы ещё до выезда."
         />
         <div className="grid gap-5 lg:grid-cols-4">
           {processSteps.map((step) => (
@@ -485,17 +504,29 @@ function CasesSection() {
 function PricingSection() {
   return (
     <section className="py-18 lg:py-24">
-      <div className="container grid gap-8 xl:grid-cols-[1fr_1.15fr] xl:items-start">
-        <div className="space-y-5">
+      <div className="container grid gap-8 lg:grid-cols-[1fr_1.15fr] lg:items-start">
+        <div className="reveal-rise space-y-5">
           <div className="section-kicker">Цены и ориентиры</div>
-          <h2 className="section-title text-white">Стоимость должна быть понятной, но честной</h2>
+          <h2 className="section-title text-white">Стоимость без тумана и случайных цифр</h2>
           <p className="story-copy">
-            Вместо слишком точных обещаний лучше сразу показывать ориентиры. Это звучит
-            профессиональнее и помогает не менять условия после осмотра объекта.
+            На сайте указаны реальные стартовые ориентиры по основным работам. Итоговая смета
+            зависит от состояния шахты, глубины, материалов и состава решения, поэтому честнее
+            сразу показать факторы цены, чем обещать невозможное по телефону.
           </p>
+          <div className="grid gap-3 sm:grid-cols-3">
+            {[
+              "Ориентир до выезда",
+              "Состав работ без скрытых этапов",
+              "Точная смета после осмотра",
+            ].map((item) => (
+              <div key={item} className="rounded-[1.35rem] border border-white/8 bg-white/4 p-4 text-sm leading-6 text-white/72">
+                {item}
+              </div>
+            ))}
+          </div>
           <SecondaryLink href="/ceny">Открыть страницу цен</SecondaryLink>
         </div>
-        <div className="page-frame overflow-hidden rounded-[2rem]">
+        <div className="reveal-rise reveal-rise-delay-1 page-frame overflow-hidden rounded-[2rem]">
           <div className="divide-y divide-white/8">
             {pricing.map((item) => (
               <div key={item.service} className="grid gap-3 p-5 md:grid-cols-[1.1fr_160px] md:items-center">
@@ -515,6 +546,71 @@ function PricingSection() {
   );
 }
 
+function GuaranteeSection() {
+  const guarantees = [
+    {
+      title: "Понятный объём работ",
+      text: "До начала работ клиент понимает, что именно будет сделано, какие этапы обязательны и от чего зависит итоговая смета.",
+    },
+    {
+      title: "Аккуратность на участке",
+      text: "Работы организуются так, чтобы не превращать участок в строительный хаос и не оставлять после себя лишнюю грязь.",
+    },
+    {
+      title: "Фото и объяснение результата",
+      text: "После завершения видно, что именно сделано по шахте, швам, дну или водоснабжению, и что теперь требуется по эксплуатации.",
+    },
+  ];
+
+  const included = [
+    "Осмотр состояния шахты и понятное объяснение проблемы",
+    "Согласование объёма работ до начала основного этапа",
+    "Аккуратная чистка, ремонт или монтаж по задаче объекта",
+    "Фотофиксация ключевых этапов и итогового результата",
+    "Рекомендации по дальнейшей эксплуатации колодца",
+    "Связь после работ по уточняющим вопросам клиента",
+  ];
+
+  return (
+    <section className="py-18 lg:py-24">
+      <div className="container grid gap-8 xl:grid-cols-[0.92fr_1.08fr]">
+        <div className="space-y-5">
+          <div className="section-kicker">Гарантия и состав работ</div>
+          <h2 className="section-title text-white">Что получает клиент помимо самой услуги</h2>
+          <p className="story-copy">
+            Доверие растёт, когда на сайте заранее видно не только цену, но и правила работы:
+            что входит в услугу, как проходит объект и на чём строится гарантия качества.
+          </p>
+          <div className="rounded-[1.6rem] border border-primary/18 bg-primary/8 p-5 text-sm leading-7 text-white/78">
+            Каждая задача начинается с оценки реального состояния колодца. Поэтому гарантия строится
+            на правильно подобранном объёме работ, а не на формальных обещаниях без осмотра.
+          </div>
+        </div>
+        <div className="grid gap-5">
+          <div className="grid gap-4 md:grid-cols-3">
+            {guarantees.map((item) => (
+              <div key={item.title} className="glass-panel rounded-[1.6rem] p-5">
+                <div className="text-lg font-semibold text-white">{item.title}</div>
+                <p className="mt-3 text-sm leading-7 text-white/66">{item.text}</p>
+              </div>
+            ))}
+          </div>
+          <div className="page-frame rounded-[2rem] p-6 lg:p-8">
+            <div className="section-kicker">Обычно входит в работу</div>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              {included.map((item) => (
+                <div key={item} className="rounded-[1.4rem] border border-white/8 bg-white/4 p-4 text-sm leading-7 text-white/74">
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function TestimonialsSection() {
   return (
     <section className="py-18 lg:py-24">
@@ -524,7 +620,7 @@ function TestimonialsSection() {
           title="Реальные отзывы и переписки усиливают доверие"
           description="Клиенту важно увидеть не рекламный лозунг, а подтверждение того, что задачу действительно разобрали, объяснили и решили по делу."
         />
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+        <div className="reveal-rise reveal-rise-delay-1 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {testimonials.map((item) =>
             "image" in item && item.image ? (
               <figure key={item.quote} className="page-frame overflow-hidden rounded-[1.8rem]">
@@ -564,8 +660,8 @@ function FaqSection({ items = globalFaq }: { items?: readonly { question: string
           <div className="section-kicker">FAQ</div>
             <h2 className="section-title mt-4 text-white">Вопросы, которые снимают сомнения</h2>
             <p className="story-copy mt-5">
-              Хороший сервис сразу отвечает на важные вопросы. Это помогает понять логику работ,
-              снять типовые опасения и перейти к заявке без лишнего напряжения.
+              На этой странице собраны вопросы, которые чаще всего возникают до выезда: по цене,
+              порядку работ, срокам и тому, что действительно нужно делать на объекте.
             </p>
         </div>
         <div className="space-y-4">
@@ -591,7 +687,7 @@ function LocationHubSection() {
         <SectionHeading
           eyebrow="Города и районы"
           title="Выезжаем по всей Московской области"
-          description="В разделе собраны ключевые города и районы, чтобы клиент сразу понимал: заявки принимаются по всей области, а нужную услугу можно быстро открыть по своему направлению."
+          description="Заявки принимаются по всей Московской области. Ниже собраны города и районы, по которым удобнее быстро перейти к нужной услуге и сразу понять, что выезд возможен по вашему направлению."
         />
         <div className="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
           <div className="page-frame rounded-[2rem] p-6 lg:p-8">
@@ -620,23 +716,22 @@ function LocationHubSection() {
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
               <div className="glass-panel rounded-[1.5rem] p-5">
                 <div className="metric-value text-primary">{citySeoLocations.length}</div>
-                <div className="mt-2 text-lg font-semibold text-white">Ключевые направления выезда</div>
+                <div className="mt-2 text-lg font-semibold text-white">Города по выезду</div>
                 <p className="mt-3 text-sm leading-7 text-white/62">
-                  Быстрый переход к городам и районам, откуда чаще всего приходят обращения.
+                  Основные направления, по которым удобно сразу открыть нужную услугу и оставить заявку.
                 </p>
               </div>
               <div className="glass-panel rounded-[1.5rem] p-5">
                 <div className="metric-value text-primary">{districtSeoLocations.length}</div>
-                <div className="mt-2 text-lg font-semibold text-white">Страницы по районам</div>
+                <div className="mt-2 text-lg font-semibold text-white">Районы и округа</div>
                 <p className="mt-3 text-sm leading-7 text-white/62">
-                  Под округа и районные кластеры, чтобы расширить поисковое покрытие.
+                  Дополнительные направления по области, чтобы клиенту было проще найти свой район.
                 </p>
               </div>
             </div>
             <div className="mt-5 rounded-[1.5rem] border border-white/8 bg-white/4 p-5 text-sm leading-7 text-white/68">
-              Каждое направление связано с основными услугами, формой заявки и общим разделом
-              локаций. Так клиент быстрее находит свой маршрут, а навигация остаётся ясной и
-              удобной.
+              По каждой локации можно быстро перейти к основным услугам, посмотреть работы и сразу
+              связаться по своему объекту без лишних поисков по сайту.
             </div>
           </div>
         </div>
@@ -657,9 +752,8 @@ function CtaSection() {
                 Нужна чистка, ремонт или <span className="text-gradient-metal">вода в доме</span>?
               </h2>
               <p className="story-copy max-w-2xl">
-                Опишите задачу, район и текущее состояние объекта. Такой формат заявки выглядит
-                профессионально, помогает быстрее оценить задачу и делает путь клиента спокойным
-                и понятным.
+                Опишите задачу, район и текущее состояние объекта. Чем точнее исходные данные,
+                тем быстрее можно понять формат работ и сориентировать вас по следующему шагу.
               </p>
               <div className="flex flex-col gap-3 sm:flex-row">
                 <PrimaryLink href="/kontakty">
@@ -772,7 +866,7 @@ function ServiceGallerySection({ defaultServiceSlug }: { defaultServiceSlug: str
         <SectionHeading
           eyebrow="Фотогалерея"
           title="Примеры выполненных работ по всем ключевым услугам"
-          description="На сервисной странице важно не только объяснить, как работает услуга, но и показать реальные визуальные сценарии. Галерея помогает быстро переключаться между типами работ и смотреть примеры без выхода из маршрута."
+          description="На странице услуги важно не только рассказать о работе, но и показать реальные объекты. Галерея помогает быстро сравнить примеры по разным задачам и понять, как выглядит результат на практике."
         />
         <div className="flex flex-wrap gap-3">
           {galleryFilters.map((filter) => {
@@ -928,7 +1022,7 @@ function ServiceContent({ slug }: { slug: string }) {
             <SectionHeading
               eyebrow="Приоритетные города"
               title={`${service.title} в ключевых городах Подмосковья`}
-              description="Для ключевых направлений мы собрали отдельные маршруты по важным городам, чтобы клиенту было проще сразу перейти к своей локации и нужной услуге."
+              description="Для самых частых направлений собраны отдельные страницы по городам, чтобы клиент мог сразу открыть свою локацию и нужную услугу без лишних переходов."
             />
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {priorityPagesForService.map(({ city, page }) => (
@@ -937,7 +1031,7 @@ function ServiceContent({ slug }: { slug: string }) {
                 <div className="mt-4 text-2xl font-semibold text-white">{page.title}</div>
                 <p className="mt-4 text-sm leading-7 text-white/62">{page.focus}</p>
                   <div className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary">
-                    Открыть маршрут по городу <ArrowRight className="size-4" />
+                    Открыть страницу по городу <ArrowRight className="size-4" />
                   </div>
               </Link>
             ))}
@@ -949,8 +1043,8 @@ function ServiceContent({ slug }: { slug: string }) {
         <div className="container space-y-10">
           <SectionHeading
             eyebrow="Другие услуги"
-            title="Сайт остаётся связным и помогает перейти к смежным задачам"
-            description="Если клиент пришёл за одной услугой, ему важно быстро увидеть, что команда может закрыть и соседние инженерные задачи — без выпадения из единого визуального контекста."
+            title="По объекту можно сразу закрыть и смежные задачи"
+            description="Если после осмотра выясняется, что нужна не одна услуга, клиент сразу видит связанные направления и может решить вопрос в рамках одного понятного процесса."
           />
           <div className="grid gap-5 lg:grid-cols-3">
             {related.map((item) => (
@@ -959,7 +1053,7 @@ function ServiceContent({ slug }: { slug: string }) {
                 <div className="mt-4 text-2xl font-semibold text-white">{item.title}</div>
                 <p className="mt-4 text-sm leading-7 text-white/62">{item.description}</p>
                 <div className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary">
-                  Перейти к странице <ArrowRight className="size-4" />
+                  Подробнее об услуге <ArrowRight className="size-4" />
                 </div>
               </Link>
             ))}
@@ -986,6 +1080,7 @@ export function HomePage() {
       <ProcessSection />
       <CasesSection />
       <PricingSection />
+      <GuaranteeSection />
       <TestimonialsSection />
       <FaqSection />
       <LocationHubSection />
@@ -1003,11 +1098,11 @@ export function ServicesPage() {
   return (
     <SiteLayout>
       <HeroPageBlock
-        eyebrow="Структура услуг"
+        eyebrow="Основные услуги"
         title="Услуги по колодцам и водоснабжению"
-        description="Главная задача этого раздела — быстро развести посетителя по конкретным страницам: чистка, ремонт, углубление и подводка воды в дом."
+        description="Здесь собраны все основные направления: чистка, ремонт, углубление и подводка воды в дом. Каждая страница объясняет задачу, состав работ и ориентиры по стоимости без лишних слов."
         image={assets.hero}
-        price="Понятная структура"
+        price="4 направления работ"
       />
       <ServicesPreview />
       <ProcessSection />
@@ -1025,13 +1120,14 @@ export function PricingPage() {
   return (
     <SiteLayout>
       <HeroPageBlock
-        eyebrow="Коммерческий ориентир"
+        eyebrow="Цены и условия"
         title="Цены на услуги"
-        description="Страница стоимости показывает ориентиры по основным работам и объясняет, почему точная смета зависит от состояния объекта и состава решения."
+        description="На странице собраны стартовые ориентиры по основным работам, факторы формирования цены и пояснения, почему точная смета рассчитывается только после осмотра объекта."
         image={assets.repair}
-        price="От прозрачных ориентиров"
+        price="Ориентиры по стоимости"
       />
       <PricingSection />
+      <GuaranteeSection />
       <FaqSection />
       <CtaSection />
     </SiteLayout>
@@ -1087,8 +1183,8 @@ export function ContactsPage() {
                 {siteMeta.email}
               </a>
               <p className="story-copy">
-                Базируемся в {siteMeta.baseLocation}. Опишите район, задачу и текущее состояние
-                колодца, чтобы быстрее перейти к нормальной оценке работ без длинных уточнений.
+                Базируемся в {siteMeta.baseLocation}. Сообщите район, задачу и текущее состояние
+                колодца, чтобы быстрее понять формат работ и сориентировать вас по выезду.
               </p>
             </div>
             <div className="mt-8 grid gap-4">
@@ -1267,13 +1363,13 @@ function LocalSeoPageContent({ location }: { location: LocalSeoLocation | undefi
         <div className="container grid gap-8 xl:grid-cols-[1.05fr_0.95fr]">
           <div className="space-y-8">
             <div className="page-frame rounded-[2rem] p-6 lg:p-8">
-              <div className="section-kicker">Локальная релевантность</div>
+              <div className="section-kicker">Работа по направлению</div>
               <h2 className="mt-4 text-3xl font-bold text-white md:text-4xl">
-                Страница собрана под запросы по локации {location.name}
+                Работаем по объектам в {location.name} и рядом
               </h2>
               <p className="story-copy mt-5">
-                Этот раздел помогает сразу понять, что выезды идут именно по нужному направлению.
-                Клиент видит свои услуги, свою локацию и быстрый путь к звонку или заявке.
+                На этой странице собраны основные услуги по вашему направлению, чтобы можно было
+                сразу понять формат работ и быстро перейти к звонку или заявке.
               </p>
             </div>
             <div className="page-frame rounded-[2rem] p-6 lg:p-8">
@@ -1294,7 +1390,7 @@ function LocalSeoPageContent({ location }: { location: LocalSeoLocation | undefi
                       </p>
                       {priorityPage ? (
                         <div className="mt-3 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary/85">
-                          Отдельный маршрут по услуге <ArrowRight className="size-3.5" />
+                          Страница по услуге <ArrowRight className="size-3.5" />
                         </div>
                       ) : null}
                     </Link>
@@ -1306,7 +1402,7 @@ function LocalSeoPageContent({ location }: { location: LocalSeoLocation | undefi
 
           <div className="space-y-5">
             <div className="page-frame rounded-[2rem] p-6 lg:p-8">
-              <div className="section-kicker">Фокус страницы</div>
+              <div className="section-kicker">По этой локации</div>
               <p className="story-copy mt-5">{location.focus}</p>
               <div className="mt-6 rounded-[1.5rem] border border-primary/18 bg-primary/8 p-4 text-sm leading-7 text-white/78">
                 Основные запросы: чистка колодцев {location.name}, ремонт колодцев {location.name},
@@ -1314,7 +1410,7 @@ function LocalSeoPageContent({ location }: { location: LocalSeoLocation | undefi
               </div>
             </div>
             <div className="page-frame rounded-[2rem] p-6 lg:p-8">
-              <div className="section-kicker">Переходы по локациям</div>
+              <div className="section-kicker">Соседние направления</div>
               <div className="mt-5 grid gap-3 sm:grid-cols-2">
                 {siblingLocations.map((item) => (
                   <Link
@@ -1329,7 +1425,7 @@ function LocalSeoPageContent({ location }: { location: LocalSeoLocation | undefi
             </div>
             {priorityPagesForCity.length ? (
               <div className="page-frame rounded-[2rem] p-6 lg:p-8">
-                <div className="section-kicker">Приоритетные страницы услуг</div>
+                <div className="section-kicker">Частые заявки по этой локации</div>
                 <div className="mt-5 grid gap-3">
                   {priorityPagesForCity.map(({ service, page }) => (
                     <Link
@@ -1351,18 +1447,18 @@ function LocalSeoPageContent({ location }: { location: LocalSeoLocation | undefi
       <section className="py-18 lg:py-24">
         <div className="container grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
           <div>
-            <div className="section-kicker">Как это работает</div>
-            <h2 className="section-title mt-4 text-white">От выбора направления к заявке</h2>
+            <div className="section-kicker">Как пользоваться разделом</div>
+            <h2 className="section-title mt-4 text-white">Нужная услуга и локация — на одной странице</h2>
             <p className="story-copy mt-5">
-              В этом разделе пользователь не теряется в общей навигации. Он сразу видит свои
-              услуги, свою локацию и быстрый путь к заявке или звонку.
+              Здесь всё собрано вокруг конкретного направления: основные услуги, соседние локации и
+              быстрый способ связаться по объекту без долгих переходов по сайту.
             </p>
           </div>
           <div className="grid gap-5 lg:grid-cols-3">
             {[
-              `Отдельный маршрут под ${location.name}`,
-              `Связка с услугами и общим разделом работ`,
-              `Переходы на соседние города и районы области`,
+              `Услуги по ${location.name} на одной странице`,
+              `Быстрые переходы к работам и контактам`,
+              `Соседние города и районы Московской области`,
             ].map((item) => (
               <div key={item} className="glass-panel rounded-[1.7rem] p-5 text-sm leading-7 text-white/72">
                 {item}
@@ -1426,7 +1522,7 @@ function LocalServiceCityPageContent({
   return (
     <SiteLayout>
       <HeroPageBlock
-        eyebrow="Приоритетная связка"
+        eyebrow="Город и услуга"
         title={page.title}
         description={page.lead}
         image={service.image}
@@ -1437,8 +1533,8 @@ function LocalServiceCityPageContent({
         <div className="container grid gap-8 xl:grid-cols-[1.02fr_0.98fr]">
           <div className="space-y-8">
             <div className="page-frame rounded-[2rem] p-6 lg:p-8">
-              <div className="section-kicker">Что закрывает страница</div>
-              <h2 className="mt-4 text-3xl font-bold text-white md:text-4xl">{service.title} в {city.name} без общей шаблонности</h2>
+              <div className="section-kicker">По конкретной услуге</div>
+              <h2 className="mt-4 text-3xl font-bold text-white md:text-4xl">{service.title} в {city.name} с акцентом на реальную задачу клиента</h2>
               <p className="story-copy mt-5">{page.description}</p>
               <p className="story-copy mt-5">{page.focus}</p>
             </div>
@@ -1456,12 +1552,11 @@ function LocalServiceCityPageContent({
 
           <div className="space-y-5">
             <div className="page-frame rounded-[2rem] p-6 lg:p-8">
-              <div className="section-kicker">Локальный фокус</div>
+              <div className="section-kicker">Работа по городу</div>
               <div className="mt-4 text-2xl font-semibold text-white">{city.officialName}</div>
               <p className="story-copy mt-5">
-                Для этой связки важно соединить конкретную услугу с конкретной локацией: пользователь
-                сразу понимает, что страница отвечает именно на его запрос по {city.name}, а не
-                ведёт на общий обзор без географического акцента.
+                Этот раздел помогает сразу увидеть услугу именно по {city.name}: без общих формулировок,
+                с понятным описанием работ и быстрым переходом к заявке по вашему объекту.
               </p>
             </div>
             <div className="page-frame rounded-[2rem] p-6 lg:p-8">
@@ -1486,11 +1581,11 @@ function LocalServiceCityPageContent({
       <section className="py-18 lg:py-24">
         <div className="container grid gap-8 lg:grid-cols-[0.92fr_1.08fr]">
           <div>
-            <div className="section-kicker">Перелинковка внутри города</div>
+            <div className="section-kicker">Другие услуги по городу</div>
             <h2 className="section-title mt-4 text-white">Другие услуги в {city.name}</h2>
             <p className="story-copy mt-5">
-              Для приоритетных городов собраны отдельные сервисные маршруты. Так клиент быстрее
-              попадает в нужную услугу и не тратит время на лишние переходы.
+              Если по объекту нужна не одна работа, здесь можно сразу перейти к смежным услугам по
+              тому же городу и не искать их заново в общем каталоге.
             </p>
           </div>
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
@@ -1584,7 +1679,7 @@ export function SeoAreasPage() {
             <SectionHeading
               eyebrow="Приоритетные связки"
               title="Отдельные услуги в самых важных городах"
-              description="Для ключевых городов собраны не только общие направления, но и отдельные маршруты по конкретным услугам. Так навигация становится точнее и быстрее ведёт к заявке."
+              description="Для ключевых городов собраны отдельные страницы по конкретным услугам. Это помогает быстрее открыть нужную задачу по своему направлению и сразу перейти к заявке."
             />
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
             {featuredPriorityServiceCityPages.map((page) => (
