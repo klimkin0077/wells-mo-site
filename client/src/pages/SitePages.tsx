@@ -209,8 +209,8 @@ function Footer() {
         <div className="space-y-4">
           <div className="font-heading text-2xl font-bold text-white">{siteMeta.name}</div>
           <p className="max-w-md text-sm leading-7 text-white/62">
-            Современный сайт для услуг по колодцам и водоснабжению: спокойная подача,
-            аккуратная инженерная логика и премиальное визуальное ощущение.
+            Чистка, ремонт, углубление и вода в доме из колодца. Работаем спокойно,
+            по делу и с реальными примерами выполненных объектов.
           </p>
         </div>
         <div>
@@ -236,8 +236,8 @@ function Footer() {
             <a href={`mailto:${siteMeta.email}`} className="block transition hover:text-white">
               {siteMeta.email}
             </a>
-            <div>На связи — {siteMeta.ownerName}</div>
-            <div>{siteMeta.region}</div>
+            <div>{siteMeta.coverage}</div>
+            <div>{siteMeta.baseLocation}</div>
           </div>
         </div>
       </div>
@@ -283,7 +283,7 @@ function HomeHero() {
         <div className="space-y-8 pb-8 lg:pb-0">
           <div className="copper-chip">
             <span className="inline-block size-2 rounded-full bg-primary" />
-            {siteMeta.region}
+            {siteMeta.coverage}
           </div>
           <div className="space-y-5">
             <h1 className="hero-title text-white">
@@ -358,8 +358,8 @@ function ServicesPreview() {
       <div className="container space-y-10">
         <SectionHeading
           eyebrow="Ключевые направления"
-          title="Многостраничный сайт вокруг реальных задач клиента"
-          description="Каждая основная услуга вынесена в отдельную страницу, чтобы посетитель быстро находил нужное решение, а сайт усиливал локальное SEO и коммерческую подачу."
+          title="Чистка, ремонт, углубление и вода в доме"
+          description="Каждое направление вынесено отдельно, чтобы клиент быстро понимал, какая услуга нужна именно ему и какой результат можно получить по объекту."
         />
         <div className="grid gap-5 lg:grid-cols-2 xl:grid-cols-4">
           {services.map((service) => {
@@ -407,7 +407,7 @@ function WhyChooseSection() {
           </h2>
           <p className="story-copy mt-5">
             Здесь нет громких заявлений ради эффекта. Доверие строится на понятной логике,
-            спокойной подаче, реальных фото и аккуратной инженерной структуре сайта.
+            спокойном объяснении работ, реальных фото и аккуратном результате на объекте.
           </p>
           <div className="metal-line my-8" />
           <div className="space-y-5">
@@ -437,8 +437,8 @@ function ProcessSection() {
       <div className="container space-y-10">
         <SectionHeading
           eyebrow="Как проходит работа"
-          title="Маршрут клиента от запроса до готового результата"
-          description="На сайте важно показать порядок действий: это снижает тревожность и помогает воспринимать услугу как понятный инженерный процесс, а не как набор случайных работ."
+          title="Маршрут от первого звонка до готового результата"
+          description="Порядок действий помогает сразу понять логику работ, спокойнее принять решение и увидеть, как задача доводится до нормального результата без хаоса."
         />
         <div className="grid gap-5 lg:grid-cols-4">
           {processSteps.map((step) => (
@@ -461,7 +461,7 @@ function CasesSection() {
         <SectionHeading
           eyebrow="Реальные объекты"
           title="Кейсы, которые заменяют лишние обещания"
-          description="Портфолио показывает не просто красивые кадры, а связку задачи, процесса и результата. Именно так сайт выглядит убедительно и дорого одновременно."
+          description="Портфолио показывает не просто красивые кадры, а связку задачи, процесса и результата. Именно так клиент быстрее понимает уровень работ и принимает решение увереннее."
         />
         <div className="grid gap-5 lg:grid-cols-3">
           {cases.map((item) => (
@@ -490,7 +490,7 @@ function PricingSection() {
           <div className="section-kicker">Цены и ориентиры</div>
           <h2 className="section-title text-white">Стоимость должна быть понятной, но честной</h2>
           <p className="story-copy">
-            Вместо слишком точных обещаний на сайте лучше показывать ориентиры. Это звучит
+            Вместо слишком точных обещаний лучше сразу показывать ориентиры. Это звучит
             профессиональнее и помогает не менять условия после осмотра объекта.
           </p>
           <SecondaryLink href="/ceny">Открыть страницу цен</SecondaryLink>
@@ -521,8 +521,8 @@ function TestimonialsSection() {
       <div className="container space-y-10">
         <SectionHeading
           eyebrow="Отзывы"
-          title="Тон сайта — сдержанный, а отзывы усиливают решение"
-          description="Клиенту важно услышать не рекламный лозунг, а подтверждение того, что задачу действительно разобрали и решили по делу."
+          title="Реальные отзывы и переписки усиливают доверие"
+          description="Клиенту важно увидеть не рекламный лозунг, а подтверждение того, что задачу действительно разобрали, объяснили и решили по делу."
         />
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
           {testimonials.map((item) =>
@@ -531,7 +531,7 @@ function TestimonialsSection() {
                 <div className="image-mask min-h-[280px] border-b border-white/8 bg-[#0f141d]">
                   <img
                     src={item.image}
-                    alt={item.alt ?? item.author}
+                    alt={item.alt ?? "Отзыв клиента WELLS-MO"}
                     className="absolute inset-0 h-full w-full object-cover"
                   />
                 </div>
@@ -562,11 +562,11 @@ function FaqSection({ items = globalFaq }: { items?: readonly { question: string
       <div className="container grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
         <div>
           <div className="section-kicker">FAQ</div>
-          <h2 className="section-title mt-4 text-white">Вопросы, которые снимают сомнения</h2>
-          <p className="story-copy mt-5">
-            Хороший сервисный сайт не прячет ответы. Он показывает логику работ, разбирает
-            типовые опасения и помогает перейти к заявке без напряжения.
-          </p>
+            <h2 className="section-title mt-4 text-white">Вопросы, которые снимают сомнения</h2>
+            <p className="story-copy mt-5">
+              Хороший сервис сразу отвечает на важные вопросы. Это помогает понять логику работ,
+              снять типовые опасения и перейти к заявке без лишнего напряжения.
+            </p>
         </div>
         <div className="space-y-4">
           {items.map((item) => (
@@ -590,8 +590,8 @@ function LocationHubSection() {
       <div className="container space-y-10">
         <SectionHeading
           eyebrow="Города и районы"
-          title="Отдельные локальные страницы для SEO и удобной навигации"
-          description="Для усиления локального SEO сайт получает самостоятельные посадочные страницы по городам и районам Московской области. Внутри — единый стиль, локальные заголовки, точные мета-теги и связка с ключевыми услугами."
+          title="Выезжаем по всей Московской области"
+          description="В разделе собраны ключевые города и районы, чтобы клиент сразу понимал: заявки принимаются по всей области, а нужную услугу можно быстро открыть по своему направлению."
         />
         <div className="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
           <div className="page-frame rounded-[2rem] p-6 lg:p-8">
@@ -620,9 +620,9 @@ function LocationHubSection() {
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
               <div className="glass-panel rounded-[1.5rem] p-5">
                 <div className="metric-value text-primary">{citySeoLocations.length}</div>
-                <div className="mt-2 text-lg font-semibold text-white">Страницы по городам</div>
+                <div className="mt-2 text-lg font-semibold text-white">Ключевые направления выезда</div>
                 <p className="mt-3 text-sm leading-7 text-white/62">
-                  Под отдельные городские запросы с локальными заголовками и перелинковкой.
+                  Быстрый переход к городам и районам, откуда чаще всего приходят обращения.
                 </p>
               </div>
               <div className="glass-panel rounded-[1.5rem] p-5">
@@ -634,9 +634,9 @@ function LocationHubSection() {
               </div>
             </div>
             <div className="mt-5 rounded-[1.5rem] border border-white/8 bg-white/4 p-5 text-sm leading-7 text-white/68">
-              Каждая локальная страница связана с основными услугами, формой заявки и общим хабом
-              локаций. Это делает структуру сайта понятной и для пользователя, и для поисковых
-              систем.
+              Каждое направление связано с основными услугами, формой заявки и общим разделом
+              локаций. Так клиент быстрее находит свой маршрут, а навигация остаётся ясной и
+              удобной.
             </div>
           </div>
         </div>
@@ -836,7 +836,7 @@ function ServiceContent({ slug }: { slug: string }) {
       : `Страница не найдена | ${siteMeta.name}`,
     service
       ? `${service.title} по ${siteMeta.region.toLowerCase()}. ${service.intro}`
-      : "Нужная страница услуги не найдена в текущей структуре сайта.",
+      : "Нужная страница услуги не найдена.",
   );
 
   if (!service) {
@@ -845,7 +845,7 @@ function ServiceContent({ slug }: { slug: string }) {
         <section className="container py-28">
           <div className="page-frame rounded-[2rem] p-10">
             <h1 className="text-4xl font-bold text-white">Страница не найдена</h1>
-            <p className="mt-4 text-white/65">Похоже, нужная услуга ещё не добавлена в структуру сайта.</p>
+            <p className="mt-4 text-white/65">Похоже, нужная услуга сейчас недоступна. Вернитесь в общий каталог или свяжитесь с нами напрямую.</p>
           </div>
         </section>
       </SiteLayout>
@@ -902,11 +902,11 @@ function ServiceContent({ slug }: { slug: string }) {
 
       <section className="py-18 lg:py-24">
         <div className="container space-y-10">
-          <SectionHeading
-            eyebrow="Этапы"
-            title="Как раскрывается услуга на отдельной странице"
-            description="Каждая ключевая страница должна показывать не набор общих обещаний, а реальную последовательность действий и профессиональную логику работ."
-          />
+            <SectionHeading
+              eyebrow="Этапы"
+              title="Как проходит услуга от осмотра до результата"
+              description="Здесь показана реальная последовательность действий, чтобы клиент заранее понимал, как строится работа по объекту и что происходит на каждом этапе."
+            />
           <div className="grid gap-5 lg:grid-cols-4">
             {service.steps.map((step, index) => (
               <div key={step.title} className="glass-panel rounded-[1.8rem] p-6">
@@ -925,20 +925,20 @@ function ServiceContent({ slug }: { slug: string }) {
 
       <section className="py-18 lg:py-24">
         <div className="container space-y-10">
-          <SectionHeading
-            eyebrow="Приоритетные города"
-            title={`${service.title} в ключевых городах Подмосковья`}
-            description="Для усиления локального SEO у ключевых услуг появляются отдельные посадочные страницы под самые важные города. Это помогает работать точнее и по сервисным, и по геозависимым запросам."
-          />
+            <SectionHeading
+              eyebrow="Приоритетные города"
+              title={`${service.title} в ключевых городах Подмосковья`}
+              description="Для ключевых направлений мы собрали отдельные маршруты по важным городам, чтобы клиенту было проще сразу перейти к своей локации и нужной услуге."
+            />
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {priorityPagesForService.map(({ city, page }) => (
               <Link key={page.path} href={page.path} className="glass-panel card-hover rounded-[1.8rem] p-6">
                 <div className="section-kicker">{city.officialName}</div>
                 <div className="mt-4 text-2xl font-semibold text-white">{page.title}</div>
                 <p className="mt-4 text-sm leading-7 text-white/62">{page.focus}</p>
-                <div className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary">
-                  Открыть локальную страницу <ArrowRight className="size-4" />
-                </div>
+                  <div className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary">
+                    Открыть маршрут по городу <ArrowRight className="size-4" />
+                  </div>
               </Link>
             ))}
           </div>
@@ -975,7 +975,7 @@ function ServiceContent({ slug }: { slug: string }) {
 export function HomePage() {
   usePageSeo(
     "Чистка колодцев, ремонт и водоснабжение из колодца в дом — Московская область | WELLS-MO",
-    "Чистка колодцев, ремонт шахты, углубление и подводка воды в дом по Московской области. Современная структура сайта, понятная подача и реальные фото работ.",
+    "Чистка колодцев, ремонт шахты, углубление и подводка воды в дом по всей Московской области. Реальные фото работ, понятная смета и быстрый контакт.",
   );
 
   return (
@@ -997,7 +997,7 @@ export function HomePage() {
 export function ServicesPage() {
   usePageSeo(
     `Услуги по колодцам и водоснабжению — ${siteMeta.region} | ${siteMeta.name}`,
-    "Отдельные страницы услуг по чистке колодцев, ремонту, углублению и подводке воды в дом по Московской области.",
+    "Чистка колодцев, ремонт, углубление и подводка воды в дом по всей Московской области с реальными примерами работ и понятной подачей.",
   );
 
   return (
@@ -1019,7 +1019,7 @@ export function ServicesPage() {
 export function PricingPage() {
   usePageSeo(
     `Цены на чистку и ремонт колодцев — ${siteMeta.region} | ${siteMeta.name}`,
-    "Ориентировочные цены на чистку колодцев, ремонт шахты, углубление и водоснабжение из колодца в дом по Московской области.",
+    "Ориентировочные цены на чистку колодцев, ремонт шахты, углубление и водоснабжение из колодца в дом по всей Московской области.",
   );
 
   return (
@@ -1041,18 +1041,18 @@ export function PricingPage() {
 export function WorksPage() {
   usePageSeo(
     `Наши работы по колодцам и водоснабжению — ${siteMeta.region} | ${siteMeta.name}`,
-    "Кейсы по чистке колодцев, ремонту и подводке воды в дом: реальные объекты, процессы и результаты по Московской области.",
+    "Кейсы по чистке колодцев, ремонту и подводке воды в дом: реальные объекты, процессы и результаты по всей Московской области.",
   );
 
   return (
     <SiteLayout>
-      <HeroPageBlock
-        eyebrow="Портфолио"
-        title="Наши работы"
-        description="Кейсы и реальные фотографии усиливают доверие лучше любых общих обещаний. Здесь сайт показывает задачу, процесс и результат в одном визуальном языке."
-        image={assets.cleaning}
-        price="Реальные объекты"
-      />
+        <HeroPageBlock
+          eyebrow="Портфолио"
+          title="Наши работы"
+          description="Кейсы и реальные фотографии усиливают доверие лучше любых общих обещаний. Здесь видно задачу, процесс и результат по настоящим объектам."
+          image={assets.cleaning}
+          price="Реальные объекты"
+        />
       <CasesSection />
       <TestimonialsSection />
       <CtaSection />
@@ -1063,18 +1063,18 @@ export function WorksPage() {
 export function ContactsPage() {
   usePageSeo(
     `Контакты и заявка на работы по колодцам — ${siteMeta.region} | ${siteMeta.name}`,
-    "Контакты, форма заявки и быстрый способ связаться по вопросам чистки колодцев, ремонта и подводки воды в дом по Московской области.",
+    "Контакты, форма заявки и быстрый способ связаться по вопросам чистки колодцев, ремонта и подводки воды в дом по всей Московской области.",
   );
 
   return (
     <SiteLayout>
-      <HeroPageBlock
-        eyebrow="Связь и заявка"
-        title="Контакты"
-        description="Контактная страница должна быть короткой, уверенной и удобной. Для мобильной версии главное — сразу показать следующий шаг и быстрый способ связи."
-        image={assets.waterSupply}
-        price={siteMeta.region}
-      />
+        <HeroPageBlock
+          eyebrow="Связь и заявка"
+          title="Контакты"
+          description="Позвоните, напишите или оставьте заявку. Мы работаем по всей Московской области и быстро помогаем понять, какой формат работ нужен именно по вашему объекту."
+          image={assets.waterSupply}
+          price={siteMeta.coverage}
+        />
       <section className="py-18 lg:py-24">
         <div className="container grid gap-8 xl:grid-cols-[0.9fr_1.1fr]">
           <div className="page-frame rounded-[2rem] p-6 lg:p-8">
@@ -1087,8 +1087,8 @@ export function ContactsPage() {
                 {siteMeta.email}
               </a>
               <p className="story-copy">
-                На связи — {siteMeta.ownerName}. Опишите район, задачу и текущее состояние колодца,
-                чтобы быстрее перейти к нормальной оценке работ без длинных уточнений.
+                Базируемся в {siteMeta.baseLocation}. Опишите район, задачу и текущее состояние
+                колодца, чтобы быстрее перейти к нормальной оценке работ без длинных уточнений.
               </p>
             </div>
             <div className="mt-8 grid gap-4">
@@ -1130,8 +1130,8 @@ export function ContactsPage() {
                 <ArrowRight className="size-4" />
               </button>
               <p className="text-sm leading-7 text-white/45">
-                Для быстрого контакта можно сразу связаться с {siteMeta.ownerName}: позвонить по
-                номеру {siteMeta.phone} или написать на {siteMeta.email}.
+                Для быстрого контакта можно сразу позвонить по номеру {siteMeta.phone} или
+                написать на {siteMeta.email}. Работаем по всей Московской области.
               </p>
             </form>
           </div>
@@ -1145,7 +1145,7 @@ export function ContactsPage() {
 export function AboutPage() {
   usePageSeo(
     `О компании и подходе к работам — ${siteMeta.region} | ${siteMeta.name}`,
-    "Спокойный профессиональный подход к чистке и ремонту колодцев, углублению и организации воды в доме по Московской области.",
+    "Спокойный профессиональный подход к чистке и ремонту колодцев, углублению и организации воды в доме по всей Московской области.",
   );
 
   return (
@@ -1163,8 +1163,8 @@ export function AboutPage() {
             <div className="section-kicker">Позиционирование</div>
             <h2 className="mt-4 text-4xl font-bold text-white">Профильная команда без лишнего пафоса</h2>
             <p className="story-copy mt-5">
-              Вместо лозунгов сайт рассказывает о нормальном процессе: как вы оцениваете объект,
-              почему не предлагаете ненужные операции и как связываете состояние шахты с
+              Вместо лозунгов мы показываем нормальный рабочий процесс: как оцениваем объект,
+              почему не предлагаем ненужные операции и как связываем состояние шахты с
               дальнейшим бытовым результатом для клиента.
             </p>
           </div>
@@ -1186,18 +1186,18 @@ export function AboutPage() {
 export function FAQPage() {
   usePageSeo(
     `Частые вопросы по чистке и ремонту колодцев — ${siteMeta.region} | ${siteMeta.name}`,
-    "Ответы на частые вопросы о чистке колодцев, ремонте шахты, углублении и подводке воды в дом по Московской области.",
+    "Ответы на частые вопросы о чистке колодцев, ремонте шахты, углублении и подводке воды в дом по всей Московской области.",
   );
 
   return (
     <SiteLayout>
-      <HeroPageBlock
-        eyebrow="Ответы заранее"
-        title="Частые вопросы"
-        description="FAQ нужен не только для SEO, но и для нормального коммерческого диалога: он помогает снять тревогу и показать профессиональную логику без давления."
-        image={assets.repair}
-        price="Вопросы и ответы"
-      />
+        <HeroPageBlock
+          eyebrow="Ответы заранее"
+          title="Частые вопросы"
+          description="FAQ помогает снять тревогу заранее, понять порядок работ и быстрее принять спокойное решение без давления и недосказанности."
+          image={assets.repair}
+          price="Вопросы и ответы"
+        />
       <FaqSection />
       <CtaSection />
     </SiteLayout>
@@ -1226,8 +1226,8 @@ function LocalSeoPageContent({ location }: { location: LocalSeoLocation | undefi
       ? `Чистка и ремонт колодцев — ${location.name} | ${siteMeta.name}`
       : `Локальная страница не найдена | ${siteMeta.name}`,
     location
-      ? `Чистка колодцев, ремонт шахты, углубление и подводка воды в дом — ${location.name}, Московская область. Отдельная локальная страница с услугами, FAQ и заявкой.`
-      : "Локальная SEO-страница не найдена.",
+      ? `Чистка колодцев, ремонт шахты, углубление и подводка воды в дом — ${location.name}, Московская область. Реальные услуги, понятный порядок работ и быстрый способ оставить заявку.`
+      : "Локальная страница не найдена.",
   );
 
   if (!location) {
@@ -1237,7 +1237,7 @@ function LocalSeoPageContent({ location }: { location: LocalSeoLocation | undefi
           <div className="page-frame rounded-[2rem] p-10">
             <h1 className="text-4xl font-bold text-white">Локация не найдена</h1>
             <p className="mt-4 text-white/65">
-              Нужная локальная страница пока отсутствует в текущей структуре сайта.
+              Нужное направление по этой локации сейчас недоступно. Вернитесь в раздел услуг или свяжитесь с нами напрямую.
             </p>
           </div>
         </section>
@@ -1256,9 +1256,9 @@ function LocalSeoPageContent({ location }: { location: LocalSeoLocation | undefi
   return (
     <SiteLayout>
       <HeroPageBlock
-        eyebrow={location.type === "city" ? "Городская страница" : "Районная страница"}
+        eyebrow={location.type === "city" ? "Город" : "Район"}
         title={`Чистка, ремонт и вода в доме — ${location.name}`}
-        description={`Отдельная локальная страница под запросы по локации ${location.name}. Здесь сохранён единый премиальный стиль сайта, а контент сфокусирован на чистке колодцев, ремонте, углублении и водоснабжении для частных домов и дач.`}
+        description={`Работаем по направлению ${location.name} и выезжаем на объекты по чистке колодцев, ремонту, углублению и водоснабжению для частных домов и дач.`}
         image={location.asset}
         price={location.officialName}
       />
@@ -1272,9 +1272,8 @@ function LocalSeoPageContent({ location }: { location: LocalSeoLocation | undefi
                 Страница собрана под запросы по локации {location.name}
               </h2>
               <p className="story-copy mt-5">
-                Такая посадочная страница помогает сайту лучше работать по геозависимым запросам.
-                Пользователь сразу видит, что выезжают именно по его направлению, а поисковая
-                структура становится глубже и понятнее.
+                Этот раздел помогает сразу понять, что выезды идут именно по нужному направлению.
+                Клиент видит свои услуги, свою локацию и быстрый путь к звонку или заявке.
               </p>
             </div>
             <div className="page-frame rounded-[2rem] p-6 lg:p-8">
@@ -1295,7 +1294,7 @@ function LocalSeoPageContent({ location }: { location: LocalSeoLocation | undefi
                       </p>
                       {priorityPage ? (
                         <div className="mt-3 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary/85">
-                          Отдельная SEO-страница <ArrowRight className="size-3.5" />
+                          Отдельный маршрут по услуге <ArrowRight className="size-3.5" />
                         </div>
                       ) : null}
                     </Link>
@@ -1353,17 +1352,17 @@ function LocalSeoPageContent({ location }: { location: LocalSeoLocation | undefi
         <div className="container grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
           <div>
             <div className="section-kicker">Как это работает</div>
-            <h2 className="section-title mt-4 text-white">От локального запроса к заявке</h2>
+            <h2 className="section-title mt-4 text-white">От выбора направления к заявке</h2>
             <p className="story-copy mt-5">
-              На локальной странице пользователь не теряется в общей структуре сайта. Он получает
-              понятный вход: видит свои услуги, свою локацию и быстрый путь к заявке или звонку.
+              В этом разделе пользователь не теряется в общей навигации. Он сразу видит свои
+              услуги, свою локацию и быстрый путь к заявке или звонку.
             </p>
           </div>
           <div className="grid gap-5 lg:grid-cols-3">
             {[
-              `Отдельный локальный заголовок под ${location.name}`,
+              `Отдельный маршрут под ${location.name}`,
               `Связка с услугами и общим разделом работ`,
-              `Перелинковка на соседние города и районы для расширения охвата`,
+              `Переходы на соседние города и районы области`,
             ].map((item) => (
               <div key={item} className="glass-panel rounded-[1.7rem] p-5 text-sm leading-7 text-white/72">
                 {item}
@@ -1392,7 +1391,7 @@ function LocalServiceCityPageContent({
 
   usePageSeo(
     page ? page.seoTitle : `Страница услуги по городу не найдена | ${siteMeta.name}`,
-    page ? page.seoDescription : "Нужная локальная страница услуги пока не добавлена.",
+    page ? page.seoDescription : "Нужное направление услуги сейчас недоступно.",
   );
 
   if (!city || !service || !page) {
@@ -1402,7 +1401,7 @@ function LocalServiceCityPageContent({
           <div className="page-frame rounded-[2rem] p-10">
             <h1 className="text-4xl font-bold text-white">Страница не найдена</h1>
             <p className="mt-4 text-white/65">
-              Нужная связка услуги и города пока отсутствует в текущей структуре сайта.
+              Нужное направление услуги по этому городу сейчас недоступно. Вернитесь в общий раздел или свяжитесь с нами напрямую.
             </p>
           </div>
         </section>
@@ -1490,8 +1489,8 @@ function LocalServiceCityPageContent({
             <div className="section-kicker">Перелинковка внутри города</div>
             <h2 className="section-title mt-4 text-white">Другие услуги в {city.name}</h2>
             <p className="story-copy mt-5">
-              Приоритетные города получают не одну, а группу сервисных страниц. Это позволяет
-              аккуратно разводить запросы и усиливать внутреннюю SEO-структуру без потери удобства.
+              Для приоритетных городов собраны отдельные сервисные маршруты. Так клиент быстрее
+              попадает в нужную услугу и не тратит время на лишние переходы.
             </p>
           </div>
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
@@ -1529,17 +1528,17 @@ export function LocalDistrictPage({ slug }: { slug: string }) {
 export function SeoAreasPage() {
   usePageSeo(
     `Города и районы работ по Московской области | ${siteMeta.name}`,
-    "Отдельные SEO-страницы по городам и районам Московской области для услуг по колодцам, ремонту и водоснабжению из колодца в дом.",
+    "Города и районы Московской области, куда выезжаем по чистке колодцев, ремонту, углублению и водоснабжению из колодца в дом.",
   );
 
   return (
     <SiteLayout>
       <HeroPageBlock
-        eyebrow="Локальное SEO"
+        eyebrow="География работ"
         title="Города и районы Московской области"
-        description="В этом разделе собраны отдельные страницы по локациям. Каждая страница помогает лучше отрабатывать локальные запросы и вести посетителя к нужной услуге без потери общего премиального стиля."
+        description="В этом разделе собраны направления, по которым принимаем заявки. Так проще сразу открыть свой город или район и перейти к нужной услуге без лишних шагов."
         image={assets.hero}
-        price={`${allSeoLocations.length} локальных страниц`}
+        price={`${allSeoLocations.length} направлений`}
       />
       <LocationHubSection />
       <section className="py-18 lg:py-24">
@@ -1582,11 +1581,11 @@ export function SeoAreasPage() {
       </section>
       <section className="py-18 lg:py-24">
         <div className="container space-y-10">
-          <SectionHeading
-            eyebrow="Приоритетные связки"
-            title="Отдельные страницы услуг в самых важных городах"
-            description="Для ключевых городов сайт получает не только общие городские страницы, но и отдельные посадочные под конкретные услуги. Это усиливает локальное SEO и делает навигацию точнее."
-          />
+            <SectionHeading
+              eyebrow="Приоритетные связки"
+              title="Отдельные услуги в самых важных городах"
+              description="Для ключевых городов собраны не только общие направления, но и отдельные маршруты по конкретным услугам. Так навигация становится точнее и быстрее ведёт к заявке."
+            />
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
             {featuredPriorityServiceCityPages.map((page) => (
               <Link key={page.path} href={page.path} className="glass-panel card-hover rounded-[1.7rem] p-5">

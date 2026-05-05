@@ -24,14 +24,16 @@ export type ServiceGalleryItem = {
 
 export const siteMeta = {
   name: "WELLS-MO",
-  ownerName: "Денис",
-  phone: "+7 (981) 666-66-70",
-  phoneHref: "tel:+79816666670",
+  ownerName: "WELLS-MO",
+  phone: "8 (981) 666-66-70",
+  phoneHref: "tel:89816666670",
   region: "Московская область",
+  coverage: "Работаем по всей Московской области",
+  baseLocation: "Москва, башня Федерация",
   email: "info@wells-mo.ru",
-  tagline: "Чистка, ремонт и водоснабжение из колодца",
+  tagline: "Чистка, ремонт и вода в доме из колодца",
   description:
-    "Современный многостраничный сайт услуг по чистке колодцев, ремонту шахты, углублению и подводке воды в дом по Московской области.",
+    "Чистка колодцев, ремонт шахты, углубление и подводка воды в дом по всей Московской области. Реальные фото работ, понятная смета и спокойный профессиональный подход.",
 } as const;
 
 export const assets = {
@@ -53,18 +55,22 @@ export const assets = {
     "https://d2xsxph8kpxj0f.cloudfront.net/310519663042042500/htP6tJcWEMcp6qhKGuYmV6/gallery-deepening-02_32aeaf84.jpeg",
   galleryWaterSupplyDetail:
     "https://d2xsxph8kpxj0f.cloudfront.net/310519663042042500/htP6tJcWEMcp6qhKGuYmV6/gallery-water-02_bdc20feb.jpg",
-  userReviews: "/manus-storage/reviews-real_b8f4aaf4.png",
-  userBottomShield: "/manus-storage/bottom-shield-installation_63fdd0fd.png",
-  userAfterWashing: "/manus-storage/after-washing_c921d0c4.png",
-  userLogo: "/manus-storage/site-logo-round_8fff2fa5.png",
-  userGravelBackfill: "/manus-storage/gravel-washing-backfill_8ab3f108.png",
-  userCurrentJointProblem: "/manus-storage/current-joint-problem_4ced24f1.png",
-  userShiftedRingRepair: "/manus-storage/shifted-ring-repair_67c5034b.png",
-  userShaftWashing: "/manus-storage/shaft-washing_a169e4ad.png",
-  userFinishedWell: "/manus-storage/finished-well_7b5c4ebe.png",
-  userJointWaterproofing: "/manus-storage/joint-waterproofing_5d4e4f5b.png",
-  userWellCleaningMain: "/manus-storage/well-cleaning-main_539a53ac.png",
-  userShaftDiagnostics: "/manus-storage/shaft-diagnostics_66073b34.png",
+  userReviews: "https://wellservices-htp6tjcw.manus.space/manus-storage/reviews-real_b8f4aaf4.png",
+  userBottomShield: "https://wellservices-htp6tjcw.manus.space/manus-storage/bottom-shield-installation_63fdd0fd.png",
+  userAfterWashing: "https://wellservices-htp6tjcw.manus.space/manus-storage/after-washing_c921d0c4.png",
+  userLogo: "https://wellservices-htp6tjcw.manus.space/manus-storage/site-logo-round_8fff2fa5.png",
+  userGravelBackfill: "https://wellservices-htp6tjcw.manus.space/manus-storage/gravel-washing-backfill_8ab3f108.png",
+  userCurrentJointProblem: "https://wellservices-htp6tjcw.manus.space/manus-storage/current-joint-problem_4ced24f1.png",
+  userShiftedRingRepair: "https://wellservices-htp6tjcw.manus.space/manus-storage/shifted-ring-repair_67c5034b.png",
+  userShaftWashing: "https://wellservices-htp6tjcw.manus.space/manus-storage/shaft-washing_a169e4ad.png",
+  userFinishedWell: "https://wellservices-htp6tjcw.manus.space/manus-storage/finished-well_7b5c4ebe.png",
+  userJointWaterproofing: "https://wellservices-htp6tjcw.manus.space/manus-storage/joint-waterproofing_5d4e4f5b.png",
+  userWellCleaningMain: "https://wellservices-htp6tjcw.manus.space/manus-storage/well-cleaning-main_539a53ac.png",
+  userShaftDiagnostics: "https://wellservices-htp6tjcw.manus.space/manus-storage/shaft-diagnostics_66073b34.png",
+  userAvitoDmitriy: "https://wellservices-htp6tjcw.manus.space/manus-storage/dmitriy-avito-review_dae62156.png",
+  userAvitoOlesya: "https://wellservices-htp6tjcw.manus.space/manus-storage/olesya-avito-review_f94ec4e3.png",
+  userAvitoLyubov: "https://wellservices-htp6tjcw.manus.space/manus-storage/lyubov-avito-review_6d32f7af.png",
+  userAvitoUser: "https://wellservices-htp6tjcw.manus.space/manus-storage/user-avito-review_44604ce7.png",
 } as const;
 
 export const navigation = [
@@ -79,10 +85,10 @@ export const navigation = [
 ] as const;
 
 export const trustMetrics = [
-  { value: "01", label: "Выезд по Московской области" },
+  { value: "01", label: "Работаем по всей Московской области" },
   { value: "02", label: "Понятная смета до начала работ" },
-  { value: "03", label: "Реальные фото объектов и процессов" },
-  { value: "04", label: "Подход от шахты до воды в доме" },
+  { value: "03", label: "Реальные фото объектов и реальные отзывы" },
+  { value: "04", label: "От чистки и ремонта до воды в доме" },
 ] as const;
 
 export const services: ServiceItem[] = [
@@ -328,20 +334,20 @@ export const serviceOrder = services.map((service) => service.slug);
 
 export const whyChooseUs = [
   {
-    title: "Спокойная профессиональная подача",
-    text: "Сначала оцениваем состояние объекта, затем предлагаем решение и объясняем, из чего складывается работа.",
+    title: "Сначала разбираемся в проблеме",
+    text: "Оцениваем состояние колодца, объясняем, что действительно нужно делать, и не раздуваем объём работ без причины.",
   },
   {
-    title: "Премиальный визуальный подход",
-    text: "Сайт и подача подчеркивают качество через детали, реальные фотографии и чистую архитектуру, а не через лишние обещания.",
+    title: "Реальные объекты вместо пустых обещаний",
+    text: "Показываем настоящие процессы, готовые результаты и отзывы клиентов, чтобы решение опиралось на факты, а не на громкие слова.",
   },
   {
-    title: "Комплексный подход",
-    text: "Можем закрыть задачу от очистки и восстановления шахты до организации воды в доме.",
+    title: "Закрываем задачу комплексно",
+    text: "Берём в работу чистку, ремонт, углубление и подводку воды в дом, если объект требует нескольких этапов сразу.",
   },
   {
-    title: "Работа с реальным результатом",
-    text: "Показываем фото процессов, объясняем сделанное и не прячем важные детали за общими словами.",
+    title: "Выезд по всей Московской области",
+    text: "Работаем по всей области, а базируемся в Москве, поэтому удобно выезжаем на объекты в разных направлениях региона.",
   },
 ] as const;
 
@@ -524,10 +530,31 @@ export const serviceGalleryItems: ServiceGalleryItem[] = [
 export const testimonials = [
   {
     quote:
-      "Реальные отзывы клиентов и переписка по объектам усиливают доверие лучше любых деклараций на первом экране.",
-    author: "Подтверждённая обратная связь по работам",
+      "Подборка реальных отзывов и переписок помогает показать не обещания, а фактический опыт клиентов после выполненных работ.",
+    author: "Подтверждённая обратная связь по объектам",
     image: assets.userReviews,
     alt: "Скриншот реальных отзывов клиентов WELLS-MO",
+  },
+  {
+    quote:
+      "Клиент подробно описал сложный объект с песком, течами, смещением колец и нарушенной герметизацией. В отзыве отдельно отмечены донный щит, гидроизоляция швов, обратная засыпка щебнем и очень аккуратная работа бригады.",
+    author: "Дмитрий · отзыв с Avito",
+    image: assets.userAvitoDmitriy,
+    alt: "Отзыв Дмитрия с Avito о чистке и ремонте колодца",
+  },
+  {
+    quote:
+      "В отзыве отмечены быстрый ответ, выезд уже на следующее утро, чёткое обсуждение фронта работ, чистка колодца с дезинфекцией и аккуратная промазка текущего шва.",
+    author: "Олеся · отзыв с Avito",
+    image: assets.userAvitoOlesya,
+    alt: "Отзыв Олеси с Avito о чистке колодца и герметизации шва",
+  },
+  {
+    quote:
+      "Клиентка позвонила поздно вечером, а на следующий день бригада уже приступила к работе. В отзыве отдельно отмечены диагностика треснувших швов, чистка с дезинфекцией, скобирование, герметизация и гарантия на выполненные работы.",
+    author: "Пользователь · отзыв с Avito",
+    image: assets.userAvitoUser,
+    alt: "Отзыв пользователя с Avito о чистке колодца и ремонте швов",
   },
   {
     quote:
@@ -539,18 +566,13 @@ export const testimonials = [
       "По ремонту всё объяснили спокойно и по делу. Видно было, что речь идёт не о продаже услуг, а о реальном состоянии шахты и нормальном решении проблемы.",
     author: "Собственник участка, Подмосковье",
   },
-  {
-    quote:
-      "Делали подводку воды из колодца в дом. Всё собрано аккуратно, визуально чисто и без ощущения временного решения.",
-    author: "Загородный дом, Московская область",
-  },
 ] as const;
 
 export const globalFaq = [
   {
-    question: "Вы работаете только по Московской области?",
+    question: "Где вы работаете и как быстро можно договориться о выезде?",
     answer:
-      "Да, сайт и структура проекта ориентированы на выезды по Московской области и ближайшим локациям внутри региона.",
+      "Работаем по всей Московской области. Базируемся в Москве, в башне Федерация, поэтому берём заявки по разным направлениям региона и согласовываем выезд под конкретную задачу.",
   },
   {
     question: "Можно ли назвать точную цену по телефону?",
@@ -627,8 +649,8 @@ const slugifyLocation = (value: string) =>
 
 const locationFocusPool = [
   "Акцент на аккуратной чистке, ремонте швов и понятной диагностике состояния шахты.",
-  "Страница ориентирована на заявки по чистке колодцев, восстановлению конструкции и воде в доме.",
-  "Локальный акцент на реальных выездах, понятной смете и спокойной профессиональной подаче.",
+  "Принимаем заявки по чистке колодцев, восстановлению конструкции и воде в доме без лишней бюрократии.",
+  "Локальный акцент на реальных выездах, понятной смете и спокойном профессиональном подходе.",
   "Подходит для запросов по обслуживанию колодцев, ремонту, углублению и монтажу водоснабжения.",
 ] as const;
 
@@ -764,17 +786,17 @@ const cityNameInMap: Record<string, string> = {
 const getCityNameIn = (city: LocalSeoLocation) => cityNameInMap[city.slug] ?? city.name;
 
 const serviceCityLeadMap: Record<string, string> = {
-  "chistka-kolodcev": "Отдельная локальная посадочная страница под запросы по чистке колодцев с акцентом на состояние воды, обслуживание шахты и аккуратный выезд по объекту.",
-  "remont-kolodcev": "Локальная страница под ремонт колодцев с фокусом на герметизацию швов, укрепление колец и спокойное объяснение технического решения.",
-  "uglublenie-kolodcev": "Страница для запросов по углублению колодцев, где важны диагностика, оценка конструкции и взвешенный подход без поспешных обещаний.",
-  "vodosnabzhenie-iz-kolodca-v-dom": "Локальная инженерная посадочная страница по подводке воды из колодца в дом, подбору схемы и аккуратному монтажу системы.",
+  "chistka-kolodcev": "Чистка колодцев с акцентом на состояние воды, обслуживание шахты и аккуратный выезд по объекту.",
+  "remont-kolodcev": "Ремонт колодцев с фокусом на герметизацию швов, укрепление колец и спокойное объяснение технического решения.",
+  "uglublenie-kolodcev": "Углубление колодцев, где важны диагностика, оценка конструкции и взвешенный подход без поспешных обещаний.",
+  "vodosnabzhenie-iz-kolodca-v-dom": "Подводка воды из колодца в дом с подбором схемы и аккуратным монтажом системы.",
 };
 
 const serviceCityFocusMap: Record<string, string> = {
   "chistka-kolodcev": "Подходит для запросов, где вода помутнела, появился запах, накопились отложения и нужен понятный формат обслуживания без лишних слов.",
-  "remont-kolodcev": "Усиливает запросы, связанные с течами, швами, смещением колец и восстановлением нормальной работы шахты.",
+  "remont-kolodcev": "Решает задачи, связанные с течами, швами, смещением колец и восстановлением нормальной работы шахты.",
   "uglublenie-kolodcev": "Закрывает сложные запросы по снижению уровня воды, сезонным просадкам и оценке целесообразности углубления на конкретном объекте.",
-  "vodosnabzhenie-iz-kolodca-v-dom": "Ориентирована на владельцев домов и дач, которым нужна стабильная подача воды из колодца в дом как целостная инженерная система.",
+  "vodosnabzhenie-iz-kolodca-v-dom": "Подходит владельцам домов и дач, которым нужна стабильная подача воды из колодца в дом как целостная инженерная система.",
 };
 
 const buildPriorityServiceCityPage = (
