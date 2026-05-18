@@ -3,8 +3,6 @@ Design reminder for this file:
 Маршрутизация должна поддерживать полноценный многостраничный сайт с тёмной премиальной темой как базовой средой для всех экранов.
 */
 
-import { Toaster } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
@@ -57,10 +55,7 @@ function App() {
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="dark">
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
+        <Router />
       </ThemeProvider>
     </ErrorBoundary>
   );
