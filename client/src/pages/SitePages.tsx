@@ -64,6 +64,72 @@ declare global {
 
 const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
 const WEB3FORMS_ACCESS_KEY = "8f1b122e-09bf-4784-9ab9-5068f642ebec";
+const PHONE_MASK_FOCUS_PREFIX = "+7 (";
+
+function normalizeRussianPhoneDigits(value: string) {
+  let digitsOnly = value.replace(/\D/g, "");
+
+  if (!digitsOnly) {
+    return "";
+  }
+
+  if (digitsOnly.length > 11 && digitsOnly.startsWith("7") && ["7", "8"].includes(digitsOnly[1] ?? "")) {
+    digitsOnly = digitsOnly.slice(1);
+  }
+
+  if (digitsOnly.startsWith("8")) {
+    return `7${digitsOnly.slice(1)}`.slice(0, 11);
+  }
+
+  if (digitsOnly.startsWith("7")) {
+    return digitsOnly.slice(0, 11);
+  }
+
+  return `7${digitsOnly}`.slice(0, 11);
+}
+
+function formatRussianPhone(value: string, showPrefix = false) {
+  const digits = normalizeRussianPhoneDigits(value);
+
+  if (!digits) {
+    return showPrefix ? PHONE_MASK_FOCUS_PREFIX : "";
+  }
+
+  const localDigits = digits.slice(1);
+  let formatted = "+7";
+
+  if (!localDigits.length) {
+    return showPrefix ? PHONE_MASK_FOCUS_PREFIX : formatted;
+  }
+
+  formatted += ` (${localDigits.slice(0, 3)}`;
+
+  if (localDigits.length < 3) {
+    return formatted;
+  }
+
+  formatted += ")";
+
+  if (localDigits.length === 3) {
+    return `${formatted} `;
+  }
+
+  formatted += ` ${localDigits.slice(3, 6)}`;
+
+  if (localDigits.length <= 6) {
+    return formatted;
+  }
+
+  formatted += `-${localDigits.slice(6, 8)}`;
+
+  if (localDigits.length <= 8) {
+    return formatted;
+  }
+
+  formatted += `-${localDigits.slice(8, 10)}`;
+
+  return formatted;
+}
 
 type ContactFormState = {
   name: string;
@@ -1286,6 +1352,13 @@ export function ContactsPage() {
   const [submitState, setSubmitState] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [submitMessage, setSubmitMessage] = useState("");
 
+  const resetSubmitState = () => {
+    if (submitState !== "idle") {
+      setSubmitState("idle");
+      setSubmitMessage("");
+    }
+  };
+
   const handleFieldChange =
     (field: keyof ContactFormState) =>
     (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -1296,11 +1369,32 @@ export function ContactsPage() {
         [field]: value,
       }));
 
-      if (submitState !== "idle") {
-        setSubmitState("idle");
-        setSubmitMessage("");
-      }
+      resetSubmitState();
     };
+
+  const handlePhoneChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const nextPhoneValue = formatRussianPhone(event.target.value);
+
+    setFormData((current) => ({
+      ...current,
+      phone: nextPhoneValue,
+    }));
+
+    resetSubmitState();
+  };
+
+  const handlePhoneFocus = () => {
+    setFormData((current) => {
+      if (current.phone.trim()) {
+        return current;
+      }
+
+      return {
+        ...current,
+        phone: PHONE_MASK_FOCUS_PREFIX,
+      };
+    });
+  };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -1309,9 +1403,11 @@ export function ContactsPage() {
       return;
     }
 
+    const normalizedPhoneDigits = normalizeRussianPhoneDigits(formData.phone);
+
     const normalizedData = {
       name: formData.name.trim(),
-      phone: formData.phone.trim(),
+      phone: formatRussianPhone(formData.phone),
       location: formData.location.trim(),
       message: formData.message.trim(),
       botcheck: formData.botcheck.trim(),
@@ -1320,6 +1416,12 @@ export function ContactsPage() {
     if (!normalizedData.name || !normalizedData.phone || !normalizedData.location || !normalizedData.message) {
       setSubmitState("error");
       setSubmitMessage("Пожалуйста, заполните имя, телефон, район и описание задачи перед отправкой заявки.");
+      return;
+    }
+
+    if (normalizedPhoneDigits.length < 11) {
+      setSubmitState("error");
+      setSubmitMessage("Укажите полный номер телефона в формате +7 (999) 123-45-67.");
       return;
     }
 
@@ -1426,13 +1528,16 @@ export function ContactsPage() {
               />
               <input
                 name="phone"
+                type="tel"
+                inputMode="tel"
                 autoComplete="tel"
                 required
                 disabled={submitState === "loading"}
                 value={formData.phone}
-                onChange={handleFieldChange("phone")}
+                onChange={handlePhoneChange}
+                onFocus={handlePhoneFocus}
                 className="h-14 rounded-2xl border border-white/10 bg-white/4 px-4 text-base text-white placeholder:text-white/34 disabled:cursor-not-allowed disabled:opacity-60"
-                placeholder="Телефон"
+                placeholder="+7 (___) ___-__-__"
               />
               <input
                 name="location"
