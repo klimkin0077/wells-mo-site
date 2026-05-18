@@ -14,6 +14,8 @@ import {
   DeepeningPage,
   FAQPage,
   HomePage,
+  WellDiggingPage,
+  SepticPage,
   LocalCityPage,
   LocalCityServicePage,
   LocalDistrictPage,
@@ -46,6 +48,8 @@ function SiteRouter() {
       <Route path="/uslugi" component={ServicesPage} />
       <Route path="/chistka-kolodcev" component={CleaningPage} />
       <Route path="/remont-kolodcev" component={RepairPage} />
+      <Route path="/kopka-kolodcev" component={WellDiggingPage} />
+      <Route path="/septik-iz-zhbi-kolec" component={SepticPage} />
       <Route path="/uglublenie-kolodcev" component={DeepeningPage} />
       <Route path="/vodosnabzhenie-iz-kolodca-v-dom" component={WaterSupplyPage} />
       <Route path="/ceny" component={PricingPage} />

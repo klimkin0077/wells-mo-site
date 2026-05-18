@@ -52,6 +52,8 @@ import {
 const iconMap = {
   "chistka-kolodcev": Sparkles,
   "remont-kolodcev": Hammer,
+  "kopka-kolodcev": Wrench,
+  "septik-iz-zhbi-kolec": Building2,
   "uglublenie-kolodcev": MoveDown,
   "vodosnabzhenie-iz-kolodca-v-dom": Droplets,
 } as const;
@@ -268,9 +270,65 @@ function usePageSeo(title: string, description: string) {
       return element;
     };
 
+    const ensureLink = (selector: string, rel: string) => {
+      let element = document.head.querySelector<HTMLLinkElement>(selector);
+
+      if (!element) {
+        element = document.createElement("link");
+        element.setAttribute("rel", rel);
+        document.head.appendChild(element);
+      }
+
+      return element;
+    };
+
+    const currentUrl = typeof window !== "undefined" ? window.location.href : "https://wells-mo.ru";
+    const keywordPool = [
+      "чистка колодцев московская область",
+      "ремонт колодцев московская область",
+      "копка колодцев",
+      "септик из жби колец",
+      "водоснабжение из колодца в дом",
+      "одинцово",
+      "истра",
+      "дмитров",
+      title,
+    ];
+    const keywords = Array.from(new Set(keywordPool)).join(", ");
+
     ensureMeta('meta[name="description"]', "name", "description").setAttribute("content", description);
+    ensureMeta('meta[name="keywords"]', "name", "keywords").setAttribute("content", keywords);
+    ensureMeta('meta[name="robots"]', "name", "robots").setAttribute("content", "index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1");
     ensureMeta('meta[property="og:title"]', "property", "og:title").setAttribute("content", title);
     ensureMeta('meta[property="og:description"]', "property", "og:description").setAttribute("content", description);
+    ensureMeta('meta[property="og:url"]', "property", "og:url").setAttribute("content", currentUrl);
+    ensureMeta('meta[property="og:type"]', "property", "og:type").setAttribute("content", "website");
+    ensureLink('link[rel="canonical"]', "canonical").setAttribute("href", currentUrl);
+
+    let schemaScript = document.head.querySelector<HTMLScriptElement>('script[data-schema="wellsmo-localbusiness"]');
+    if (!schemaScript) {
+      schemaScript = document.createElement("script");
+      schemaScript.type = "application/ld+json";
+      schemaScript.dataset.schema = "wellsmo-localbusiness";
+      document.head.appendChild(schemaScript);
+    }
+
+    schemaScript.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      name: siteMeta.name,
+      description,
+      url: currentUrl,
+      telephone: siteMeta.phoneHref.replace("tel:", "+"),
+      email: siteMeta.email,
+      areaServed: ["Московская область", "Одинцово", "Истра", "Дмитров", "Красногорск", "Солнечногорск", "Химки", "Лобня"],
+      address: {
+        "@type": "PostalAddress",
+        addressRegion: "Московская область",
+        addressCountry: "RU",
+      },
+      serviceType: title,
+    });
   }, [title, description]);
 }
 
@@ -839,8 +897,8 @@ function Footer() {
         <div className="space-y-4">
           <div className="font-heading text-2xl font-bold text-white">{siteMeta.name}</div>
           <p className="max-w-md text-sm leading-7 text-white/62">
-            Чистка, ремонт, углубление и вода в доме из колодца. Работаем спокойно,
-            по делу и с реальными примерами выполненных объектов.
+            Колодцы, септики и вода в доме по Московской области. Работаем по делу,
+            быстро и с реальными примерами выполненных объектов.
           </p>
         </div>
         <div>
@@ -920,14 +978,13 @@ function HomeHero() {
           </div>
           <div className="space-y-5">
             <h1 className="hero-title text-white">
-              Чистка, ремонт и <span className="text-gradient-metal">вода в доме</span>
+              Колодцы, <span className="text-gradient-metal">септики</span> и вода в доме
               <br />
-              из колодца
+              по Московской области
             </h1>
             <p className="max-w-2xl text-base leading-8 text-white/68 sm:text-lg lg:text-xl">
-              Чистим колодцы, устраняем течи, восстанавливаем шахту и подключаем воду в дом.
-              Клиент заранее понимает, что будет сделано, сколько это примерно стоит и какой
-              результат он получит по своему объекту.
+              Чистим, ремонтируем, копаем новые колодцы, ставим септики из ЖБ колец и заводим воду в дом.
+              Акцент держим на севере и северо-западе области: Одинцово, Истра, Дмитров и соседние направления.
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row">
@@ -970,7 +1027,7 @@ function HomeHero() {
             <div className="absolute left-5 right-5 top-5 flex items-center justify-between rounded-full border border-white/12 bg-[#10151d]/72 px-4 py-3 backdrop-blur-md">
               <div>
                 <div className="text-xs uppercase tracking-[0.24em] text-primary/90">WELLS-MO</div>
-                <div className="text-sm text-white/65">Сервис по колодцам и воде в доме</div>
+                <div className="text-sm text-white/65">Колодцы, септики и вода в доме</div>
               </div>
               <ShieldCheck className="size-5 text-primary" />
             </div>
@@ -980,8 +1037,8 @@ function HomeHero() {
               </div>
               <div className="grid gap-3 sm:grid-cols-3">
                 {[
-                  "Понятный объём работ",
-                  "Аккуратная работа на участке",
+                  "Понятный объём работ и сметы",
+                  "Быстрый выезд по северу и северо-западу МО",
                   "Реальные фото процессов и результата",
                 ].map((item) => (
                   <div key={item} className="rounded-2xl border border-white/8 bg-white/4 p-4 text-sm text-white/74">
@@ -1003,8 +1060,8 @@ function ServicesPreview() {
       <div className="container space-y-10">
         <SectionHeading
           eyebrow="Ключевые направления"
-          title="Чистка, ремонт, углубление и вода в доме"
-          description="Каждое направление вынесено отдельно, чтобы клиент быстро понимал, какая услуга нужна именно ему и какой результат можно получить по объекту."
+          title="Чистка, ремонт, копка, септики и вода в доме"
+          description="Каждое направление вынесено в отдельную страницу, чтобы сайт выглядел как полноценный сервисный ресурс, а клиент быстро находил нужную услугу под свою задачу."
         />
         <div className="grid gap-5 lg:grid-cols-2 xl:grid-cols-4">
           {services.map((service) => {
@@ -1066,7 +1123,7 @@ function WhyChooseSection() {
           </div>
         </div>
         <div className="grid gap-5 md:grid-cols-2">
-          {[assets.cleaning, assets.repair, assets.waterSupply, assets.hero].map((asset, index) => (
+          {[assets.fieldCrew, assets.wellDigging, assets.septic, assets.waterSupply].map((asset, index) => (
             <div key={asset} className={cn("image-mask page-frame overflow-hidden rounded-[1.8rem]", index === 0 ? "md:col-span-2 min-h-[260px]" : "min-h-[240px]")}>
               <img
                 src={asset}
@@ -1328,7 +1385,7 @@ function LocationHubSection() {
         <SectionHeading
           eyebrow="Города и районы"
           title="Выезжаем по всей Московской области"
-          description="Работаем по всей Московской области. Ниже показаны города и районы, куда выезжаем на чистку, ремонт, углубление колодцев и подводку воды в дом."
+          description="Работаем по всей Московской области. Ниже показаны города и районы, куда выезжаем на чистку, ремонт, копку колодцев, монтаж септиков из ЖБ колец, углубление и подводку воды в дом."
         />
         <div className="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
           <div className="page-frame rounded-[2rem] p-6 lg:p-8">
@@ -1389,7 +1446,7 @@ function CtaSection() {
             <div className="space-y-5">
               <div className="section-kicker">Следующий шаг</div>
               <h2 className="section-title text-white">
-                Нужна чистка, ремонт или <span className="text-gradient-metal">вода в доме</span>?
+                Нужен колодец, септик или <span className="text-gradient-metal">вода в доме</span>?
               </h2>
               <p className="story-copy max-w-2xl">
                 Опишите задачу, район и текущее состояние объекта. Чем точнее исходные данные,
@@ -1724,8 +1781,8 @@ function ServiceContent({ slug }: { slug: string }) {
 
 export function HomePage() {
   usePageSeo(
-    "Чистка колодцев, ремонт и водоснабжение из колодца в дом — Московская область | WELLS-MO",
-    "Чистка колодцев, ремонт шахты, углубление и подводка воды в дом по всей Московской области. Реальные фото работ, понятная смета и быстрый контакт.",
+    "Колодцы, септики и вода в доме — Московская область | WELLS-MO",
+    "Чистка, ремонт, копка колодцев, септики из ЖБ колец, углубление и вода в доме по всей Московской области. Реальные фото работ, понятная смета и быстрый контакт.",
   );
 
   return (
@@ -1747,18 +1804,18 @@ export function HomePage() {
 
 export function ServicesPage() {
   usePageSeo(
-    `Услуги по колодцам и водоснабжению — ${siteMeta.region} | ${siteMeta.name}`,
-    "Чистка колодцев, ремонт, углубление и подводка воды в дом по всей Московской области с реальными примерами работ и понятной подачей.",
+    `Услуги по колодцам, септикам и водоснабжению — ${siteMeta.region} | ${siteMeta.name}`,
+    "Чистка, ремонт, копка колодцев, септики из ЖБ колец, углубление и подводка воды в дом по Московской области с реальными примерами работ и понятной подачей.",
   );
 
   return (
     <SiteLayout>
       <HeroPageBlock
         eyebrow="Основные услуги"
-        title="Услуги по колодцам и водоснабжению"
-        description="Собрали основные направления работ по колодцам и воде в доме: чистка, ремонт, углубление и подводка воды с понятным составом работ и ориентирами по стоимости."
-        image={assets.hero}
-        price="4 направления работ"
+        title="Услуги по колодцам, септикам и водоснабжению"
+        description="Собрали основные направления работ по колодцам, септикам и воде в доме: чистка, ремонт, копка, углубление, монтаж септика и подводка воды с понятным составом работ и ориентирами по стоимости."
+        image={assets.fieldCrew}
+        price="6 направлений работ"
       />
       <ServicesPreview />
       <ProcessSection />
@@ -1769,8 +1826,8 @@ export function ServicesPage() {
 
 export function PricingPage() {
   usePageSeo(
-    `Цены на чистку и ремонт колодцев — ${siteMeta.region} | ${siteMeta.name}`,
-    "Ориентировочные цены на чистку колодцев, ремонт шахты, углубление и водоснабжение из колодца в дом по всей Московской области.",
+    `Цены на колодцы, септики и воду в доме — ${siteMeta.region} | ${siteMeta.name}`,
+    "Ориентировочные цены на копку колодцев, септики из ЖБ колец, чистку, ремонт, углубление и водоснабжение из колодца в дом по Московской области.",
   );
 
   return (
@@ -2091,7 +2148,7 @@ export function ContactsPage() {
 export function AboutPage() {
   usePageSeo(
     `О компании и подходе к работам — ${siteMeta.region} | ${siteMeta.name}`,
-    "Спокойный профессиональный подход к чистке и ремонту колодцев, углублению и организации воды в доме по всей Московской области.",
+    "Подход к чистке, ремонту, копке колодцев, септикам из ЖБ колец, углублению и организации воды в доме по всей Московской области.",
   );
 
   return (
@@ -2131,8 +2188,8 @@ export function AboutPage() {
 
 export function FAQPage() {
   usePageSeo(
-    `Частые вопросы по чистке и ремонту колодцев — ${siteMeta.region} | ${siteMeta.name}`,
-    "Ответы на частые вопросы о чистке колодцев, ремонте шахты, углублении и подводке воды в дом по всей Московской области.",
+    `Частые вопросы по колодцам, септикам и воде в доме — ${siteMeta.region} | ${siteMeta.name}`,
+    "Ответы на частые вопросы о чистке, ремонте, копке колодцев, септиках из ЖБ колец, углублении и подводке воды в дом по всей Московской области.",
   );
 
   return (
@@ -2166,13 +2223,21 @@ export function WaterSupplyPage() {
   return <ServiceContent slug="vodosnabzhenie-iz-kolodca-v-dom" />;
 }
 
+export function WellDiggingPage() {
+  return <ServiceContent slug="kopka-kolodcev" />;
+}
+
+export function SepticPage() {
+  return <ServiceContent slug="septik-iz-zhbi-kolec" />;
+}
+
 function LocalSeoPageContent({ location }: { location: LocalSeoLocation | undefined }) {
   usePageSeo(
     location
-      ? `Чистка и ремонт колодцев — ${location.name} | ${siteMeta.name}`
+      ? `Колодцы, септики и вода в доме — ${location.name} | ${siteMeta.name}`
       : `Локальная страница не найдена | ${siteMeta.name}`,
     location
-      ? `Чистка колодцев, ремонт шахты, углубление и подводка воды в дом — ${location.name}, Московская область. Реальные услуги, понятный порядок работ и быстрый способ оставить заявку.`
+      ? `Чистка, ремонт, копка колодцев, септики из ЖБ колец, углубление и подводка воды в дом — ${location.name}, Московская область. Реальные услуги, понятный порядок работ и быстрый способ оставить заявку.`
       : "Локальная страница не найдена.",
   );
 
@@ -2203,8 +2268,8 @@ function LocalSeoPageContent({ location }: { location: LocalSeoLocation | undefi
     <SiteLayout>
       <HeroPageBlock
         eyebrow={location.type === "city" ? "Город" : "Район"}
-        title={`Чистка, ремонт и вода в доме — ${location.name}`}
-        description={`Работаем по направлению ${location.name} и выезжаем на объекты по чистке колодцев, ремонту, углублению и водоснабжению для частных домов и дач.`}
+        title={`Колодцы, септики и вода в доме — ${location.name}`}
+        description={`Работаем по направлению ${location.name} и выезжаем на объекты по чистке, ремонту, копке колодцев, септикам из ЖБ колец, углублению и водоснабжению для частных домов и дач.`}
         image={location.asset}
         price={location.officialName}
       />
@@ -2470,7 +2535,7 @@ export function LocalDistrictPage({ slug }: { slug: string }) {
 export function SeoAreasPage() {
   usePageSeo(
     `Города и районы работ по Московской области | ${siteMeta.name}`,
-    "Города и районы Московской области, куда выезжаем по чистке колодцев, ремонту, углублению и водоснабжению из колодца в дом.",
+    "Города и районы Московской области, куда выезжаем по чистке, ремонту, копке колодцев, септикам из ЖБ колец, углублению и водоснабжению из колодца в дом.",
   );
 
   return (
@@ -2478,7 +2543,7 @@ export function SeoAreasPage() {
       <HeroPageBlock
         eyebrow="География работ"
         title="Города и районы Московской области"
-        description="Принимаем заявки по городам и районам Московской области на чистку, ремонт, углубление колодцев и подводку воды в дом."
+        description="Принимаем заявки по городам и районам Московской области на чистку, ремонт, копку колодцев, септики из ЖБ колец, углубление колодцев и подводку воды в дом."
         image={assets.hero}
         price={`${allSeoLocations.length} направлений`}
       />
