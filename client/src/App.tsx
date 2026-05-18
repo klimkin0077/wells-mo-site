@@ -4,7 +4,7 @@ Design reminder for this file:
 */
 
 import NotFound from "@/pages/NotFound";
-import { Route, Switch } from "wouter";
+import { Route, Router as WouterRouter, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import {
@@ -25,7 +25,12 @@ import {
   WorksPage,
 } from "./pages/SitePages";
 
-function Router() {
+const routerBase = (() => {
+  const baseUrl = import.meta.env.BASE_URL || "/";
+  return baseUrl === "/" ? "" : baseUrl.replace(/\/$/, "");
+})();
+
+function SiteRouter() {
   return (
     <Switch>
       <Route path="/" component={HomePage} />
@@ -55,7 +60,9 @@ function App() {
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="dark">
-        <Router />
+        <WouterRouter base={routerBase}>
+          <SiteRouter />
+        </WouterRouter>
       </ThemeProvider>
     </ErrorBoundary>
   );

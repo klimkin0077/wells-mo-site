@@ -202,6 +202,7 @@ function vitePluginManusDebugCollector(): Plugin {
 
 export default defineConfig(({ command }) => {
   const isProductionBuild = command === "build";
+  const publicBase = process.env.VITE_PUBLIC_BASE || "/";
 
   const plugins = [
     react(),
@@ -211,6 +212,7 @@ export default defineConfig(({ command }) => {
   ];
 
   return {
+    base: publicBase,
     plugins,
     resolve: {
       alias: {
