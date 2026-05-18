@@ -55,6 +55,37 @@ const iconMap = {
   "vodosnabzhenie-iz-kolodca-v-dom": Droplets,
 } as const;
 
+declare global {
+  interface Window {
+    ym?: (...args: unknown[]) => void;
+    __WELLS_MO_METRIKA_ID__?: number | null;
+  }
+}
+
+function trackCtaClick(ctaId: string, placement?: string) {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  const detail = {
+    ctaId,
+    placement: placement ?? window.location.pathname,
+    path: window.location.pathname,
+    timestamp: Date.now(),
+  };
+
+  window.dispatchEvent(new CustomEvent("wellsmo:cta-click", { detail }));
+
+  const metrikaId = window.__WELLS_MO_METRIKA_ID__;
+  if (typeof metrikaId === "number" && typeof window.ym === "function") {
+    try {
+      window.ym(metrikaId, "reachGoal", "cta_click", detail);
+    } catch {
+      // Analytics should never block navigation.
+    }
+  }
+}
+
 function ScrollToTop() {
   const [location] = useLocation();
 
@@ -88,10 +119,25 @@ function usePageSeo(title: string, description: string) {
   }, [title, description]);
 }
 
-function PrimaryLink({ href, children }: { href: string; children: ReactNode }) {
+function PrimaryLink({
+  href,
+  children,
+  trackingId,
+  trackingPlacement,
+}: {
+  href: string;
+  children: ReactNode;
+  trackingId?: string;
+  trackingPlacement?: string;
+}) {
+  const resolvedTrackingId = trackingId ?? href;
+
   return (
     <Link
       href={href}
+      data-cta={resolvedTrackingId}
+      data-cta-placement={trackingPlacement ?? href}
+      onClick={() => trackCtaClick(resolvedTrackingId, trackingPlacement)}
       className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:translate-y-[-1px] hover:shadow-[0_12px_32px_rgba(193,145,71,0.25)]"
     >
       {children}
@@ -99,10 +145,25 @@ function PrimaryLink({ href, children }: { href: string; children: ReactNode }) 
   );
 }
 
-function SecondaryLink({ href, children }: { href: string; children: ReactNode }) {
+function SecondaryLink({
+  href,
+  children,
+  trackingId,
+  trackingPlacement,
+}: {
+  href: string;
+  children: ReactNode;
+  trackingId?: string;
+  trackingPlacement?: string;
+}) {
+  const resolvedTrackingId = trackingId ?? href;
+
   return (
     <Link
       href={href}
+      data-cta={resolvedTrackingId}
+      data-cta-placement={trackingPlacement ?? href}
+      onClick={() => trackCtaClick(resolvedTrackingId, trackingPlacement)}
       className="inline-flex items-center justify-center gap-2 rounded-full border border-white/12 bg-white/4 px-6 py-3 text-sm font-semibold text-white/90 transition hover:border-primary/40 hover:bg-white/8"
     >
       {children}
@@ -116,12 +177,15 @@ function MobileStickyBar() {
       <div className="container grid grid-cols-[1fr_auto] gap-3 py-3">
         <a
           href={siteMeta.phoneHref}
+          data-cta="mobile_phone"
+          data-cta-placement="mobile_sticky_bar"
+          onClick={() => trackCtaClick("mobile_phone", "mobile_sticky_bar")}
           className="inline-flex min-w-0 items-center justify-center gap-2 rounded-full border border-primary/18 bg-primary/10 px-4 py-3 text-sm font-semibold text-primary"
         >
           <Phone className="size-4 shrink-0" />
           <span className="truncate">Позвонить</span>
         </a>
-        <PrimaryLink href="/kontakty">Заявка</PrimaryLink>
+        <PrimaryLink href="/kontakty" trackingId="mobile_request" trackingPlacement="mobile_sticky_bar">Заявка</PrimaryLink>
       </div>
     </div>
   );
@@ -312,11 +376,20 @@ function HomeHero() {
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row">
-            <PrimaryLink href="/kontakty">
+            <PrimaryLink href="/kontakty" trackingId="hero_consultation" trackingPlacement="home_hero">
               Получить консультацию
               <ArrowRight className="size-4" />
             </PrimaryLink>
-            <SecondaryLink href="/uslugi">Посмотреть услуги</SecondaryLink>
+            <a
+              href={siteMeta.phoneHref}
+              data-cta="hero_phone"
+              data-cta-placement="home_hero"
+              onClick={() => trackCtaClick("hero_phone", "home_hero")}
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/12 bg-white/4 px-6 py-3 text-sm font-semibold text-white/90 transition hover:border-primary/40 hover:bg-white/8"
+            >
+              <Phone className="size-4 text-primary" />
+              {siteMeta.phone}
+            </a>
           </div>
           <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
             {trustMetrics.map((item) => (
@@ -333,6 +406,9 @@ function HomeHero() {
             <img
               src={assets.hero}
               alt="Премиальный объект с колодцем и работой специалистов"
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
               className="absolute inset-0 h-full w-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f15] via-[#0b0f15]/42 to-transparent" />
@@ -437,7 +513,13 @@ function WhyChooseSection() {
         <div className="grid gap-5 md:grid-cols-2">
           {[assets.cleaning, assets.repair, assets.waterSupply, assets.hero].map((asset, index) => (
             <div key={asset} className={cn("image-mask page-frame overflow-hidden rounded-[1.8rem]", index === 0 ? "md:col-span-2 min-h-[260px]" : "min-h-[240px]")}>
-              <img src={asset} alt="Реальный процесс работ" className="absolute inset-0 h-full w-full object-cover" />
+              <img
+                src={asset}
+                alt="Реальный процесс работ"
+                loading="lazy"
+                decoding="async"
+                className="absolute inset-0 h-full w-full object-cover"
+              />
             </div>
           ))}
         </div>
@@ -475,14 +557,20 @@ function CasesSection() {
       <div className="container space-y-10">
         <SectionHeading
           eyebrow="Реальные объекты"
-          title="Кейсы, которые заменяют лишние обещания"
-          description="Портфолио показывает не просто красивые кадры, а связку задачи, процесса и результата. Именно так клиент быстрее понимает уровень работ и принимает решение увереннее."
+          title="Реальные объекты до и после работ"
+          description="Показываем объекты такими, какими они были в работе: с понятной задачей, реальным процессом и итогом, который можно оценить без лишних обещаний."
         />
         <div className="grid gap-5 lg:grid-cols-3">
           {cases.map((item) => (
             <article key={item.title} className="page-frame overflow-hidden rounded-[1.8rem]">
               <div className="image-mask min-h-[300px] border-b border-white/8">
-                <img src={item.image} alt={item.title} className="absolute inset-0 h-full w-full object-cover" />
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
               </div>
               <div className="p-6">
                 <div className="text-xs uppercase tracking-[0.2em] text-primary/90">{item.location}</div>
@@ -520,7 +608,7 @@ function PricingSection() {
               </div>
             ))}
           </div>
-          <SecondaryLink href="/ceny">Открыть страницу цен</SecondaryLink>
+          <SecondaryLink href="/ceny" trackingId="pricing_details" trackingPlacement="pricing_section">Открыть страницу цен</SecondaryLink>
         </div>
         <div className="reveal-rise reveal-rise-delay-1 page-frame overflow-hidden rounded-[2rem]">
           <div className="divide-y divide-white/8">
@@ -613,8 +701,8 @@ function TestimonialsSection() {
       <div className="container space-y-10">
         <SectionHeading
           eyebrow="Отзывы"
-          title="Реальные отзывы и переписки усиливают доверие"
-          description="Клиенту важно увидеть не рекламный лозунг, а подтверждение того, что задачу действительно разобрали, объяснили и решили по делу."
+          title="Отзывы клиентов, которым уже помогли на объекте"
+          description="Здесь собраны реальные отзывы и скриншоты переписок, чтобы вы могли заранее понять стиль работы, уровень общения и результат по похожим задачам."
         />
         <div className="reveal-rise reveal-rise-delay-1 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {testimonials.map((item) =>
@@ -624,6 +712,8 @@ function TestimonialsSection() {
                   <img
                     src={item.image}
                     alt={item.alt ?? "Отзыв клиента WELLS-MO"}
+                    loading="lazy"
+                    decoding="async"
                     className="absolute inset-0 h-full w-full object-cover"
                   />
                 </div>
@@ -751,11 +841,14 @@ function CtaSection() {
                 тем быстрее можно понять формат работ и сориентировать вас по следующему шагу.
               </p>
               <div className="flex flex-col gap-3 sm:flex-row">
-                <PrimaryLink href="/kontakty">
+                <PrimaryLink href="/kontakty" trackingId="final_request" trackingPlacement="final_cta">
                   Оставить заявку <ArrowRight className="size-4" />
                 </PrimaryLink>
                 <a
                   href={siteMeta.phoneHref}
+                  data-cta="final_phone"
+                  data-cta-placement="final_cta"
+                  onClick={() => trackCtaClick("final_phone", "final_cta")}
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-white/12 bg-white/4 px-6 py-3 text-sm font-semibold text-white/88"
                 >
                   <Phone className="size-4 text-primary" />
@@ -813,7 +906,14 @@ function HeroPageBlock({
         </div>
         <div className="page-frame overflow-hidden rounded-[2rem] p-3">
           <div className="image-mask min-h-[340px] lg:min-h-[480px]">
-            <img src={image} alt={title} className="absolute inset-0 h-full w-full object-cover" />
+            <img
+              src={image}
+              alt={title}
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+              className="absolute inset-0 h-full w-full object-cover"
+            />
           </div>
         </div>
       </div>
@@ -891,7 +991,13 @@ function ServiceGallerySection({ defaultServiceSlug }: { defaultServiceSlug: str
             return (
               <article key={item.id} className="page-frame card-hover overflow-hidden rounded-[1.8rem]">
                 <div className="image-mask min-h-[220px] border-b border-white/8">
-                  <img src={item.image} alt={item.title} className="absolute inset-0 h-full w-full object-cover" />
+                  <img
+                  src={item.image}
+                  alt={item.title}
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
                 </div>
                 <div className="space-y-4 p-5">
                   <div className="flex items-center justify-between gap-3 text-xs uppercase tracking-[0.2em] text-white/45">
