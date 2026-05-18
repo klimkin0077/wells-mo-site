@@ -4,7 +4,7 @@ Design reminder for this file:
 Каждая страница должна ощущаться как часть единого дорогого интерфейса: крупные заголовки, воздух, стеклянные панели, тёмная база, латунные акценты и реальные изображения.
 */
 
-import { type ChangeEvent, type FormEvent, type ReactNode, useEffect, useMemo, useState } from "react";
+import { type ChangeEvent, type FormEvent, type ReactNode, createContext, useContext, useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "wouter";
 import {
   ArrowRight,
@@ -21,6 +21,7 @@ import {
   Wrench,
   X,
 } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import {
   allSeoLocations,
@@ -147,6 +148,75 @@ const initialContactFormState: ContactFormState = {
   botcheck: "",
 };
 
+type TaskDiscussionFormState = {
+  name: string;
+  phone: string;
+  location: string;
+  rings: string;
+  service: string;
+  issue: string;
+  details: string;
+  botcheck: string;
+};
+
+const initialTaskDiscussionFormState: TaskDiscussionFormState = {
+  name: "",
+  phone: "",
+  location: "",
+  rings: "",
+  service: "",
+  issue: "",
+  details: "",
+  botcheck: "",
+};
+
+const discussionServiceOptions = [
+  "Чистка колодца",
+  "Ремонт швов",
+  "Ремонт колец",
+  "Вода в дом",
+  "Нужен осмотр и консультация",
+] as const;
+
+const discussionIssueOptions = [
+  "Вода мутная",
+  "Верховодка поступает через кольца",
+  "Течь по швам",
+  "Кольца сместились",
+  "Нужна чистка",
+  "Не идёт вода в дом",
+] as const;
+
+const discussionRingOptions = [
+  "До 5 колец",
+  "6–8 колец",
+  "9–12 колец",
+  "Больше 12 колец",
+  "Не знаю",
+] as const;
+
+type OpenTaskDialogOptions = {
+  trackingId?: string;
+  placement?: string;
+  presetService?: string;
+  presetIssue?: string;
+  presetDetails?: string;
+};
+
+const TaskDiscussionDialogContext = createContext<{
+  openTaskDialog: (options?: OpenTaskDialogOptions) => void;
+} | null>(null);
+
+function useTaskDiscussionDialog() {
+  const context = useContext(TaskDiscussionDialogContext);
+
+  if (!context) {
+    throw new Error("Task discussion dialog context is unavailable.");
+  }
+
+  return context;
+}
+
 function trackCtaClick(ctaId: string, placement?: string) {
   if (typeof window === "undefined") {
     return;
@@ -256,6 +326,404 @@ function SecondaryLink({
   );
 }
 
+function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
+  const [open, setOpen] = useState(false);
+  const [formData, setFormData] = useState<TaskDiscussionFormState>(initialTaskDiscussionFormState);
+  const [submitState, setSubmitState] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [submitMessage, setSubmitMessage] = useState("");
+  const [dialogPlacement, setDialogPlacement] = useState("");
+
+  const resetSubmitState = () => {
+    if (submitState !== "idle") {
+      setSubmitState("idle");
+      setSubmitMessage("");
+    }
+  };
+
+  const handleFieldChange =
+    (field: keyof TaskDiscussionFormState) =>
+    (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+      const value = event.target.value;
+
+      setFormData((current) => ({
+        ...current,
+        [field]: value,
+      }));
+
+      resetSubmitState();
+    };
+
+  const handleChoiceChange = (field: "service" | "issue", value: string) => {
+    setFormData((current) => ({
+      ...current,
+      [field]: current[field] === value ? "" : value,
+    }));
+
+    resetSubmitState();
+  };
+
+  const handlePhoneChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const nextPhoneValue = formatRussianPhone(event.target.value);
+
+    setFormData((current) => ({
+      ...current,
+      phone: nextPhoneValue,
+    }));
+
+    resetSubmitState();
+  };
+
+  const handlePhoneFocus = () => {
+    setFormData((current) => {
+      if (current.phone.trim()) {
+        return current;
+      }
+
+      return {
+        ...current,
+        phone: PHONE_MASK_FOCUS_PREFIX,
+      };
+    });
+  };
+
+  const openTaskDialog = (options: OpenTaskDialogOptions = {}) => {
+    const resolvedPlacement = options.placement ?? (typeof window !== "undefined" ? window.location.pathname : "site");
+    const resolvedTrackingId = options.trackingId ?? "task_dialog_open";
+
+    setDialogPlacement(resolvedPlacement);
+    setFormData({
+      ...initialTaskDiscussionFormState,
+      service: options.presetService ?? "",
+      issue: options.presetIssue ?? "",
+      details: options.presetDetails ?? "",
+    });
+    setSubmitState("idle");
+    setSubmitMessage("");
+    setOpen(true);
+    trackCtaClick(resolvedTrackingId, resolvedPlacement);
+  };
+
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (submitState === "loading" && !nextOpen) {
+      return;
+    }
+
+    setOpen(nextOpen);
+
+    if (!nextOpen) {
+      setSubmitState("idle");
+      setSubmitMessage("");
+    }
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (submitState === "loading") {
+      return;
+    }
+
+    const normalizedPhoneDigits = normalizeRussianPhoneDigits(formData.phone);
+    const normalizedData = {
+      name: formData.name.trim(),
+      phone: formatRussianPhone(formData.phone),
+      location: formData.location.trim(),
+      rings: formData.rings.trim(),
+      service: formData.service.trim(),
+      issue: formData.issue.trim(),
+      details: formData.details.trim(),
+      botcheck: formData.botcheck.trim(),
+    };
+
+    if (!normalizedData.name || !normalizedData.phone || !normalizedData.location || !normalizedData.rings || !normalizedData.service || !normalizedData.issue) {
+      setSubmitState("error");
+      setSubmitMessage("Заполните имя, телефон, где находится объект, количество колец, формат работ и основную проблему.");
+      return;
+    }
+
+    if (normalizedPhoneDigits.length < 11) {
+      setSubmitState("error");
+      setSubmitMessage("Укажите полный номер телефона в формате +7 (999) 123-45-67.");
+      return;
+    }
+
+    setSubmitState("loading");
+    setSubmitMessage("Отправляем форму для обсуждения задачи. Обычно это занимает несколько секунд.");
+
+    try {
+      const response = await fetch(WEB3FORMS_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_ACCESS_KEY,
+          subject: `Обсудить задачу — ${normalizedData.issue}`,
+          from_name: siteMeta.name,
+          name: normalizedData.name,
+          phone: normalizedData.phone,
+          location: normalizedData.location,
+          service: normalizedData.service,
+          issue: normalizedData.issue,
+          rings: normalizedData.rings,
+          details: normalizedData.details || "Без дополнительного описания.",
+          page: dialogPlacement || "Форма обсуждения задачи",
+          site: "wells-mo.ru",
+          recipient: siteMeta.email,
+          botcheck: normalizedData.botcheck,
+          message: [
+            `Где находится объект: ${normalizedData.location}`,
+            `Сколько колец: ${normalizedData.rings}`,
+            `Что нужно: ${normalizedData.service}`,
+            `Что случилось: ${normalizedData.issue}`,
+            `Дополнительно: ${normalizedData.details || "Без дополнительного описания."}`,
+          ].join("\n"),
+        }),
+      });
+
+      const result = (await response.json()) as { success?: boolean; message?: string };
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || "Сервис отправки не подтвердил приём формы.");
+      }
+
+      setFormData(initialTaskDiscussionFormState);
+      setSubmitState("success");
+      setSubmitMessage("Форма отправлена. Мы получили данные по объекту и свяжемся с вами для обсуждения задачи.");
+    } catch (error) {
+      console.error("Ошибка отправки формы обсуждения задачи", error);
+      setSubmitState("error");
+      setSubmitMessage("Не удалось отправить форму автоматически. Пожалуйста, позвоните по номеру на сайте или заполните основную форму заявки на странице контактов.");
+    }
+  };
+
+  const contextValue = useMemo(() => ({ openTaskDialog }), [openTaskDialog]);
+
+  return (
+    <TaskDiscussionDialogContext.Provider value={contextValue}>
+      {children}
+      <Dialog open={open} onOpenChange={handleOpenChange}>
+        <DialogContent
+          className="max-h-[calc(100vh-2rem)] max-w-[min(64rem,calc(100%-2rem))] overflow-y-auto border border-white/10 bg-[#0d1219] p-0 text-white shadow-[0_32px_120px_rgba(0,0,0,0.58)]"
+          showCloseButton
+        >
+          <div className="grid lg:grid-cols-[0.84fr_1.16fr]">
+            <div className="border-b border-white/8 bg-[radial-gradient(circle_at_top,_rgba(193,145,71,0.18),_transparent_55%),linear-gradient(180deg,#111723_0%,#0b0f15_100%)] p-6 lg:border-b-0 lg:border-r lg:p-8">
+              <div className="section-kicker">Обсудить задачу</div>
+              <DialogHeader className="mt-4 text-left">
+                <DialogTitle className="font-heading text-3xl font-bold tracking-[-0.04em] text-white sm:text-4xl">
+                  Быстрый опрос по вашему колодцу
+                </DialogTitle>
+                <DialogDescription className="max-w-md text-sm leading-7 text-white/62">
+                  Заполните короткую форму: где находится объект, сколько колец, что случилось и какой формат работ нужен. Так проще понять проблему ещё до звонка.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="mt-8 grid gap-3">
+                {[
+                  "Вы сразу показываете суть проблемы без долгих объяснений.",
+                  "Мы видим, что это — чистка, ремонт швов, верховодка или другая задача.",
+                  "Ответ приходит на рабочую почту и не теряется среди звонков.",
+                ].map((item) => (
+                  <div key={item} className="rounded-[1.3rem] border border-white/10 bg-white/5 px-4 py-4 text-sm leading-7 text-white/72">
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="p-6 lg:p-8">
+              <form className="grid gap-4" onSubmit={handleSubmit}>
+                <input
+                  type="text"
+                  name="botcheck"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  className="hidden"
+                  value={formData.botcheck}
+                  onChange={handleFieldChange("botcheck")}
+                />
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <input
+                    name="name"
+                    autoComplete="name"
+                    required
+                    disabled={submitState === "loading"}
+                    value={formData.name}
+                    onChange={handleFieldChange("name")}
+                    className="h-14 rounded-2xl border border-white/10 bg-white/4 px-4 text-base text-white placeholder:text-white/34 disabled:cursor-not-allowed disabled:opacity-60"
+                    placeholder="Ваше имя"
+                  />
+                  <input
+                    name="phone"
+                    type="tel"
+                    inputMode="tel"
+                    autoComplete="tel"
+                    required
+                    disabled={submitState === "loading"}
+                    value={formData.phone}
+                    onChange={handlePhoneChange}
+                    onFocus={handlePhoneFocus}
+                    className="h-14 rounded-2xl border border-white/10 bg-white/4 px-4 text-base text-white placeholder:text-white/34 disabled:cursor-not-allowed disabled:opacity-60"
+                    placeholder="+7 (___) ___-__-__"
+                  />
+                </div>
+                <div className="grid gap-4">
+                  <input
+                    name="location"
+                    autoComplete="address-level2"
+                    required
+                    disabled={submitState === "loading"}
+                    value={formData.location}
+                    onChange={handleFieldChange("location")}
+                    className="h-14 rounded-2xl border border-white/10 bg-white/4 px-4 text-base text-white placeholder:text-white/34 disabled:cursor-not-allowed disabled:opacity-60"
+                    placeholder="Где находится объект?"
+                  />
+                  <div className="space-y-3">
+                    <div className="text-sm font-semibold uppercase tracking-[0.18em] text-primary/85">Сколько колец в колодце?</div>
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      {discussionRingOptions.map((option) => (
+                        <button
+                          key={option}
+                          type="button"
+                          onClick={() => handleFieldChange("rings")({ target: { value: option } } as ChangeEvent<HTMLInputElement>)}
+                          className={cn(
+                            "rounded-[1.3rem] border px-4 py-4 text-left text-sm font-medium transition",
+                            formData.rings === option
+                              ? "border-primary/45 bg-primary/14 text-primary shadow-[0_14px_32px_rgba(193,145,71,0.18)]"
+                              : "border-white/10 bg-white/4 text-white/78 hover:border-primary/30 hover:bg-white/7",
+                          )}
+                        >
+                          {option}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <div className="text-sm font-semibold uppercase tracking-[0.18em] text-primary/85">Что нужно сделать?</div>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {discussionServiceOptions.map((option) => (
+                      <button
+                        key={option}
+                        type="button"
+                        onClick={() => handleChoiceChange("service", option)}
+                        className={cn(
+                          "rounded-[1.3rem] border px-4 py-4 text-left text-sm font-medium transition",
+                          formData.service === option
+                            ? "border-primary/45 bg-primary/14 text-primary shadow-[0_14px_32px_rgba(193,145,71,0.18)]"
+                            : "border-white/10 bg-white/4 text-white/78 hover:border-primary/30 hover:bg-white/7",
+                        )}
+                      >
+                        {option}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <div className="text-sm font-semibold uppercase tracking-[0.18em] text-primary/85">Что случилось с колодцем?</div>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {discussionIssueOptions.map((option) => (
+                      <button
+                        key={option}
+                        type="button"
+                        onClick={() => handleChoiceChange("issue", option)}
+                        className={cn(
+                          "rounded-[1.3rem] border px-4 py-4 text-left text-sm font-medium transition",
+                          formData.issue === option
+                            ? "border-primary/45 bg-primary/14 text-primary shadow-[0_14px_32px_rgba(193,145,71,0.18)]"
+                            : "border-white/10 bg-white/4 text-white/78 hover:border-primary/30 hover:bg-white/7",
+                        )}
+                      >
+                        {option}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <textarea
+                  name="details"
+                  disabled={submitState === "loading"}
+                  value={formData.details}
+                  onChange={handleFieldChange("details")}
+                  className="min-h-32 rounded-2xl border border-white/10 bg-white/4 px-4 py-4 text-base text-white placeholder:text-white/34 disabled:cursor-not-allowed disabled:opacity-60"
+                  placeholder="Коротко опишите детали: вода мутная, идёт верховодка через кольца, разошлись швы, нужен ремонт или чистка..."
+                />
+                {submitState !== "idle" ? (
+                  <div
+                    className={cn(
+                      "rounded-[1.4rem] border px-4 py-3 text-sm leading-7",
+                      submitState === "success" && "border-emerald-400/30 bg-emerald-500/10 text-emerald-50",
+                      submitState === "error" && "border-rose-400/30 bg-rose-500/10 text-rose-50",
+                      submitState === "loading" && "border-white/10 bg-white/5 text-white/78",
+                    )}
+                  >
+                    {submitMessage}
+                  </div>
+                ) : null}
+                <button
+                  type="submit"
+                  disabled={submitState === "loading"}
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:translate-y-[-1px] disabled:cursor-not-allowed disabled:opacity-70"
+                >
+                  {submitState === "loading" ? "Отправляем форму..." : "Отправить и обсудить задачу"}
+                  <ArrowRight className="size-4" />
+                </button>
+              </form>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </TaskDiscussionDialogContext.Provider>
+  );
+}
+
+function RequestDialogButton({
+  children,
+  trackingId,
+  trackingPlacement,
+  presetService,
+  presetIssue,
+  presetDetails,
+  variant = "primary",
+  className,
+}: {
+  children: ReactNode;
+  trackingId?: string;
+  trackingPlacement?: string;
+  presetService?: string;
+  presetIssue?: string;
+  presetDetails?: string;
+  variant?: "primary" | "secondary";
+  className?: string;
+}) {
+  const { openTaskDialog } = useTaskDiscussionDialog();
+
+  return (
+    <button
+      type="button"
+      data-cta={trackingId ?? "task_dialog_open"}
+      data-cta-placement={trackingPlacement ?? "dialog_button"}
+      onClick={() =>
+        openTaskDialog({
+          trackingId,
+          placement: trackingPlacement,
+          presetService,
+          presetIssue,
+          presetDetails,
+        })
+      }
+      className={cn(
+        "inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition hover:translate-y-[-1px]",
+        variant === "primary"
+          ? "bg-primary text-primary-foreground hover:shadow-[0_12px_32px_rgba(193,145,71,0.25)]"
+          : "border border-white/12 bg-white/4 text-white/90 hover:border-primary/40 hover:bg-white/8",
+        className,
+      )}
+    >
+      {children}
+    </button>
+  );
+}
+
 function MobileStickyBar() {
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-[#0b0f15]/92 backdrop-blur-xl lg:hidden">
@@ -270,7 +738,7 @@ function MobileStickyBar() {
           <Phone className="size-4 shrink-0" />
           <span className="truncate">Позвонить</span>
         </a>
-        <PrimaryLink href="/kontakty" trackingId="mobile_request" trackingPlacement="mobile_sticky_bar">Заявка</PrimaryLink>
+        <RequestDialogButton trackingId="mobile_request" trackingPlacement="mobile_sticky_bar">Заявка</RequestDialogButton>
       </div>
     </div>
   );
@@ -322,7 +790,7 @@ function Header() {
             <Phone className="size-4 text-primary" />
             {siteMeta.phone}
           </a>
-          <PrimaryLink href="/kontakty">Оставить заявку</PrimaryLink>
+          <RequestDialogButton trackingId="header_request" trackingPlacement="header_desktop">Оставить заявку</RequestDialogButton>
         </div>
 
         <button
@@ -409,15 +877,17 @@ function Footer() {
 
 function SiteLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="site-shell min-h-screen">
-      <ScrollToTop />
-      <div className="mesh-glow left-[-8rem] top-24 h-72 w-72 bg-primary/18" />
-      <div className="mesh-glow right-[-4rem] top-[30rem] h-64 w-64 bg-sky-400/8" />
-      <Header />
-      <main className="pb-24 lg:pb-0">{children}</main>
-      <MobileStickyBar />
-      <Footer />
-    </div>
+    <TaskDiscussionDialogProvider>
+      <div className="site-shell min-h-screen">
+        <ScrollToTop />
+        <div className="mesh-glow left-[-8rem] top-24 h-72 w-72 bg-primary/18" />
+        <div className="mesh-glow right-[-4rem] top-[30rem] h-64 w-64 bg-sky-400/8" />
+        <Header />
+        <main className="pb-24 lg:pb-0">{children}</main>
+        <MobileStickyBar />
+        <Footer />
+      </div>
+    </TaskDiscussionDialogProvider>
   );
 }
 
@@ -461,10 +931,10 @@ function HomeHero() {
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row">
-            <PrimaryLink href="/kontakty" trackingId="hero_consultation" trackingPlacement="home_hero">
+            <RequestDialogButton trackingId="hero_consultation" trackingPlacement="home_hero">
               Получить консультацию
               <ArrowRight className="size-4" />
-            </PrimaryLink>
+            </RequestDialogButton>
             <a
               href={siteMeta.phoneHref}
               data-cta="hero_phone"
@@ -926,9 +1396,9 @@ function CtaSection() {
                 тем быстрее можно понять формат работ и сориентировать вас по следующему шагу.
               </p>
               <div className="flex flex-col gap-3 sm:flex-row">
-                <PrimaryLink href="/kontakty" trackingId="final_request" trackingPlacement="final_cta">
+                <RequestDialogButton trackingId="final_request" trackingPlacement="final_cta">
                   Оставить заявку <ArrowRight className="size-4" />
-                </PrimaryLink>
+                </RequestDialogButton>
                 <a
                   href={siteMeta.phoneHref}
                   data-cta="final_phone"
@@ -981,9 +1451,9 @@ function HeroPageBlock({
           <h1 className="hero-title text-white">{title}</h1>
           <p className="max-w-2xl text-lg leading-8 text-white/68">{description}</p>
           <div className="flex flex-col gap-3 sm:flex-row">
-            <PrimaryLink href="/kontakty">
+            <RequestDialogButton trackingId="page_hero_discuss" trackingPlacement="page_hero">
               Обсудить задачу <ArrowRight className="size-4" />
-            </PrimaryLink>
+            </RequestDialogButton>
             <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-5 py-3 text-sm font-semibold text-primary">
               {price}
             </div>
@@ -1494,13 +1964,38 @@ export function ContactsPage() {
             </div>
             <div className="mt-8 grid gap-4">
               {[
-                "Мутная вода, запах или длительный простой",
-                "Течь через швы, смещение колец или деформация шахты",
-                "Нужно провести воду в дом из существующего колодца",
+                {
+                  label: "Мутная вода, запах или длительный простой",
+                  presetIssue: "Вода мутная",
+                  presetService: "Чистка колодца",
+                  presetDetails: "Вода мутная, появился запах или колодец долго стоял без обслуживания.",
+                },
+                {
+                  label: "Течь через швы, смещение колец или деформация шахты",
+                  presetIssue: "Течь по швам",
+                  presetService: "Ремонт швов",
+                  presetDetails: "Есть течь через швы, смещение колец или нужна герметизация шахты.",
+                },
+                {
+                  label: "Нужно провести воду в дом из существующего колодца",
+                  presetIssue: "Не идёт вода в дом",
+                  presetService: "Вода в дом",
+                  presetDetails: "Нужно обсудить подачу воды в дом из существующего колодца.",
+                },
               ].map((item) => (
-                <div key={item} className="rounded-[1.4rem] border border-white/8 bg-white/4 p-4 text-sm leading-7 text-white/74">
-                  {item}
-                </div>
+                <RequestDialogButton
+                  key={item.label}
+                  variant="secondary"
+                  trackingId="contacts_issue_card"
+                  trackingPlacement="contacts_quick_issue"
+                  presetIssue={item.presetIssue}
+                  presetService={item.presetService}
+                  presetDetails={item.presetDetails}
+                  className="w-full justify-between rounded-[1.4rem] border border-white/8 bg-white/4 p-4 text-left text-sm leading-7 text-white/74"
+                >
+                  <span className="text-left">{item.label}</span>
+                  <ArrowRight className="size-4 shrink-0 text-primary" />
+                </RequestDialogButton>
               ))}
             </div>
           </div>
