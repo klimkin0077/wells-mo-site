@@ -22,6 +22,14 @@ import {
   X,
 } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { cn } from "@/lib/utils";
 import {
   allSeoLocations,
@@ -52,11 +60,98 @@ import {
 const iconMap = {
   "chistka-kolodcev": Sparkles,
   "remont-kolodcev": Hammer,
+  "gidroizolyaciya-shvov": ShieldCheck,
+  "skobirovanie-kolodca": Hammer,
+  "drenazhnyy-kolodec": Droplets,
   "kopka-kolodcev": Wrench,
   "septik-iz-zhbi-kolec": Building2,
   "uglublenie-kolodcev": MoveDown,
   "vodosnabzhenie-iz-kolodca-v-dom": Droplets,
 } as const;
+
+const staticRouteLabels: Record<string, string> = {
+  "/": "Главная",
+  "/uslugi": "Услуги",
+  "/chistka-kolodcev": "Чистка колодцев",
+  "/remont-kolodcev": "Ремонт колодцев",
+  "/gidroizolyaciya-shvov": "Гидроизоляция швов",
+  "/skobirovanie-kolodca": "Скобирование колодца",
+  "/uglublenie-kolodcev": "Углубление колодцев",
+  "/kopka-kolodcev": "Копка колодцев",
+  "/septik-iz-zhb-kolec": "Септик из ЖБ колец",
+  "/septik-iz-zhbi-kolec": "Септик из ЖБ колец",
+  "/drenazhnyy-kolodec": "Дренажный колодец",
+  "/vodoprovod-iz-kolodca-v-dom": "Водопровод из колодца в дом",
+  "/vodosnabzhenie-iz-kolodca-v-dom": "Водоснабжение из колодца в дом",
+  "/price": "Цены",
+  "/ceny": "Цены",
+  "/nashi-raboty": "Наши работы",
+  "/o-nas": "О нас",
+  "/o-kompanii": "О компании",
+  "/contacts": "Контакты",
+  "/kontakty": "Контакты",
+  "/faq": "FAQ",
+  "/goroda": "Города",
+  "/rajony-rabot": "Районы работ",
+  "/rajony": "Районы",
+};
+
+const cityLabelBySlug = new Map(allSeoLocations.map((item) => [item.slug, item.name]));
+const serviceLabelBySlug = new Map(services.map((item) => [item.slug, item.title]));
+
+function humanizeSlug(slug: string) {
+  return slug
+    .split("-")
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
+function buildBreadcrumbItems(pathname: string) {
+  const normalizedPath = pathname === "/" ? "/" : pathname.replace(/\/+$/, "");
+
+  if (normalizedPath === "/") {
+    return [{ href: "/", label: "Главная" }];
+  }
+
+  const segments = normalizedPath.split("/").filter(Boolean);
+  const items = [{ href: "/", label: "Главная" }];
+
+  if (segments[0] === "goroda") {
+    items.push({ href: "/goroda", label: "Города" });
+
+    if (segments[1]) {
+      items.push({ href: `/goroda/${segments[1]}`, label: cityLabelBySlug.get(segments[1]) ?? humanizeSlug(segments[1]) });
+    }
+
+    if (segments[2]) {
+      items.push({
+        href: `/goroda/${segments[1]}/${segments[2]}`,
+        label: serviceLabelBySlug.get(segments[2]) ?? humanizeSlug(segments[2]),
+      });
+    }
+
+    return items;
+  }
+
+  if (segments[0] === "rajony") {
+    items.push({ href: "/rajony-rabot", label: "Районы работ" });
+
+    if (segments[1]) {
+      items.push({ href: `/rajony/${segments[1]}`, label: cityLabelBySlug.get(segments[1]) ?? humanizeSlug(segments[1]) });
+    }
+
+    return items;
+  }
+
+  let currentPath = "";
+  for (const segment of segments) {
+    currentPath += `/${segment}`;
+    items.push({ href: currentPath, label: staticRouteLabels[currentPath] ?? humanizeSlug(segment) });
+  }
+
+  return items;
+}
 
 declare global {
   interface Window {
@@ -153,10 +248,13 @@ const initialContactFormState: ContactFormState = {
 type TaskDiscussionFormState = {
   name: string;
   phone: string;
-  location: string;
-  rings: string;
+  cityArea: string;
+  address: string;
   service: string;
+  depth: string;
   issue: string;
+  access: string;
+  contactMethod: string;
   details: string;
   botcheck: string;
 };
@@ -164,38 +262,61 @@ type TaskDiscussionFormState = {
 const initialTaskDiscussionFormState: TaskDiscussionFormState = {
   name: "",
   phone: "",
-  location: "",
-  rings: "",
+  cityArea: "",
+  address: "",
   service: "",
+  depth: "",
   issue: "",
+  access: "",
+  contactMethod: "",
   details: "",
   botcheck: "",
 };
 
 const discussionServiceOptions = [
-  "Чистка колодца",
-  "Ремонт швов",
-  "Ремонт колец",
-  "Вода в дом",
-  "Нужен осмотр и консультация",
+  "Чистка колодцев",
+  "Ремонт колодцев",
+  "Скобирование колец",
+  "Гидроизоляция швов",
+  "Углубление колодцев",
+  "Донный щит и гравий",
+  "Копка колодцев",
+  "Септики из ЖБ колец",
+  "Дренажный колодец",
+  "Водоснабжение из колодца в дом",
+  "Другое",
 ] as const;
 
 const discussionIssueOptions = [
-  "Вода мутная",
-  "Верховодка поступает через кольца",
-  "Течь по швам",
-  "Кольца сместились",
-  "Нужна чистка",
-  "Не идёт вода в дом",
+  "Мутная вода",
+  "Появился запах",
+  "На дне песок и ил",
+  "Течёт шов",
+  "Идёт верховодка через кольца",
+  "Смещены кольца",
+  "Колодец пересох",
+  "Нужно углубление",
+  "Нужно выкопать новый колодец",
+  "Нужен септик",
+  "Нужно провести воду в дом",
+  "Другое",
 ] as const;
 
-const discussionRingOptions = [
+const discussionDepthOptions = [
   "До 5 колец",
   "6–8 колец",
   "9–12 колец",
   "Больше 12 колец",
-  "Не знаю",
+  "Не знаю точно",
 ] as const;
+
+const discussionAccessOptions = [
+  "Лёгкий подъезд",
+  "Подъезд ограничен",
+  "Нужно уточнить по фото/видео",
+] as const;
+
+const discussionContactMethodOptions = ["Звонок", "Telegram", "MAX"] as const;
 
 type OpenTaskDialogOptions = {
   trackingId?: string;
@@ -286,9 +407,9 @@ function usePageSeo(title: string, description: string) {
     const keywordPool = [
       "чистка колодцев московская область",
       "ремонт колодцев московская область",
-      "копка колодцев",
-      "септик из жби колец",
-      "водоснабжение из колодца в дом",
+      "гидроизоляция швов колодца",
+      "скобирование колец колодца",
+      "углубление колодцев",
       "одинцово",
       "истра",
       "дмитров",
@@ -387,7 +508,7 @@ function SecondaryLink({
 function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState<TaskDiscussionFormState>(initialTaskDiscussionFormState);
-  const [submitState, setSubmitState] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [submitState, setSubmitState] = useState<"idle" | "success" | "error">("idle");
   const [submitMessage, setSubmitMessage] = useState("");
   const [dialogPlacement, setDialogPlacement] = useState("");
 
@@ -411,7 +532,7 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
       resetSubmitState();
     };
 
-  const handleChoiceChange = (field: "service" | "issue", value: string) => {
+  const handleChoiceChange = (field: "service" | "issue" | "depth" | "access" | "contactMethod", value: string) => {
     setFormData((current) => ({
       ...current,
       [field]: current[field] === value ? "" : value,
@@ -462,10 +583,6 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
   };
 
   const handleOpenChange = (nextOpen: boolean) => {
-    if (submitState === "loading" && !nextOpen) {
-      return;
-    }
-
     setOpen(nextOpen);
 
     if (!nextOpen) {
@@ -474,114 +591,143 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const normalizedPhoneDigits = normalizeRussianPhoneDigits(formData.phone);
 
-    if (submitState === "loading") {
-      return;
-    }
-
-    const normalizedPhoneDigits = normalizeRussianPhoneDigits(formData.phone);
+  const buildTaskMessage = () => {
     const normalizedData = {
       name: formData.name.trim(),
       phone: formatRussianPhone(formData.phone),
-      location: formData.location.trim(),
-      rings: formData.rings.trim(),
+      cityArea: formData.cityArea.trim(),
+      address: formData.address.trim(),
       service: formData.service.trim(),
+      depth: formData.depth.trim(),
       issue: formData.issue.trim(),
+      access: formData.access.trim(),
+      contactMethod: formData.contactMethod.trim(),
       details: formData.details.trim(),
       botcheck: formData.botcheck.trim(),
     };
 
-    if (!normalizedData.name || !normalizedData.phone || !normalizedData.location || !normalizedData.rings || !normalizedData.service || !normalizedData.issue) {
-      setSubmitState("error");
-      setSubmitMessage("Заполните имя, телефон, где находится объект, количество колец, формат работ и основную проблему.");
-      return;
+    if (normalizedData.botcheck) {
+      return { ok: false as const, message: "Проверка формы не пройдена.", text: "" };
+    }
+
+    if (!normalizedData.name || !normalizedData.phone || !normalizedData.cityArea || !normalizedData.address || !normalizedData.service || !normalizedData.depth || !normalizedData.issue || !normalizedData.access || !normalizedData.contactMethod) {
+      return {
+        ok: false as const,
+        message: "Заполните имя, телефон, город или район, адрес, услугу, глубину, проблему, подъезд и удобный канал связи.",
+        text: "",
+      };
     }
 
     if (normalizedPhoneDigits.length < 11) {
-      setSubmitState("error");
-      setSubmitMessage("Укажите полный номер телефона в формате +7 (999) 123-45-67.");
-      return;
+      return { ok: false as const, message: "Укажите полный номер телефона в формате +7 (999) 123-45-67.", text: "" };
     }
 
-    setSubmitState("loading");
-    setSubmitMessage("Отправляем форму для обсуждения задачи. Обычно это занимает несколько секунд.");
+    const text = [
+      "Заявка с сайта WELLS-MO",
+      `Имя: ${normalizedData.name}`,
+      `Телефон: ${normalizedData.phone}`,
+      `Город / район: ${normalizedData.cityArea}`,
+      `Адрес / ориентир: ${normalizedData.address}`,
+      `Услуга: ${normalizedData.service}`,
+      `Количество колец / глубина: ${normalizedData.depth}`,
+      `Проблема: ${normalizedData.issue}`,
+      `Подъезд: ${normalizedData.access}`,
+      `Удобная связь: ${normalizedData.contactMethod}`,
+      `Комментарий: ${normalizedData.details || "Без комментария"}`,
+      `Страница отправки: ${dialogPlacement || (typeof window !== "undefined" ? window.location.pathname : "wells-mo.ru")}`,
+    ].join("\n");
+
+    return { ok: true as const, message: "", text };
+  };
+
+  const copyRequestToClipboard = async () => {
+    const payload = buildTaskMessage();
+
+    if (!payload.ok) {
+      setSubmitState("error");
+      setSubmitMessage(payload.message);
+      return null;
+    }
 
     try {
-      const response = await fetch(WEB3FORMS_ENDPOINT, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          access_key: WEB3FORMS_ACCESS_KEY,
-          subject: `Обсудить задачу — ${normalizedData.issue}`,
-          from_name: siteMeta.name,
-          name: normalizedData.name,
-          phone: normalizedData.phone,
-          location: normalizedData.location,
-          service: normalizedData.service,
-          issue: normalizedData.issue,
-          rings: normalizedData.rings,
-          details: normalizedData.details || "Без дополнительного описания.",
-          page: dialogPlacement || "Форма обсуждения задачи",
-          site: "wells-mo.ru",
-          recipient: siteMeta.email,
-          botcheck: normalizedData.botcheck,
-          message: [
-            `Где находится объект: ${normalizedData.location}`,
-            `Сколько колец: ${normalizedData.rings}`,
-            `Что нужно: ${normalizedData.service}`,
-            `Что случилось: ${normalizedData.issue}`,
-            `Дополнительно: ${normalizedData.details || "Без дополнительного описания."}`,
-          ].join("\n"),
-        }),
-      });
-
-      const result = (await response.json()) as { success?: boolean; message?: string };
-
-      if (!response.ok || !result.success) {
-        throw new Error(result.message || "Сервис отправки не подтвердил приём формы.");
-      }
-
-      setFormData(initialTaskDiscussionFormState);
+      await navigator.clipboard.writeText(payload.text);
       setSubmitState("success");
-      setSubmitMessage("Форма отправлена. Мы получили данные по объекту и свяжемся с вами для обсуждения задачи.");
-    } catch (error) {
-      console.error("Ошибка отправки формы обсуждения задачи", error);
+      setSubmitMessage("Заявка собрана и скопирована. Теперь можно отправить её через Telegram, MAX или почту.");
+      return payload.text;
+    } catch {
       setSubmitState("error");
-      setSubmitMessage("Не удалось отправить форму автоматически. Пожалуйста, позвоните по номеру на сайте или заполните основную форму заявки на странице контактов.");
+      setSubmitMessage("Не удалось скопировать заявку автоматически. Попробуйте ещё раз или отправьте её по телефону.");
+      return null;
     }
   };
 
-  const contextValue = useMemo(() => ({ openTaskDialog }), [openTaskDialog]);
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    await copyRequestToClipboard();
+  };
+
+  const handleOpenTelegram = async () => {
+    const text = await copyRequestToClipboard();
+    if (!text) return;
+    window.open(siteMeta.telegramUrl, "_blank", "noopener,noreferrer");
+  };
+
+  const handleOpenMax = async () => {
+    const text = await copyRequestToClipboard();
+    if (!text) return;
+    window.open(siteMeta.maxUrl, "_blank", "noopener,noreferrer");
+  };
+
+  const handleOpenMail = async () => {
+    const payload = buildTaskMessage();
+
+    if (!payload.ok) {
+      setSubmitState("error");
+      setSubmitMessage(payload.message);
+      return;
+    }
+
+    const mailtoHref = `mailto:${siteMeta.email}?subject=${encodeURIComponent("Заявка с сайта WELLS-MO")}&body=${encodeURIComponent(payload.text)}`;
+    window.location.href = mailtoHref;
+    setSubmitState("success");
+    setSubmitMessage("Почтовый клиент открыт. Если нужно, сначала можно скопировать заявку и отправить её в Telegram или MAX.");
+  };
+
+  const contextValue = useMemo(() => ({ openTaskDialog }), []);
 
   return (
     <TaskDiscussionDialogContext.Provider value={contextValue}>
       {children}
+      <button
+        type="button"
+        onClick={() => openTaskDialog({ trackingId: "desktop_floating_request", placement: "desktop_floating_cta" })}
+        className="fixed bottom-6 right-6 z-40 hidden rounded-full border border-primary/30 bg-[#111723]/88 px-5 py-3 text-sm font-semibold text-primary shadow-[0_18px_42px_rgba(0,0,0,0.32)] backdrop-blur-xl transition hover:-translate-y-1 hover:shadow-[0_24px_48px_rgba(193,145,71,0.2)] lg:inline-flex"
+      >
+        Задать задачу
+      </button>
       <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent
-          className="max-h-[calc(100vh-2rem)] max-w-[min(64rem,calc(100%-2rem))] overflow-y-auto border border-white/10 bg-[#0d1219] p-0 text-white shadow-[0_32px_120px_rgba(0,0,0,0.58)]"
+          className="max-h-[calc(100vh-2rem)] max-w-[min(72rem,calc(100%-2rem))] overflow-y-auto border border-white/10 bg-[#0d1219] p-0 text-white shadow-[0_32px_120px_rgba(0,0,0,0.58)]"
           showCloseButton
         >
-          <div className="grid lg:grid-cols-[0.84fr_1.16fr]">
+          <div className="grid lg:grid-cols-[0.82fr_1.18fr]">
             <div className="border-b border-white/8 bg-[radial-gradient(circle_at_top,_rgba(193,145,71,0.18),_transparent_55%),linear-gradient(180deg,#111723_0%,#0b0f15_100%)] p-6 lg:border-b-0 lg:border-r lg:p-8">
-              <div className="section-kicker">Обсудить задачу</div>
+              <div className="section-kicker">Задать задачу</div>
               <DialogHeader className="mt-4 text-left">
                 <DialogTitle className="font-heading text-3xl font-bold tracking-[-0.04em] text-white sm:text-4xl">
-                  Быстрый опрос по вашему колодцу
+                  Заявка без лишних созвонов
                 </DialogTitle>
                 <DialogDescription className="max-w-md text-sm leading-7 text-white/62">
-                  Заполните короткую форму: где находится объект, сколько колец, что случилось и какой формат работ нужен. Так проще понять проблему ещё до звонка.
+                  Заполните объект по делу. Мы соберём текст заявки, чтобы вы могли сразу отправить его в Telegram, MAX или на почту.
                 </DialogDescription>
               </DialogHeader>
               <div className="mt-8 grid gap-3">
                 {[
-                  "Вы сразу показываете суть проблемы без долгих объяснений.",
-                  "Мы видим, что это — чистка, ремонт швов, верховодка или другая задача.",
-                  "Ответ приходит на рабочую почту и не теряется среди звонков.",
+                  "Если швы текут, одной чистки мало — это сразу видно по форме заявки.",
+                  "Если кольца смещены, мы увидим, что нужен не косметический ремонт, а фиксация конструкции.",
+                  "Лучше сразу дать адрес, глубину и фото или видео — так проще назвать реальный порядок работ.",
                 ].map((item) => (
                   <div key={item} className="rounded-[1.3rem] border border-white/10 bg-white/5 px-4 py-4 text-sm leading-7 text-white/72">
                     {item}
@@ -591,140 +737,65 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
             </div>
             <div className="p-6 lg:p-8">
               <form className="grid gap-4" onSubmit={handleSubmit}>
-                <input
-                  type="text"
-                  name="botcheck"
-                  tabIndex={-1}
-                  autoComplete="off"
-                  className="hidden"
-                  value={formData.botcheck}
-                  onChange={handleFieldChange("botcheck")}
-                />
+                <input type="text" name="botcheck" tabIndex={-1} autoComplete="off" className="hidden" value={formData.botcheck} onChange={handleFieldChange("botcheck")} />
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <input
-                    name="name"
-                    autoComplete="name"
-                    required
-                    disabled={submitState === "loading"}
-                    value={formData.name}
-                    onChange={handleFieldChange("name")}
-                    className="h-14 rounded-2xl border border-white/10 bg-white/4 px-4 text-base text-white placeholder:text-white/34 disabled:cursor-not-allowed disabled:opacity-60"
-                    placeholder="Ваше имя"
-                  />
-                  <input
-                    name="phone"
-                    type="tel"
-                    inputMode="tel"
-                    autoComplete="tel"
-                    required
-                    disabled={submitState === "loading"}
-                    value={formData.phone}
-                    onChange={handlePhoneChange}
-                    onFocus={handlePhoneFocus}
-                    className="h-14 rounded-2xl border border-white/10 bg-white/4 px-4 text-base text-white placeholder:text-white/34 disabled:cursor-not-allowed disabled:opacity-60"
-                    placeholder="+7 (___) ___-__-__"
-                  />
+                  <input name="name" autoComplete="name" value={formData.name} onChange={handleFieldChange("name")} className="h-14 rounded-2xl border border-white/10 bg-white/4 px-4 text-base text-white placeholder:text-white/34" placeholder="Имя" />
+                  <input name="phone" type="tel" inputMode="tel" autoComplete="tel" value={formData.phone} onChange={handlePhoneChange} onFocus={handlePhoneFocus} className="h-14 rounded-2xl border border-white/10 bg-white/4 px-4 text-base text-white placeholder:text-white/34" placeholder="+7 (___) ___-__-__" />
                 </div>
-                <div className="grid gap-4">
-                  <input
-                    name="location"
-                    autoComplete="address-level2"
-                    required
-                    disabled={submitState === "loading"}
-                    value={formData.location}
-                    onChange={handleFieldChange("location")}
-                    className="h-14 rounded-2xl border border-white/10 bg-white/4 px-4 text-base text-white placeholder:text-white/34 disabled:cursor-not-allowed disabled:opacity-60"
-                    placeholder="Где находится объект?"
-                  />
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <input name="cityArea" autoComplete="address-level2" value={formData.cityArea} onChange={handleFieldChange("cityArea")} className="h-14 rounded-2xl border border-white/10 bg-white/4 px-4 text-base text-white placeholder:text-white/34" placeholder="Город / район" />
+                  <input name="address" autoComplete="street-address" value={formData.address} onChange={handleFieldChange("address")} className="h-14 rounded-2xl border border-white/10 bg-white/4 px-4 text-base text-white placeholder:text-white/34" placeholder="Адрес / ориентир" />
+                </div>
+                <div className="space-y-3">
+                  <div className="text-sm font-semibold uppercase tracking-[0.18em] text-primary/85">Тип услуги</div>
+                  <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                    {discussionServiceOptions.map((option) => (
+                      <button key={option} type="button" onClick={() => handleChoiceChange("service", option)} className={cn("rounded-[1.3rem] border px-4 py-4 text-left text-sm font-medium transition", formData.service === option ? "border-primary/45 bg-primary/14 text-primary shadow-[0_14px_32px_rgba(193,145,71,0.18)]" : "border-white/10 bg-white/4 text-white/78 hover:border-primary/30 hover:bg-white/7")}>{option}</button>
+                    ))}
+                  </div>
+                </div>
+                <div className="grid gap-4 lg:grid-cols-[1.05fr_0.95fr]">
                   <div className="space-y-3">
-                    <div className="text-sm font-semibold uppercase tracking-[0.18em] text-primary/85">Сколько колец в колодце?</div>
+                    <div className="text-sm font-semibold uppercase tracking-[0.18em] text-primary/85">Количество колец / глубина</div>
                     <div className="grid gap-3 sm:grid-cols-2">
-                      {discussionRingOptions.map((option) => (
-                        <button
-                          key={option}
-                          type="button"
-                          onClick={() => handleFieldChange("rings")({ target: { value: option } } as ChangeEvent<HTMLInputElement>)}
-                          className={cn(
-                            "rounded-[1.3rem] border px-4 py-4 text-left text-sm font-medium transition",
-                            formData.rings === option
-                              ? "border-primary/45 bg-primary/14 text-primary shadow-[0_14px_32px_rgba(193,145,71,0.18)]"
-                              : "border-white/10 bg-white/4 text-white/78 hover:border-primary/30 hover:bg-white/7",
-                          )}
-                        >
-                          {option}
-                        </button>
+                      {discussionDepthOptions.map((option) => (
+                        <button key={option} type="button" onClick={() => handleChoiceChange("depth", option)} className={cn("rounded-[1.3rem] border px-4 py-4 text-left text-sm font-medium transition", formData.depth === option ? "border-primary/45 bg-primary/14 text-primary shadow-[0_14px_32px_rgba(193,145,71,0.18)]" : "border-white/10 bg-white/4 text-white/78 hover:border-primary/30 hover:bg-white/7")}>{option}</button>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="text-sm font-semibold uppercase tracking-[0.18em] text-primary/85">Есть ли подъезд</div>
+                    <div className="grid gap-3">
+                      {discussionAccessOptions.map((option) => (
+                        <button key={option} type="button" onClick={() => handleChoiceChange("access", option)} className={cn("rounded-[1.3rem] border px-4 py-4 text-left text-sm font-medium transition", formData.access === option ? "border-primary/45 bg-primary/14 text-primary shadow-[0_14px_32px_rgba(193,145,71,0.18)]" : "border-white/10 bg-white/4 text-white/78 hover:border-primary/30 hover:bg-white/7")}>{option}</button>
                       ))}
                     </div>
                   </div>
                 </div>
                 <div className="space-y-3">
-                  <div className="text-sm font-semibold uppercase tracking-[0.18em] text-primary/85">Что нужно сделать?</div>
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    {discussionServiceOptions.map((option) => (
-                      <button
-                        key={option}
-                        type="button"
-                        onClick={() => handleChoiceChange("service", option)}
-                        className={cn(
-                          "rounded-[1.3rem] border px-4 py-4 text-left text-sm font-medium transition",
-                          formData.service === option
-                            ? "border-primary/45 bg-primary/14 text-primary shadow-[0_14px_32px_rgba(193,145,71,0.18)]"
-                            : "border-white/10 bg-white/4 text-white/78 hover:border-primary/30 hover:bg-white/7",
-                        )}
-                      >
-                        {option}
-                      </button>
+                  <div className="text-sm font-semibold uppercase tracking-[0.18em] text-primary/85">Что происходит</div>
+                  <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                    {discussionIssueOptions.map((option) => (
+                      <button key={option} type="button" onClick={() => handleChoiceChange("issue", option)} className={cn("rounded-[1.3rem] border px-4 py-4 text-left text-sm font-medium transition", formData.issue === option ? "border-primary/45 bg-primary/14 text-primary shadow-[0_14px_32px_rgba(193,145,71,0.18)]" : "border-white/10 bg-white/4 text-white/78 hover:border-primary/30 hover:bg-white/7")}>{option}</button>
                     ))}
                   </div>
                 </div>
                 <div className="space-y-3">
-                  <div className="text-sm font-semibold uppercase tracking-[0.18em] text-primary/85">Что случилось с колодцем?</div>
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    {discussionIssueOptions.map((option) => (
-                      <button
-                        key={option}
-                        type="button"
-                        onClick={() => handleChoiceChange("issue", option)}
-                        className={cn(
-                          "rounded-[1.3rem] border px-4 py-4 text-left text-sm font-medium transition",
-                          formData.issue === option
-                            ? "border-primary/45 bg-primary/14 text-primary shadow-[0_14px_32px_rgba(193,145,71,0.18)]"
-                            : "border-white/10 bg-white/4 text-white/78 hover:border-primary/30 hover:bg-white/7",
-                        )}
-                      >
-                        {option}
-                      </button>
+                  <div className="text-sm font-semibold uppercase tracking-[0.18em] text-primary/85">Как удобнее связаться</div>
+                  <div className="grid gap-3 sm:grid-cols-3">
+                    {discussionContactMethodOptions.map((option) => (
+                      <button key={option} type="button" onClick={() => handleChoiceChange("contactMethod", option)} className={cn("rounded-[1.3rem] border px-4 py-4 text-left text-sm font-medium transition", formData.contactMethod === option ? "border-primary/45 bg-primary/14 text-primary shadow-[0_14px_32px_rgba(193,145,71,0.18)]" : "border-white/10 bg-white/4 text-white/78 hover:border-primary/30 hover:bg-white/7")}>{option}</button>
                     ))}
                   </div>
                 </div>
-                <textarea
-                  name="details"
-                  disabled={submitState === "loading"}
-                  value={formData.details}
-                  onChange={handleFieldChange("details")}
-                  className="min-h-32 rounded-2xl border border-white/10 bg-white/4 px-4 py-4 text-base text-white placeholder:text-white/34 disabled:cursor-not-allowed disabled:opacity-60"
-                  placeholder="Коротко опишите детали: вода мутная, идёт верховодка через кольца, разошлись швы, нужен ремонт или чистка..."
-                />
-                {submitState !== "idle" ? (
-                  <div
-                    className={cn(
-                      "rounded-[1.4rem] border px-4 py-3 text-sm leading-7",
-                      submitState === "success" && "border-emerald-400/30 bg-emerald-500/10 text-emerald-50",
-                      submitState === "error" && "border-rose-400/30 bg-rose-500/10 text-rose-50",
-                      submitState === "loading" && "border-white/10 bg-white/5 text-white/78",
-                    )}
-                  >
-                    {submitMessage}
-                  </div>
-                ) : null}
-                <button
-                  type="submit"
-                  disabled={submitState === "loading"}
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:translate-y-[-1px] disabled:cursor-not-allowed disabled:opacity-70"
-                >
-                  {submitState === "loading" ? "Отправляем форму..." : "Отправить и обсудить задачу"}
-                  <ArrowRight className="size-4" />
-                </button>
+                <textarea name="details" value={formData.details} onChange={handleFieldChange("details")} className="min-h-32 rounded-2xl border border-white/10 bg-white/4 px-4 py-4 text-base text-white placeholder:text-white/34" placeholder="Комментарий: что уже делали, когда появилась проблема, есть ли фото/видео, какая точка на карте..." />
+                {submitState !== "idle" ? <div className={cn("rounded-[1.4rem] border px-4 py-3 text-sm leading-7", submitState === "success" && "border-emerald-400/30 bg-emerald-500/10 text-emerald-50", submitState === "error" && "border-rose-400/30 bg-rose-500/10 text-rose-50")}>{submitMessage}</div> : null}
+                <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                  <button type="submit" className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:translate-y-[-1px]">Скопировать заявку</button>
+                  <button type="button" onClick={handleOpenMail} className="inline-flex items-center justify-center gap-2 rounded-full border border-white/12 bg-white/4 px-6 py-3 text-sm font-semibold text-white/90 transition hover:border-primary/40 hover:bg-white/8">На почту</button>
+                  <button type="button" onClick={handleOpenTelegram} className="inline-flex items-center justify-center gap-2 rounded-full border border-white/12 bg-white/4 px-6 py-3 text-sm font-semibold text-white/90 transition hover:border-primary/40 hover:bg-white/8">Telegram</button>
+                  <button type="button" onClick={handleOpenMax} className="inline-flex items-center justify-center gap-2 rounded-full border border-white/12 bg-white/4 px-6 py-3 text-sm font-semibold text-white/90 transition hover:border-primary/40 hover:bg-white/8">MAX</button>
+                </div>
               </form>
             </div>
           </div>
@@ -784,19 +855,42 @@ function RequestDialogButton({
 
 function MobileStickyBar() {
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-[#0b0f15]/92 backdrop-blur-xl lg:hidden">
-      <div className="container grid grid-cols-[1fr_auto] gap-3 py-3">
-        <a
-          href={siteMeta.phoneHref}
-          data-cta="mobile_phone"
-          data-cta-placement="mobile_sticky_bar"
-          onClick={() => trackCtaClick("mobile_phone", "mobile_sticky_bar")}
-          className="inline-flex min-w-0 items-center justify-center gap-2 rounded-full border border-primary/18 bg-primary/10 px-4 py-3 text-sm font-semibold text-primary"
-        >
-          <Phone className="size-4 shrink-0" />
-          <span className="truncate">Позвонить</span>
-        </a>
-        <RequestDialogButton trackingId="mobile_request" trackingPlacement="mobile_sticky_bar">Заявка</RequestDialogButton>
+    <div className="fixed inset-x-0 bottom-0 z-40 px-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] lg:hidden">
+      <div className="mx-auto max-w-screen-sm rounded-[1.4rem] border border-white/10 bg-[#0b0f15]/72 shadow-[0_-12px_32px_rgba(0,0,0,0.28)] backdrop-blur-2xl">
+        <div className="grid grid-cols-4 gap-2 p-2.5">
+          <a
+            href={siteMeta.phoneHref}
+            data-cta="mobile_phone"
+            data-cta-placement="mobile_sticky_bar"
+            onClick={() => trackCtaClick("mobile_phone", "mobile_sticky_bar")}
+            className="inline-flex min-w-0 items-center justify-center rounded-full border border-primary/20 bg-primary/12 px-2 py-3 text-[11px] font-semibold text-primary"
+          >
+            Позвонить
+          </a>
+          <a
+            href={siteMeta.telegramUrl}
+            target="_blank"
+            rel="noreferrer"
+            data-cta="mobile_telegram"
+            data-cta-placement="mobile_sticky_bar"
+            onClick={() => trackCtaClick("mobile_telegram", "mobile_sticky_bar")}
+            className="inline-flex min-w-0 items-center justify-center rounded-full border border-white/12 bg-white/5 px-2 py-3 text-[11px] font-semibold text-white/88"
+          >
+            Telegram
+          </a>
+          <a
+            href={siteMeta.maxUrl}
+            target="_blank"
+            rel="noreferrer"
+            data-cta="mobile_max"
+            data-cta-placement="mobile_sticky_bar"
+            onClick={() => trackCtaClick("mobile_max", "mobile_sticky_bar")}
+            className="inline-flex min-w-0 items-center justify-center rounded-full border border-white/12 bg-white/5 px-2 py-3 text-[11px] font-semibold text-white/88"
+          >
+            MAX
+          </a>
+          <RequestDialogButton trackingId="mobile_request" trackingPlacement="mobile_sticky_bar" className="px-2 py-3 text-[11px]">Заявка</RequestDialogButton>
+        </div>
       </div>
     </div>
   );
@@ -812,33 +906,18 @@ function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/8 bg-[#0d1118]/72 backdrop-blur-xl">
-      <div className="container flex items-center justify-between gap-4 py-4">
-        <Link href="/" className="min-w-0">
+      <div className="container flex items-center justify-between gap-3 py-3 lg:gap-4">
+        <Link href="/" className="min-w-0 flex-1 lg:flex-none">
           <div className="flex items-center gap-3">
-            <div className="flex size-11 items-center justify-center rounded-2xl border border-primary/25 bg-primary/10 text-primary shadow-[0_10px_24px_rgba(199,154,63,0.18)]">
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl border border-primary/25 bg-primary/10 text-primary shadow-[0_10px_24px_rgba(199,154,63,0.18)] lg:size-11">
               <Droplets className="size-5" aria-hidden="true" />
             </div>
             <div className="min-w-0">
-              <div className="font-heading text-lg font-bold tracking-[-0.04em] text-white">{siteMeta.name}</div>
-              <div className="truncate text-xs text-white/55">{siteMeta.tagline}</div>
+              <div className="font-heading text-base font-bold tracking-[-0.04em] text-white lg:text-lg">{siteMeta.name}</div>
+              <div className="truncate text-[11px] text-white/55 lg:text-xs">{siteMeta.tagline}</div>
             </div>
           </div>
         </Link>
-
-        <nav className="hidden items-center gap-6 lg:flex">
-          {navigation.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "site-link text-sm font-medium text-white/70 transition hover:text-white",
-                location === item.href && "nav-link-active",
-              )}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
           <a
@@ -849,44 +928,128 @@ function Header() {
             {siteMeta.phone}
           </a>
           <RequestDialogButton trackingId="header_request" trackingPlacement="header_desktop">Оставить заявку</RequestDialogButton>
+          <button
+            type="button"
+            onClick={() => setOpen((value) => !value)}
+            className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/8"
+            aria-label={open ? "Закрыть меню" : "Открыть меню"}
+            aria-expanded={open}
+          >
+            {open ? <X className="size-4" /> : <Menu className="size-4" />}
+            Меню
+          </button>
         </div>
 
         <button
           type="button"
           onClick={() => setOpen((value) => !value)}
-          className="inline-flex size-11 items-center justify-center rounded-2xl border border-white/12 bg-white/5 text-white lg:hidden"
-          aria-label="Открыть меню"
+          className="inline-flex size-11 shrink-0 items-center justify-center rounded-2xl border border-white/12 bg-white/5 text-white lg:hidden"
+          aria-label={open ? "Закрыть меню" : "Открыть меню"}
+          aria-expanded={open}
         >
           {open ? <X className="size-5" /> : <Menu className="size-5" />}
         </button>
       </div>
 
       {open ? (
-        <div className="border-t border-white/8 bg-[#0c1016]/95 lg:hidden">
-          <div className="container space-y-2 py-4">
-            {navigation.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "block rounded-2xl px-4 py-3 text-base font-medium text-white/78 transition hover:bg-white/6 hover:text-white",
-                  location === item.href && "bg-white/6 text-white",
-                )}
-              >
-                {item.label}
-              </Link>
-            ))}
-            <a
-              href={siteMeta.phoneHref}
-              className="mt-3 flex items-center gap-2 rounded-2xl border border-primary/20 bg-primary/10 px-4 py-3 text-sm font-semibold text-primary"
-            >
-              <Phone className="size-4" />
-              {siteMeta.phone}
-            </a>
+        <div className="border-t border-white/8 bg-[#0c1016]/96">
+          <div className="container max-h-[calc(100vh-5rem)] overflow-y-auto py-4 lg:py-5">
+            <div className="grid gap-4 lg:grid-cols-[minmax(0,1.2fr)_minmax(18rem,0.8fr)] lg:items-start">
+              <div className="grid gap-2">
+                {navigation.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={cn(
+                      "block rounded-2xl px-4 py-3 text-base font-medium text-white/78 transition hover:bg-white/6 hover:text-white",
+                      location === item.href && "bg-white/6 text-white",
+                    )}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+                <Link
+                  href="/rajony-rabot"
+                  className={cn(
+                    "block rounded-2xl px-4 py-3 text-base font-medium text-white/78 transition hover:bg-white/6 hover:text-white",
+                    location === "/rajony-rabot" && "bg-white/6 text-white",
+                  )}
+                >
+                  Районы
+                </Link>
+              </div>
+              <div className="rounded-[1.6rem] border border-white/10 bg-white/[0.03] p-4 lg:p-5">
+                <div className="text-xs font-semibold uppercase tracking-[0.22em] text-primary/80">Быстрый доступ</div>
+                <div className="mt-4 grid gap-3">
+                  <a
+                    href={siteMeta.phoneHref}
+                    className="flex items-center gap-2 rounded-2xl border border-primary/20 bg-primary/10 px-4 py-3 text-sm font-semibold text-primary"
+                  >
+                    <Phone className="size-4" />
+                    {siteMeta.phone}
+                  </a>
+                  <RequestDialogButton trackingId="header_request_menu" trackingPlacement="header_menu" className="w-full justify-center">
+                    Оставить заявку
+                  </RequestDialogButton>
+                  <div className="grid grid-cols-2 gap-3">
+                    <a
+                      href={siteMeta.telegramUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center justify-center rounded-2xl border border-white/12 bg-white/5 px-4 py-3 text-sm font-medium text-white/88 transition hover:bg-white/8"
+                    >
+                      Telegram
+                    </a>
+                    <a
+                      href={siteMeta.maxUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center justify-center rounded-2xl border border-white/12 bg-white/5 px-4 py-3 text-sm font-medium text-white/88 transition hover:bg-white/8"
+                    >
+                      MAX
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       ) : null}
     </header>
+  );
+}
+
+function SiteBreadcrumbs() {
+  const [location] = useLocation();
+  const items = useMemo(() => buildBreadcrumbItems(location), [location]);
+
+  return (
+    <div className="border-b border-white/6 bg-white/[0.02]">
+      <div className="container py-3">
+        <Breadcrumb>
+          <BreadcrumbList className="text-xs text-white/52 sm:text-sm">
+            {items.map((item, index) => {
+              const isLast = index === items.length - 1;
+
+              return (
+                <div key={item.href} className="contents">
+                  <BreadcrumbItem>
+                    {isLast ? (
+                      <BreadcrumbPage className="font-medium text-white/86">{item.label}</BreadcrumbPage>
+                    ) : (
+                      <BreadcrumbLink asChild className="text-white/56 hover:text-white/86">
+                        <Link href={item.href}>{item.label}</Link>
+                      </BreadcrumbLink>
+                    )}
+                  </BreadcrumbItem>
+                  {!isLast ? <BreadcrumbSeparator className="text-white/30" /> : null}
+                </div>
+              );
+            })}
+          </BreadcrumbList>
+        </Breadcrumb>
+      </div>
+    </div>
   );
 }
 
@@ -897,8 +1060,7 @@ function Footer() {
         <div className="space-y-4">
           <div className="font-heading text-2xl font-bold text-white">{siteMeta.name}</div>
           <p className="max-w-md text-sm leading-7 text-white/62">
-            Колодцы, септики и вода в доме по Московской области. Работаем по делу,
-            быстро и с реальными примерами выполненных объектов.
+            Чистка, ремонт, гидроизоляция, скобирование и углубление колодцев по Московской области.
           </p>
         </div>
         <div>
@@ -936,12 +1098,15 @@ function Footer() {
 function SiteLayout({ children }: { children: ReactNode }) {
   return (
     <TaskDiscussionDialogProvider>
-      <div className="site-shell min-h-screen">
+      <div className="site-shell min-h-screen pb-28 lg:pb-0">
         <ScrollToTop />
         <div className="mesh-glow left-[-8rem] top-24 h-72 w-72 bg-primary/18" />
         <div className="mesh-glow right-[-4rem] top-[30rem] h-64 w-64 bg-sky-400/8" />
         <Header />
-        <main className="pb-24 lg:pb-0">{children}</main>
+        <main>
+          <SiteBreadcrumbs />
+          {children}
+        </main>
         <MobileStickyBar />
         <Footer />
       </div>
@@ -977,30 +1142,37 @@ function HomeHero() {
             {siteMeta.coverage}
           </div>
           <div className="space-y-5">
-            <h1 className="hero-title text-white">
-              Колодцы, <span className="text-gradient-metal">септики</span> и вода в доме
-              <br />
-              по Московской области
-            </h1>
+            <h1 className="hero-title text-white">Чистка и ремонт колодцев в Московской области</h1>
             <p className="max-w-2xl text-base leading-8 text-white/68 sm:text-lg lg:text-xl">
-              Чистим, ремонтируем, копаем новые колодцы, ставим септики из ЖБ колец и заводим воду в дом.
-              Акцент держим на севере и северо-западе области: Одинцово, Истра, Дмитров и соседние направления.
+              Откачка воды, мойка шахты до 400 бар, чистка дна, ремонт швов, гидроизоляция, скобирование, углубление пересохших колодцев и восстановление старых шахт.
             </p>
+
           </div>
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <RequestDialogButton trackingId="hero_consultation" trackingPlacement="home_hero">
-              Получить консультацию
-              <ArrowRight className="size-4" />
-            </RequestDialogButton>
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <a
               href={siteMeta.phoneHref}
               data-cta="hero_phone"
               data-cta-placement="home_hero"
               onClick={() => trackCtaClick("hero_phone", "home_hero")}
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-[#11141d] transition hover:translate-y-[-1px] hover:bg-primary/90"
+            >
+              <Phone className="size-4" />
+              Позвонить
+            </a>
+            <RequestDialogButton trackingId="hero_request" trackingPlacement="home_hero">
+              Задать задачу
+              <ArrowRight className="size-4" />
+            </RequestDialogButton>
+            <a
+              href={siteMeta.telegramUrl}
+              target="_blank"
+              rel="noreferrer"
+              data-cta="hero_telegram"
+              data-cta-placement="home_hero"
+              onClick={() => trackCtaClick("hero_telegram", "home_hero")}
               className="inline-flex items-center justify-center gap-2 rounded-full border border-white/12 bg-white/4 px-6 py-3 text-sm font-semibold text-white/90 transition hover:border-primary/40 hover:bg-white/8"
             >
-              <Phone className="size-4 text-primary" />
-              {siteMeta.phone}
+              Telegram
             </a>
           </div>
           <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
@@ -1027,7 +1199,7 @@ function HomeHero() {
             <div className="absolute left-5 right-5 top-5 flex items-center justify-between rounded-full border border-white/12 bg-[#10151d]/72 px-4 py-3 backdrop-blur-md">
               <div>
                 <div className="text-xs uppercase tracking-[0.24em] text-primary/90">WELLS-MO</div>
-                <div className="text-sm text-white/65">Колодцы, септики и вода в доме</div>
+                <div className="text-sm text-white/65">Чистка и ремонт колодцев</div>
               </div>
               <ShieldCheck className="size-5 text-primary" />
             </div>
@@ -1055,22 +1227,106 @@ function HomeHero() {
 }
 
 function ServicesPreview() {
+  const featuredCards = [
+    {
+      slug: "chistka-kolodcev",
+      href: "/chistka-kolodcev",
+      eyebrow: "Главная услуга",
+      title: "Чистка колодцев",
+      description:
+        "Полная чистка шахты: откачка воды, мойка стенок, очистка дна и разбор реального состояния колодца без поверхностных решений.",
+      price: "от 14 000 ₽",
+    },
+    {
+      slug: "remont-kolodcev",
+      href: "/remont-kolodcev",
+      eyebrow: "Главная услуга",
+      title: "Ремонт колодцев",
+      description:
+        "Ремонт швов, устранение течей, восстановление шахты и понятная логика работ, когда колодцу уже мало одной чистки.",
+      price: "от 3 000 ₽ за шов",
+    },
+    {
+      slug: "skobirovanie-kolodca",
+      href: "/skobirovanie-kolodca",
+      eyebrow: "Внутри ремонта",
+      title: "Скобирование колец",
+      description:
+        "Фиксируем смещённые кольца, чтобы остановить движение шахты и подготовить колодец к нормальному ремонту швов.",
+      price: "от 1 500 ₽ за шов",
+    },
+    {
+      slug: "gidroizolyaciya-shvov",
+      href: "/gidroizolyaciya-shvov",
+      eyebrow: "Внутри ремонта",
+      title: "Гидроизоляция швов",
+      description:
+        "Закрываем текущие и сухие швы, убираем подсос верховодки и работаем по фактическому состоянию стыков внутри шахты.",
+      price: "от 3 000 ₽",
+    },
+    {
+      slug: "uglublenie-kolodcev",
+      href: "/uglublenie-kolodcev",
+      eyebrow: "Внутри ремонта",
+      title: "Углубление колодцев",
+      description:
+        "Оцениваем пересохший колодец, проверяем состояние шахты и углубляем его только там, где это действительно безопасно и оправдано.",
+      price: "по результатам осмотра",
+    },
+    {
+      slug: "donny-shchit-i-graviy",
+      href: "/remont-kolodcev#donny-shchit-i-graviy",
+      eyebrow: "Внутри ремонта",
+      title: "Донный щит и гравий",
+      description:
+        "Ставим донный щит из лиственницы и засыпаем речной гравий, когда нужно восстановить нижнюю часть колодца и фильтрующий слой.",
+      price: "от 10 000 ₽",
+    },
+    {
+      slug: "kopka-kolodcev",
+      href: "/kopka-kolodcev",
+      eyebrow: "Дополнительная услуга",
+      title: "Копка колодцев",
+      description:
+        "Копаем новые колодцы из ЖБ колец, но оставляем это как отдельное направление, а не как главное лицо сайта.",
+      price: "от 8 500 ₽ за кольцо",
+    },
+    {
+      slug: "septik-iz-zhbi-kolec",
+      href: "/septik-iz-zhbi-kolec",
+      eyebrow: "Дополнительная услуга",
+      title: "Септики из ЖБ колец",
+      description:
+        "Собираем септики из ЖБ колец под ключ с доставкой и монтажом, но держим эту услугу во второстепенном блоке сайта.",
+      price: "от 11 000 ₽ за кольцо Ø1 м",
+    },
+    {
+      slug: "vodosnabzhenie-iz-kolodca-v-dom",
+      href: "/vodosnabzhenie-iz-kolodca-v-dom",
+      eyebrow: "Дополнительная услуга",
+      title: "Водоснабжение из колодца в дом",
+      description:
+        "Подводим воду из колодца в дом как отдельную дополнительную услугу, не смешивая её с главным ремонтом и чисткой шахты.",
+      price: "от 2 500 ₽ / пог. м",
+    },
+  ] as const;
+
   return (
     <section className="py-18 lg:py-24">
       <div className="container space-y-10">
         <SectionHeading
           eyebrow="Ключевые направления"
-          title="Чистка, ремонт, копка, септики и вода в доме"
-          description="Каждое направление вынесено в отдельную страницу, чтобы сайт выглядел как полноценный сервисный ресурс, а клиент быстро находил нужную услугу под свою задачу."
+          title="Чистка, ремонт и дополнительные услуги по колодцам"
+          description="Главный смысл сайта — чистка и ремонт колодцев. Ниже идут работы внутри ремонта, а копка, септики и водоснабжение вынесены во второстепенные направления."
         />
         <div className="grid gap-5 lg:grid-cols-2 xl:grid-cols-4">
-          {services.map((service) => {
+          {featuredCards.map((service) => {
             const Icon = iconMap[service.slug as keyof typeof iconMap] ?? Wrench;
 
             return (
               <Link
                 key={service.slug}
-                href={`/${service.slug}`}
+                href={service.href}
                 className="glass-panel card-hover flex h-full flex-col rounded-[1.8rem] p-5"
               >
                 <div className="mb-5 flex items-center justify-between">
@@ -1385,7 +1641,7 @@ function LocationHubSection() {
         <SectionHeading
           eyebrow="Города и районы"
           title="Выезжаем по всей Московской области"
-          description="Работаем по всей Московской области. Ниже показаны города и районы, куда выезжаем на чистку, ремонт, копку колодцев, монтаж септиков из ЖБ колец, углубление и подводку воды в дом."
+          description="Работаем по Московской области. В приоритете — Одинцово, Красногорск, Истра, Дмитров, Нахабино, Дедовск, Звенигород, Новая Рига, Рублёвка, Барвиха и Павловская Слобода. Дополнительные направления показываем ниже отдельно."
         />
         <div className="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
           <div className="page-frame rounded-[2rem] p-6 lg:p-8">
@@ -1416,7 +1672,7 @@ function LocationHubSection() {
                 <div className="metric-value text-primary">{citySeoLocations.length}</div>
                 <div className="mt-2 text-lg font-semibold text-white">Города по выезду</div>
                 <p className="mt-3 text-sm leading-7 text-white/62">
-                  Города, по которым регулярно выезжаем на обслуживание, ремонт колодцев и работы по воде в доме.
+                  Города, по которым регулярно выезжаем на чистку, ремонт, гидроизоляцию, скобирование и углубление колодцев.
                 </p>
               </div>
               <div className="glass-panel rounded-[1.5rem] p-5">
@@ -1446,7 +1702,7 @@ function CtaSection() {
             <div className="space-y-5">
               <div className="section-kicker">Следующий шаг</div>
               <h2 className="section-title text-white">
-                Нужен колодец, септик или <span className="text-gradient-metal">вода в доме</span>?
+                Нужна чистка, ремонт или <span className="text-gradient-metal">диагностика колодца</span>?
               </h2>
               <p className="story-copy max-w-2xl">
                 Опишите задачу, район и текущее состояние объекта. Чем точнее исходные данные,
@@ -1454,7 +1710,7 @@ function CtaSection() {
               </p>
               <div className="flex flex-col gap-3 sm:flex-row">
                 <RequestDialogButton trackingId="final_request" trackingPlacement="final_cta">
-                  Оставить заявку <ArrowRight className="size-4" />
+                  Задать задачу <ArrowRight className="size-4" />
                 </RequestDialogButton>
                 <a
                   href={siteMeta.phoneHref}
@@ -1470,10 +1726,10 @@ function CtaSection() {
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               {[
-                "Чистка и обслуживание колодцев",
-                "Ремонт и герметизация шахты",
-                "Углубление по результатам осмотра",
-                "Подводка воды в дом под ключ",
+                "Чистка колодцев и промывка шахты",
+                "Ремонт швов, гидроизоляция и скобирование",
+                "Углубление, донный щит и восстановление шахты",
+                "Дополнительные услуги: копка, септики, дренаж и водоснабжение",
               ].map((item) => (
                 <div key={item} className="rounded-[1.4rem] border border-white/10 bg-white/5 p-4 text-sm text-white/75">
                   {item}
@@ -1636,15 +1892,25 @@ function ServiceGallerySection({ defaultServiceSlug }: { defaultServiceSlug: str
 
 function ServiceContent({ slug }: { slug: string }) {
   const service = useMemo(() => services.find((item) => item.slug === slug), [slug]);
+  const isDeepeningPage = slug === "uglublenie-kolodcev";
+  const serviceSeoTitle = service
+    ? isDeepeningPage
+      ? `Углубление колодцев в Московской области | ${siteMeta.name}`
+      : `${service.title} — ${siteMeta.region} | ${siteMeta.name}`
+    : `Страница не найдена | ${siteMeta.name}`;
+  const serviceSeoDescription = service
+    ? isDeepeningPage
+      ? "Углубление пересохших колодцев по Московской области: оценка шахты, откачка воды, работа на глубине, усиление колец, ремонт швов и восстановление притока воды."
+      : `${service.title} по ${siteMeta.region.toLowerCase()}. ${service.intro}`
+    : "Нужная страница услуги не найдена.";
+  const serviceHeroTitle = service ? (isDeepeningPage ? "Углубление колодцев в Московской области" : service.title) : "";
+  const serviceHeroDescription = service
+    ? isDeepeningPage
+      ? "Углубление пересохших колодцев по Московской области: сначала оцениваем состояние шахты, проверяем кольца и швы, а затем предлагаем безопасное решение по глубине, грунту и реальной конструкции колодца."
+      : service.description
+    : "";
 
-  usePageSeo(
-    service
-      ? `${service.title} — ${siteMeta.region} | ${siteMeta.name}`
-      : `Страница не найдена | ${siteMeta.name}`,
-    service
-      ? `${service.title} по ${siteMeta.region.toLowerCase()}. ${service.intro}`
-      : "Нужная страница услуги не найдена.",
-  );
+  usePageSeo(serviceSeoTitle, serviceSeoDescription);
 
   if (!service) {
     return (
@@ -1668,8 +1934,8 @@ function ServiceContent({ slug }: { slug: string }) {
     <SiteLayout>
       <HeroPageBlock
         eyebrow={service.eyebrow}
-        title={service.title}
-        description={service.description}
+        title={serviceHeroTitle}
+        description={serviceHeroDescription}
         image={service.image}
         price={service.price}
       />
@@ -1781,8 +2047,8 @@ function ServiceContent({ slug }: { slug: string }) {
 
 export function HomePage() {
   usePageSeo(
-    "Колодцы, септики и вода в доме — Московская область | WELLS-MO",
-    "Чистка, ремонт, копка колодцев, септики из ЖБ колец, углубление и вода в доме по всей Московской области. Реальные фото работ, понятная смета и быстрый контакт.",
+    "Чистка и ремонт колодцев в Московской области | WELLS-MO",
+    "Профессиональная чистка и ремонт колодцев по Московской области: откачка воды, мойка шахты до 400 бар, чистка дна, ремонт швов, гидроизоляция, скобирование, углубление и восстановление старых шахт.",
   );
 
   return (
@@ -1804,18 +2070,18 @@ export function HomePage() {
 
 export function ServicesPage() {
   usePageSeo(
-    `Услуги по колодцам, септикам и водоснабжению — ${siteMeta.region} | ${siteMeta.name}`,
-    "Чистка, ремонт, копка колодцев, септики из ЖБ колец, углубление и подводка воды в дом по Московской области с реальными примерами работ и понятной подачей.",
+    `Чистка и ремонт колодцев и дополнительные услуги — ${siteMeta.region} | ${siteMeta.name}`,
+    "Основные услуги по колодцам в Московской области: чистка, ремонт, гидроизоляция швов, скобирование и углубление. Дополнительно выполняем копку колодцев, септики из ЖБ колец, дренажные колодцы и подводку воды в дом.",
   );
 
   return (
     <SiteLayout>
       <HeroPageBlock
         eyebrow="Основные услуги"
-        title="Услуги по колодцам, септикам и водоснабжению"
-        description="Собрали основные направления работ по колодцам, септикам и воде в доме: чистка, ремонт, копка, углубление, монтаж септика и подводка воды с понятным составом работ и ориентирами по стоимости."
+        title="Чистка и ремонт колодцев и дополнительные работы"
+        description="Главные направления сайта — чистка и ремонт колодцев. Отдельно раскрываем гидроизоляцию швов, скобирование, углубление, донный щит и гравий. Дополнительно показываем копку колодцев, септики из ЖБ колец, дренажные колодцы и водоснабжение из колодца в дом."
         image={assets.fieldCrew}
-        price="6 направлений работ"
+        price="8 направлений работ"
       />
       <ServicesPreview />
       <ProcessSection />
@@ -1826,8 +2092,8 @@ export function ServicesPage() {
 
 export function PricingPage() {
   usePageSeo(
-    `Цены на колодцы, септики и воду в доме — ${siteMeta.region} | ${siteMeta.name}`,
-    "Ориентировочные цены на копку колодцев, септики из ЖБ колец, чистку, ремонт, углубление и водоснабжение из колодца в дом по Московской области.",
+    `Цены на чистку и ремонт колодцев — ${siteMeta.region} | ${siteMeta.name}`,
+    "Ориентировочные цены на чистку, ремонт, гидроизоляцию швов, скобирование и углубление колодцев по Московской области. Дополнительные услуги: копка колодцев, септики из ЖБ колец, дренаж и водоснабжение из колодца в дом.",
   );
 
   return (
@@ -1849,8 +2115,8 @@ export function PricingPage() {
 
 export function WorksPage() {
   usePageSeo(
-    `Наши работы по колодцам и водоснабжению — ${siteMeta.region} | ${siteMeta.name}`,
-    "Кейсы по чистке колодцев, ремонту и подводке воды в дом: реальные объекты, процессы и результаты по всей Московской области.",
+    `Наши работы по чистке и ремонту колодцев — ${siteMeta.region} | ${siteMeta.name}`,
+    "Реальные кейсы по чистке, ремонту, гидроизоляции, скобированию и углублению колодцев по Московской области. Фото процессов, результаты работ и понятная подача по объектам.",
   );
 
   return (
@@ -1871,8 +2137,8 @@ export function WorksPage() {
 
 export function ContactsPage() {
   usePageSeo(
-    `Контакты и заявка на работы по колодцам — ${siteMeta.region} | ${siteMeta.name}`,
-    "Контакты, форма заявки и быстрый способ связаться по вопросам чистки колодцев, ремонта и подводки воды в дом по всей Московской области.",
+    `Контакты и заявка на чистку и ремонт колодцев — ${siteMeta.region} | ${siteMeta.name}`,
+    "Контакты, форма заявки и быстрый способ связаться по вопросам чистки, ремонта, гидроизоляции швов, скобирования и углубления колодцев по всей Московской области.",
   );
 
   const [formData, setFormData] = useState<ContactFormState>(initialContactFormState);
@@ -2035,8 +2301,8 @@ export function ContactsPage() {
                 },
                 {
                   label: "Нужно провести воду в дом из существующего колодца",
-                  presetIssue: "Не идёт вода в дом",
-                  presetService: "Вода в дом",
+                  presetIssue: "Нужно провести воду в дом",
+                  presetService: "Водоснабжение из колодца в дом",
                   presetDetails: "Нужно обсудить подачу воды в дом из существующего колодца.",
                 },
               ].map((item) => (
@@ -2148,7 +2414,7 @@ export function ContactsPage() {
 export function AboutPage() {
   usePageSeo(
     `О компании и подходе к работам — ${siteMeta.region} | ${siteMeta.name}`,
-    "Подход к чистке, ремонту, копке колодцев, септикам из ЖБ колец, углублению и организации воды в доме по всей Московской области.",
+    "Подход к чистке, ремонту, гидроизоляции, скобированию и углублению колодцев по всей Московской области. Дополнительные направления — копка, септики и водоснабжение из колодца в дом.",
   );
 
   return (
@@ -2188,8 +2454,8 @@ export function AboutPage() {
 
 export function FAQPage() {
   usePageSeo(
-    `Частые вопросы по колодцам, септикам и воде в доме — ${siteMeta.region} | ${siteMeta.name}`,
-    "Ответы на частые вопросы о чистке, ремонте, копке колодцев, септиках из ЖБ колец, углублении и подводке воды в дом по всей Московской области.",
+    `Частые вопросы по чистке и ремонту колодцев — ${siteMeta.region} | ${siteMeta.name}`,
+    "Ответы на частые вопросы о чистке, ремонте, гидроизоляции, скобировании и углублении колодцев по всей Московской области. Дополнительно разобраны копка, септики и водоснабжение из колодца в дом.",
   );
 
   return (
@@ -2223,6 +2489,18 @@ export function WaterSupplyPage() {
   return <ServiceContent slug="vodosnabzhenie-iz-kolodca-v-dom" />;
 }
 
+export function WaterproofingPage() {
+  return <ServiceContent slug="gidroizolyaciya-shvov" />;
+}
+
+export function WellBracingPage() {
+  return <ServiceContent slug="skobirovanie-kolodca" />;
+}
+
+export function DrainageWellPage() {
+  return <ServiceContent slug="drenazhnyy-kolodec" />;
+}
+
 export function WellDiggingPage() {
   return <ServiceContent slug="kopka-kolodcev" />;
 }
@@ -2234,10 +2512,10 @@ export function SepticPage() {
 function LocalSeoPageContent({ location }: { location: LocalSeoLocation | undefined }) {
   usePageSeo(
     location
-      ? `Колодцы, септики и вода в доме — ${location.name} | ${siteMeta.name}`
+      ? `Чистка и ремонт колодцев — ${location.name} | ${siteMeta.name}`
       : `Локальная страница не найдена | ${siteMeta.name}`,
     location
-      ? `Чистка, ремонт, копка колодцев, септики из ЖБ колец, углубление и подводка воды в дом — ${location.name}, Московская область. Реальные услуги, понятный порядок работ и быстрый способ оставить заявку.`
+      ? `Чистка и ремонт колодцев, гидроизоляция швов, скобирование и углубление — ${location.name}, Московская область. Дополнительно выполняем копку колодцев, септики из ЖБ колец и водоснабжение из колодца в дом.`
       : "Локальная страница не найдена.",
   );
 
@@ -2268,8 +2546,8 @@ function LocalSeoPageContent({ location }: { location: LocalSeoLocation | undefi
     <SiteLayout>
       <HeroPageBlock
         eyebrow={location.type === "city" ? "Город" : "Район"}
-        title={`Колодцы, септики и вода в доме — ${location.name}`}
-        description={`Работаем по направлению ${location.name} и выезжаем на объекты по чистке, ремонту, копке колодцев, септикам из ЖБ колец, углублению и водоснабжению для частных домов и дач.`}
+        title={`Чистка и ремонт колодцев — ${location.name}`}
+        description={`Работаем по направлению ${location.name} и выезжаем на объекты по чистке, ремонту, гидроизоляции швов, скобированию колец и углублению колодцев. Дополнительно берём копку колодцев, септики из ЖБ колец, дренажные колодцы и водоснабжение из колодца в дом.`}
         image={location.asset}
         price={location.officialName}
       />
@@ -2320,7 +2598,7 @@ function LocalSeoPageContent({ location }: { location: LocalSeoLocation | undefi
               <p className="story-copy mt-5">{location.focus}</p>
               <div className="mt-6 rounded-[1.5rem] border border-primary/18 bg-primary/8 p-4 text-sm leading-7 text-white/78">
                 Основные запросы: чистка колодцев {location.name}, ремонт колодцев {location.name},
-                вода из колодца в дом {location.name}.
+                гидроизоляция швов {location.name}, углубление колодцев {location.name}.
               </div>
             </div>
             <div className="page-frame rounded-[2rem] p-6 lg:p-8">
@@ -2535,7 +2813,7 @@ export function LocalDistrictPage({ slug }: { slug: string }) {
 export function SeoAreasPage() {
   usePageSeo(
     `Города и районы работ по Московской области | ${siteMeta.name}`,
-    "Города и районы Московской области, куда выезжаем по чистке, ремонту, копке колодцев, септикам из ЖБ колец, углублению и водоснабжению из колодца в дом.",
+    "Города и районы Московской области, куда выезжаем по чистке, ремонту, гидроизоляции, скобированию и углублению колодцев. Дополнительные направления — копка колодцев, септики из ЖБ колец и водоснабжение из колодца в дом.",
   );
 
   return (
@@ -2543,7 +2821,7 @@ export function SeoAreasPage() {
       <HeroPageBlock
         eyebrow="География работ"
         title="Города и районы Московской области"
-        description="Принимаем заявки по городам и районам Московской области на чистку, ремонт, копку колодцев, септики из ЖБ колец, углубление колодцев и подводку воды в дом."
+        description="Принимаем заявки по городам и районам Московской области на чистку, ремонт, гидроизоляцию, скобирование и углубление колодцев. Дополнительные работы — копка колодцев, септики из ЖБ колец и водоснабжение из колодца в дом."
         image={assets.hero}
         price={`${allSeoLocations.length} направлений`}
       />

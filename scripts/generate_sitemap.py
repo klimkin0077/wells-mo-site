@@ -12,6 +12,9 @@ service_slugs = re.findall(r'slug: "([a-z0-9-]+)"', text)
 service_slugs = [slug for slug in service_slugs if slug in {
     "chistka-kolodcev",
     "remont-kolodcev",
+    "gidroizolyaciya-shvov",
+    "skobirovanie-kolodca",
+    "drenazhnyy-kolodec",
     "kopka-kolodcev",
     "septik-iz-zhbi-kolec",
     "uglublenie-kolodcev",
@@ -28,29 +31,37 @@ def slugify(value: str) -> str:
     return re.sub(r'-+', '-', re.sub(r'\s+', '-', ''.join(translit.get(ch, ch) for ch in value.lower())).strip()).strip('-')
 
 city_names = [
-    "Балашиха","Ногинск","Бронницы","Власиха","Воскресенск","Восход","Долгопрудный","Домодедово","Дубна","Жуковский","Звёздный городок","Кашира","Клин","Коломна","Королёв","Котельники","Красногорск","Краснознаменск","Видное","Лобня","Лосино-Петровский","Лыткарино","Люберцы","Молодёжный","Мытищи","Наро-Фоминск","Одинцово","Орехово-Зуево","Павловский Посад","Подольск","Пушкино","Реутов","Сергиев Посад","Серпухов","Солнечногорск","Ступино","Талдом","Фрязино","Химки","Черноголовка","Щёлково","Электросталь"
+    "Балашиха","Ногинск","Бронницы","Власиха","Воскресенск","Восход","Долгопрудный","Домодедово","Дубна","Жуковский","Звёздный городок","Кашира","Клин","Коломна","Королёв","Котельники","Красногорск","Краснознаменск","Видное","Лобня","Лосино-Петровский","Лыткарино","Люберцы","Молодёжный","Мытищи","Наро-Фоминск","Нахабино","Новая Рига","Одинцово","Орехово-Зуево","Павловская Слобода","Павловский Посад","Подольск","Пушкино","Реутов","Рублёвка","Сергиев Посад","Серпухов","Солнечногорск","Ступино","Дедовск","Талдом","Фрязино","Химки","Барвиха","Черноголовка","Щёлково","Электросталь","Звенигород"
 ]
 district_names = [
     "Волоколамск","Дмитров","Егорьевск","Зарайск","Истра","Лотошино","Луховицы","Можайск","Раменское","Руза","Серебряные Пруды","Чехов","Шатура","Шаховская"
 ]
-priority_city_slugs = ["odincovo", "krasnogorsk", "himki", "mytischi", "solnechnogorsk", "lobnya"]
+priority_city_slugs = ["odincovo", "krasnogorsk", "nahabino", "novaya-riga", "rublevka", "barviha", "zvenigorod", "dedovsk", "pavlovskaya-sloboda"]
 
 urls = {
     "/",
     "/uslugi",
     "/ceny",
+    "/price",
     "/nashi-raboty",
     "/o-kompanii",
+    "/o-nas",
     "/faq",
     "/rajony-rabot",
     "/kontakty",
+    "/contacts",
 }
 
 for slug in service_slugs:
     urls.add(f"/{slug}")
 
+urls.add("/septik-iz-zhb-kolec")
+urls.add("/vodoprovod-iz-kolodca-v-dom")
+
 for name in city_names:
     urls.add(f"/goroda/{slugify(name)}")
+
+urls.add("/goroda/odintsovo")
 
 for name in district_names:
     urls.add(f"/rajony/{slugify(name)}")

@@ -16,12 +16,77 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://wells-mo.ru/contacts</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/drenazhnyy-kolodec</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://wells-mo.ru/faq</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://wells-mo.ru/gidroizolyaciya-shvov</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://wells-mo.ru/goroda/balashiha</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/barviha</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/barviha/chistka-kolodcev</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/barviha/drenazhnyy-kolodec</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/barviha/gidroizolyaciya-shvov</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/barviha/kopka-kolodcev</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/barviha/remont-kolodcev</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/barviha/septik-iz-zhbi-kolec</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/barviha/skobirovanie-kolodca</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/barviha/uglublenie-kolodcev</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/barviha/vodosnabzhenie-iz-kolodca-v-dom</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -32,6 +97,56 @@
   </url>
   <url>
     <loc>https://wells-mo.ru/goroda/chernogolovka</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/dedovsk</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/dedovsk/chistka-kolodcev</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/dedovsk/drenazhnyy-kolodec</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/dedovsk/gidroizolyaciya-shvov</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/dedovsk/kopka-kolodcev</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/dedovsk/remont-kolodcev</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/dedovsk/septik-iz-zhbi-kolec</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/dedovsk/skobirovanie-kolodca</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/dedovsk/uglublenie-kolodcev</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/dedovsk/vodosnabzhenie-iz-kolodca-v-dom</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -62,36 +177,6 @@
   </url>
   <url>
     <loc>https://wells-mo.ru/goroda/himki</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://wells-mo.ru/goroda/himki/chistka-kolodcev</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://wells-mo.ru/goroda/himki/kopka-kolodcev</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://wells-mo.ru/goroda/himki/remont-kolodcev</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://wells-mo.ru/goroda/himki/septik-iz-zhbi-kolec</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://wells-mo.ru/goroda/himki/uglublenie-kolodcev</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://wells-mo.ru/goroda/himki/vodosnabzhenie-iz-kolodca-v-dom</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -131,6 +216,16 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://wells-mo.ru/goroda/krasnogorsk/drenazhnyy-kolodec</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/krasnogorsk/gidroizolyaciya-shvov</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://wells-mo.ru/goroda/krasnogorsk/kopka-kolodcev</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -142,6 +237,11 @@
   </url>
   <url>
     <loc>https://wells-mo.ru/goroda/krasnogorsk/septik-iz-zhbi-kolec</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/krasnogorsk/skobirovanie-kolodca</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -162,36 +262,6 @@
   </url>
   <url>
     <loc>https://wells-mo.ru/goroda/lobnya</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://wells-mo.ru/goroda/lobnya/chistka-kolodcev</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://wells-mo.ru/goroda/lobnya/kopka-kolodcev</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://wells-mo.ru/goroda/lobnya/remont-kolodcev</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://wells-mo.ru/goroda/lobnya/septik-iz-zhbi-kolec</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://wells-mo.ru/goroda/lobnya/uglublenie-kolodcev</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://wells-mo.ru/goroda/lobnya/vodosnabzhenie-iz-kolodca-v-dom</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -221,32 +291,52 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://wells-mo.ru/goroda/mytischi/chistka-kolodcev</loc>
+    <loc>https://wells-mo.ru/goroda/nahabino</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://wells-mo.ru/goroda/mytischi/kopka-kolodcev</loc>
+    <loc>https://wells-mo.ru/goroda/nahabino/chistka-kolodcev</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://wells-mo.ru/goroda/mytischi/remont-kolodcev</loc>
+    <loc>https://wells-mo.ru/goroda/nahabino/drenazhnyy-kolodec</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://wells-mo.ru/goroda/mytischi/septik-iz-zhbi-kolec</loc>
+    <loc>https://wells-mo.ru/goroda/nahabino/gidroizolyaciya-shvov</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://wells-mo.ru/goroda/mytischi/uglublenie-kolodcev</loc>
+    <loc>https://wells-mo.ru/goroda/nahabino/kopka-kolodcev</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://wells-mo.ru/goroda/mytischi/vodosnabzhenie-iz-kolodca-v-dom</loc>
+    <loc>https://wells-mo.ru/goroda/nahabino/remont-kolodcev</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/nahabino/septik-iz-zhbi-kolec</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/nahabino/skobirovanie-kolodca</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/nahabino/uglublenie-kolodcev</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/nahabino/vodosnabzhenie-iz-kolodca-v-dom</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -261,12 +351,72 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://wells-mo.ru/goroda/novaya-riga</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/novaya-riga/chistka-kolodcev</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/novaya-riga/drenazhnyy-kolodec</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/novaya-riga/gidroizolyaciya-shvov</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/novaya-riga/kopka-kolodcev</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/novaya-riga/remont-kolodcev</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/novaya-riga/septik-iz-zhbi-kolec</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/novaya-riga/skobirovanie-kolodca</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/novaya-riga/uglublenie-kolodcev</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/novaya-riga/vodosnabzhenie-iz-kolodca-v-dom</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://wells-mo.ru/goroda/odincovo</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://wells-mo.ru/goroda/odincovo/chistka-kolodcev</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/odincovo/drenazhnyy-kolodec</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/odincovo/gidroizolyaciya-shvov</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -286,6 +436,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://wells-mo.ru/goroda/odincovo/skobirovanie-kolodca</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://wells-mo.ru/goroda/odincovo/uglublenie-kolodcev</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -296,7 +451,62 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://wells-mo.ru/goroda/odintsovo</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://wells-mo.ru/goroda/orehovo-zuevo</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/pavlovskaya-sloboda</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/pavlovskaya-sloboda/chistka-kolodcev</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/pavlovskaya-sloboda/drenazhnyy-kolodec</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/pavlovskaya-sloboda/gidroizolyaciya-shvov</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/pavlovskaya-sloboda/kopka-kolodcev</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/pavlovskaya-sloboda/remont-kolodcev</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/pavlovskaya-sloboda/septik-iz-zhbi-kolec</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/pavlovskaya-sloboda/skobirovanie-kolodca</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/pavlovskaya-sloboda/uglublenie-kolodcev</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/pavlovskaya-sloboda/vodosnabzhenie-iz-kolodca-v-dom</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -321,6 +531,56 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://wells-mo.ru/goroda/rublevka</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/rublevka/chistka-kolodcev</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/rublevka/drenazhnyy-kolodec</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/rublevka/gidroizolyaciya-shvov</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/rublevka/kopka-kolodcev</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/rublevka/remont-kolodcev</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/rublevka/septik-iz-zhbi-kolec</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/rublevka/skobirovanie-kolodca</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/rublevka/uglublenie-kolodcev</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/rublevka/vodosnabzhenie-iz-kolodca-v-dom</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://wells-mo.ru/goroda/schelkovo</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -337,36 +597,6 @@
   </url>
   <url>
     <loc>https://wells-mo.ru/goroda/solnechnogorsk</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://wells-mo.ru/goroda/solnechnogorsk/chistka-kolodcev</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://wells-mo.ru/goroda/solnechnogorsk/kopka-kolodcev</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://wells-mo.ru/goroda/solnechnogorsk/remont-kolodcev</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://wells-mo.ru/goroda/solnechnogorsk/septik-iz-zhbi-kolec</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://wells-mo.ru/goroda/solnechnogorsk/uglublenie-kolodcev</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://wells-mo.ru/goroda/solnechnogorsk/vodosnabzhenie-iz-kolodca-v-dom</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -406,6 +636,56 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://wells-mo.ru/goroda/zvenigorod</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/zvenigorod/chistka-kolodcev</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/zvenigorod/drenazhnyy-kolodec</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/zvenigorod/gidroizolyaciya-shvov</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/zvenigorod/kopka-kolodcev</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/zvenigorod/remont-kolodcev</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/zvenigorod/septik-iz-zhbi-kolec</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/zvenigorod/skobirovanie-kolodca</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/zvenigorod/uglublenie-kolodcev</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/goroda/zvenigorod/vodosnabzhenie-iz-kolodca-v-dom</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://wells-mo.ru/goroda/zvezdnyy-gorodok</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -427,6 +707,16 @@
   </url>
   <url>
     <loc>https://wells-mo.ru/o-kompanii</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/o-nas</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/price</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -511,7 +801,17 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://wells-mo.ru/septik-iz-zhb-kolec</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://wells-mo.ru/septik-iz-zhbi-kolec</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/skobirovanie-kolodca</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -522,6 +822,11 @@
   </url>
   <url>
     <loc>https://wells-mo.ru/uslugi</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/vodoprovod-iz-kolodca-v-dom</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
