@@ -4,7 +4,7 @@ Design reminder for this file:
 Каждая страница должна ощущаться как часть единого дорогого интерфейса: крупные заголовки, воздух, стеклянные панели, тёмная база, латунные акценты и реальные изображения.
 */
 
-import { type ReactNode, useEffect, useMemo, useState } from "react";
+import { type ChangeEvent, type FormEvent, type ReactNode, useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "wouter";
 import {
   ArrowRight,
@@ -61,6 +61,25 @@ declare global {
     __WELLS_MO_METRIKA_ID__?: number | null;
   }
 }
+
+const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
+const WEB3FORMS_ACCESS_KEY = "8f1b122e-09bf-4784-9ab9-5068f642ebec";
+
+type ContactFormState = {
+  name: string;
+  phone: string;
+  location: string;
+  message: string;
+  botcheck: string;
+};
+
+const initialContactFormState: ContactFormState = {
+  name: "",
+  phone: "",
+  location: "",
+  message: "",
+  botcheck: "",
+};
 
 function trackCtaClick(ctaId: string, placement?: string) {
   if (typeof window === "undefined") {
@@ -1263,15 +1282,98 @@ export function ContactsPage() {
     "Контакты, форма заявки и быстрый способ связаться по вопросам чистки колодцев, ремонта и подводки воды в дом по всей Московской области.",
   );
 
+  const [formData, setFormData] = useState<ContactFormState>(initialContactFormState);
+  const [submitState, setSubmitState] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [submitMessage, setSubmitMessage] = useState("");
+
+  const handleFieldChange =
+    (field: keyof ContactFormState) =>
+    (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const value = event.target.value;
+
+      setFormData((current) => ({
+        ...current,
+        [field]: value,
+      }));
+
+      if (submitState !== "idle") {
+        setSubmitState("idle");
+        setSubmitMessage("");
+      }
+    };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (submitState === "loading") {
+      return;
+    }
+
+    const normalizedData = {
+      name: formData.name.trim(),
+      phone: formData.phone.trim(),
+      location: formData.location.trim(),
+      message: formData.message.trim(),
+      botcheck: formData.botcheck.trim(),
+    };
+
+    if (!normalizedData.name || !normalizedData.phone || !normalizedData.location || !normalizedData.message) {
+      setSubmitState("error");
+      setSubmitMessage("Пожалуйста, заполните имя, телефон, район и описание задачи перед отправкой заявки.");
+      return;
+    }
+
+    setSubmitState("loading");
+    setSubmitMessage("Отправляем заявку. Обычно это занимает несколько секунд.");
+    trackCtaClick("contact_form_submit", "contacts_form");
+
+    try {
+      const response = await fetch(WEB3FORMS_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_ACCESS_KEY,
+          subject: `Новая заявка с ${siteMeta.name}`,
+          from_name: siteMeta.name,
+          name: normalizedData.name,
+          phone: normalizedData.phone,
+          location: normalizedData.location,
+          message: normalizedData.message,
+          page: "Контакты",
+          site: "wells-mo.ru",
+          recipient: siteMeta.email,
+          botcheck: normalizedData.botcheck,
+        }),
+      });
+
+      const result = (await response.json()) as { success?: boolean; message?: string };
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || "Сервис отправки не подтвердил приём заявки.");
+      }
+
+      setFormData(initialContactFormState);
+      setSubmitState("success");
+      setSubmitMessage("Заявка отправлена. Мы получили обращение и свяжемся с вами после просмотра информации по объекту.");
+    } catch (error) {
+      console.error("Ошибка отправки заявки", error);
+      setSubmitState("error");
+      setSubmitMessage("Не удалось отправить заявку автоматически. Пожалуйста, позвоните по номеру телефона на странице или напишите на info@wells-mo.ru.");
+    }
+  };
+
   return (
     <SiteLayout>
-        <HeroPageBlock
-          eyebrow="Связь и заявка"
-          title="Контакты"
-          description="Позвоните, напишите или оставьте заявку. Мы работаем по всей Московской области и быстро помогаем понять, какой формат работ нужен именно по вашему объекту."
-          image={assets.waterSupply}
-          price={siteMeta.coverage}
-        />
+      <HeroPageBlock
+        eyebrow="Связь и заявка"
+        title="Контакты"
+        description="Позвоните, напишите или оставьте заявку. Мы работаем по всей Московской области и быстро помогаем понять, какой формат работ нужен именно по вашему объекту."
+        image={assets.waterSupply}
+        price={siteMeta.coverage}
+      />
       <section className="py-18 lg:py-24">
         <div className="container grid gap-8 xl:grid-cols-[0.9fr_1.1fr]">
           <div className="page-frame rounded-[2rem] p-6 lg:p-8">
@@ -1302,28 +1404,75 @@ export function ContactsPage() {
           </div>
           <div className="page-frame rounded-[2rem] p-6 lg:p-8">
             <div className="section-kicker">Форма заявки</div>
-            <form className="mt-6 grid gap-4" onSubmit={(event) => event.preventDefault()}>
+            <form className="mt-6 grid gap-4" onSubmit={handleSubmit}>
               <input
-                className="h-14 rounded-2xl border border-white/10 bg-white/4 px-4 text-base text-white placeholder:text-white/34"
+                type="text"
+                name="botcheck"
+                tabIndex={-1}
+                autoComplete="off"
+                className="hidden"
+                value={formData.botcheck}
+                onChange={handleFieldChange("botcheck")}
+              />
+              <input
+                name="name"
+                autoComplete="name"
+                required
+                disabled={submitState === "loading"}
+                value={formData.name}
+                onChange={handleFieldChange("name")}
+                className="h-14 rounded-2xl border border-white/10 bg-white/4 px-4 text-base text-white placeholder:text-white/34 disabled:cursor-not-allowed disabled:opacity-60"
                 placeholder="Ваше имя"
               />
               <input
-                className="h-14 rounded-2xl border border-white/10 bg-white/4 px-4 text-base text-white placeholder:text-white/34"
+                name="phone"
+                autoComplete="tel"
+                required
+                disabled={submitState === "loading"}
+                value={formData.phone}
+                onChange={handleFieldChange("phone")}
+                className="h-14 rounded-2xl border border-white/10 bg-white/4 px-4 text-base text-white placeholder:text-white/34 disabled:cursor-not-allowed disabled:opacity-60"
                 placeholder="Телефон"
               />
               <input
-                className="h-14 rounded-2xl border border-white/10 bg-white/4 px-4 text-base text-white placeholder:text-white/34"
+                name="location"
+                autoComplete="address-level2"
+                required
+                disabled={submitState === "loading"}
+                value={formData.location}
+                onChange={handleFieldChange("location")}
+                className="h-14 rounded-2xl border border-white/10 bg-white/4 px-4 text-base text-white placeholder:text-white/34 disabled:cursor-not-allowed disabled:opacity-60"
                 placeholder="Район или населённый пункт"
               />
               <textarea
-                className="min-h-36 rounded-2xl border border-white/10 bg-white/4 px-4 py-4 text-base text-white placeholder:text-white/34"
+                name="message"
+                required
+                disabled={submitState === "loading"}
+                value={formData.message}
+                onChange={handleFieldChange("message")}
+                className="min-h-36 rounded-2xl border border-white/10 bg-white/4 px-4 py-4 text-base text-white placeholder:text-white/34 disabled:cursor-not-allowed disabled:opacity-60"
                 placeholder="Кратко опишите задачу"
               />
+              {submitState !== "idle" ? (
+                <div
+                  className={cn(
+                    "rounded-[1.4rem] border px-4 py-3 text-sm leading-7",
+                    submitState === "success" && "border-emerald-400/30 bg-emerald-500/10 text-emerald-50",
+                    submitState === "error" && "border-rose-400/30 bg-rose-500/10 text-rose-50",
+                    submitState === "loading" && "border-white/10 bg-white/5 text-white/78",
+                  )}
+                >
+                  {submitMessage}
+                </div>
+              ) : null}
               <button
                 type="submit"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:translate-y-[-1px]"
+                disabled={submitState === "loading"}
+                data-cta="contact_form_submit"
+                data-cta-placement="contacts_form"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:translate-y-[-1px] disabled:cursor-not-allowed disabled:opacity-70"
               >
-                Отправить заявку
+                {submitState === "loading" ? "Отправляем заявку..." : "Отправить заявку"}
                 <ArrowRight className="size-4" />
               </button>
               <p className="text-sm leading-7 text-white/45">
