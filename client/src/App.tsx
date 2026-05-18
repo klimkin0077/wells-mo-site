@@ -26,8 +26,17 @@ import {
 } from "./pages/SitePages";
 
 const routerBase = (() => {
-  const baseUrl = import.meta.env.BASE_URL || "/";
-  return baseUrl === "/" ? "" : baseUrl.replace(/\/$/, "");
+  if (typeof window === "undefined") {
+    return "";
+  }
+
+  const { hostname, pathname } = window.location;
+
+  if (hostname === "klimkin0077.github.io") {
+    return pathname.startsWith("/wells-mo-site") ? "/wells-mo-site" : "";
+  }
+
+  return "";
 })();
 
 function SiteRouter() {
