@@ -1381,7 +1381,7 @@ function HomeHero() {
           <div className="image-mask min-h-[380px] sm:min-h-[460px] lg:min-h-[620px]">
             <img
               src={assets.hero}
-              alt="Премиальный объект с колодцем и работой специалистов"
+              alt="Чистка и ремонт колодца в Московской области — объект WELLS-MO"
               loading="eager"
               fetchPriority="high"
               decoding="async"
@@ -1529,7 +1529,7 @@ function ServicesPreview() {
                     {service.eyebrow}
                   </div>
                 </div>
-                <div className="service-card-title text-white">{service.title}</div>
+                <h3 className="service-card-title text-white">{service.title}</h3>
                 <p className="mt-4 text-sm leading-7 text-white/72">{service.description}</p>
                 <div className="mt-6 flex items-center justify-between text-sm">
                   <span className="text-primary/88">Технология и этапы</span>
@@ -1564,18 +1564,35 @@ function WhyChooseSection() {
           <div className="space-y-5">
             {whyChooseUs.map((item) => (
               <div key={item.title} className="rounded-[1.35rem] border border-white/8 bg-white/4 p-5">
-                <div className="text-lg font-semibold text-white">{item.title}</div>
+                <h3 className="text-lg font-semibold text-white">{item.title}</h3>
                 <p className="mt-2 text-sm leading-7 text-white/62">{item.text}</p>
               </div>
             ))}
           </div>
         </div>
         <div className="grid gap-5 md:grid-cols-2">
-          {[assets.fieldCrew, assets.wellDigging, assets.septic, assets.waterSupply].map((asset, index) => (
-            <div key={asset} className={cn("image-mask page-frame overflow-hidden rounded-[1.8rem]", index === 0 ? "md:col-span-2 min-h-[260px]" : "min-h-[240px]")}>
+          {[
+            {
+              src: assets.fieldCrew,
+              alt: "Бригада WELLS-MO выполняет чистку и ремонт колодцев в Московской области",
+            },
+            {
+              src: assets.wellDigging,
+              alt: "Копка колодца из ЖБ колец в Московской области",
+            },
+            {
+              src: assets.septic,
+              alt: "Монтаж септика из ЖБ колец в Московской области",
+            },
+            {
+              src: assets.waterSupply,
+              alt: "Водоснабжение из колодца в частный дом в Московской области",
+            },
+          ].map((asset, index) => (
+            <div key={asset.src} className={cn("image-mask page-frame overflow-hidden rounded-[1.8rem]", index === 0 ? "md:col-span-2 min-h-[260px]" : "min-h-[240px]")}>
               <img
-                src={asset}
-                alt="Реальный процесс работ"
+                src={asset.src}
+                alt={asset.alt}
                 loading="lazy"
                 decoding="async"
                 className="absolute inset-0 h-full w-full object-cover"
@@ -1601,7 +1618,7 @@ function ProcessSection() {
           {processSteps.map((step) => (
             <div key={step.number} className="glass-panel rounded-[1.8rem] p-6">
               <div className="metric-value text-primary">{step.number}</div>
-              <div className="mt-4 text-xl font-semibold text-white">{step.title}</div>
+              <h3 className="mt-4 text-xl font-semibold text-white">{step.title}</h3>
               <p className="mt-3 text-sm leading-7 text-white/62">{step.text}</p>
             </div>
           ))}
@@ -1626,7 +1643,7 @@ function CasesSection() {
               <div className="image-mask min-h-[300px] border-b border-white/10 bg-[#0f141d]">
                 <img
                   src={item.image}
-                  alt={item.title}
+                  alt={`${item.service} в Московской области — ${item.stage} — ${item.title}`}
                   loading="lazy"
                   decoding="async"
                   className="absolute inset-0 h-full w-full object-cover"
@@ -1687,7 +1704,7 @@ function PricingSection() {
             {pricing.map((item) => (
               <div key={item.service} className="grid gap-3 p-5 md:grid-cols-[1.12fr_190px] md:items-center">
                 <div>
-                  <div className="text-lg font-semibold text-white">{item.service}</div>
+                  <h3 className="text-lg font-semibold text-white">{item.service}</h3>
                   <div className="mt-2 text-sm leading-6 text-white/74">{item.note}</div>
                 </div>
                 <div className="text-left font-heading text-2xl font-bold text-primary md:text-right">
@@ -1746,7 +1763,7 @@ function GuaranteeSection() {
           <div className="grid gap-4 md:grid-cols-3">
             {guarantees.map((item) => (
               <div key={item.title} className="glass-panel rounded-[1.6rem] p-5">
-                <div className="text-lg font-semibold text-white">{item.title}</div>
+                <h3 className="text-lg font-semibold text-white">{item.title}</h3>
                 <p className="mt-3 text-sm leading-7 text-white/66">{item.text}</p>
               </div>
             ))}
@@ -1804,7 +1821,7 @@ function TestimonialsSection() {
                   <div className="image-mask min-h-[280px] border-b border-white/10 bg-[#0f141d]">
                     <img
                       src={item.image}
-                      alt={item.alt ?? "Отзыв клиента WELLS-MO"}
+                      alt={item.alt ?? "Реальный отзыв клиента о чистке и ремонте колодца в Московской области"}
                       loading="lazy"
                       decoding="async"
                       className="absolute inset-0 h-full w-full object-cover"
@@ -1936,14 +1953,14 @@ function LocationHubSection() {
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
               <div className="glass-panel rounded-[1.5rem] p-5">
                 <div className="metric-value text-primary">{citySeoLocations.length}</div>
-                <div className="mt-2 text-lg font-semibold text-white">Города по выезду</div>
+                <h3 className="mt-2 text-lg font-semibold text-white">Города по выезду</h3>
                 <p className="mt-3 text-sm leading-7 text-white/62">
                   Города, по которым регулярно выезжаем на чистку, ремонт, гидроизоляцию, скобирование и углубление колодцев.
                 </p>
               </div>
               <div className="glass-panel rounded-[1.5rem] p-5">
                 <div className="metric-value text-primary">{districtSeoLocations.length}</div>
-                <div className="mt-2 text-lg font-semibold text-white">Районы и округа</div>
+                <h3 className="mt-2 text-lg font-semibold text-white">Районы и округа</h3>
                 <p className="mt-3 text-sm leading-7 text-white/62">
                   Дополнительные районы и округа, где также принимаем заявки и выезжаем на объекты.
                 </p>
@@ -2042,7 +2059,7 @@ function HeroPageBlock({
           <div className="image-mask min-h-[340px] lg:min-h-[480px]">
             <img
               src={image}
-              alt={title}
+              alt={`${title} в Московской области — WELLS-MO`}
               loading="eager"
               fetchPriority="high"
               decoding="async"
@@ -2127,7 +2144,7 @@ function ServiceGallerySection({ defaultServiceSlug }: { defaultServiceSlug: str
                 <div className="image-mask min-h-[220px] border-b border-white/8">
                   <img
                   src={item.image}
-                  alt={item.title}
+                  alt={`${item.title} — ${serviceInfo?.title ?? "услуги WELLS-MO"} в Московской области`}
                   loading="lazy"
                   decoding="async"
                   className="absolute inset-0 h-full w-full object-cover"
