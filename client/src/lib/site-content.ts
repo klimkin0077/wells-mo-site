@@ -39,6 +39,8 @@ export const siteMeta = {
     "Профессиональная чистка и ремонт колодцев по Московской области: откачка воды, мойка шахты до 400 бар, чистка дна, ремонт швов, гидроизоляция, скобирование, углубление и восстановление старых шахт. Копка колодцев, септики и подводка воды остаются дополнительными услугами.",
 } as const;
 
+const publicAsset = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\//, "")}`;
+
 export const assets = {
   texture:
     "https://d2xsxph8kpxj0f.cloudfront.net/310519663042042500/htP6tJcWEMcp6qhKGuYmV6/dark-metal-water-texture-iUcpUqfm8G7AbmoCgL3vQt.webp",
@@ -64,22 +66,22 @@ export const assets = {
     "https://d2xsxph8kpxj0f.cloudfront.net/310519663042042500/htP6tJcWEMcp6qhKGuYmV6/gallery-deepening-02_32aeaf84.jpeg",
   galleryWaterSupplyDetail:
     "https://d2xsxph8kpxj0f.cloudfront.net/310519663042042500/htP6tJcWEMcp6qhKGuYmV6/gallery-water-02_bdc20feb.jpg",
-  userReviews: "/manus-storage/reviews-real_b8f4aaf4_c0c142e1.webp",
-  userBottomShield: "/manus-storage/bottom-shield-installation_63fdd0fd_8d7a6cb6.webp",
-  userAfterWashing: "/manus-storage/after-washing_c921d0c4_318220db.webp",
-  userLogo: "/manus-storage/site-logo-round_8fff2fa5_fd868de4.webp",
-  userGravelBackfill: "/manus-storage/gravel-washing-backfill_8ab3f108_65d95c84.webp",
-  userCurrentJointProblem: "/manus-storage/current-joint-problem_4ced24f1_c1e918bb.webp",
-  userShiftedRingRepair: "/manus-storage/shifted-ring-repair_67c5034b_2de64640.webp",
-  userShaftWashing: "/manus-storage/shaft-washing_a169e4ad_189330d9.webp",
-  userFinishedWell: "/manus-storage/finished-well_7b5c4ebe_42cc107d.webp",
-  userJointWaterproofing: "/manus-storage/joint-waterproofing_5d4e4f5b_85c15b05.webp",
-  userWellCleaningMain: "/manus-storage/well-cleaning-main_539a53ac_7b5ebcbc.webp",
-  userShaftDiagnostics: "/manus-storage/shaft-diagnostics_66073b34_314af387.webp",
-  userAvitoDmitriy: "/manus-storage/dmitriy-avito-review_dae62156_f267e736.webp",
-  userAvitoOlesya: "/manus-storage/olesya-avito-review_f94ec4e3_5a183c0f.webp",
-  userAvitoLyubov: "/manus-storage/lyubov-avito-review_6d32f7af_4de5aede.webp",
-  userAvitoUser: "/manus-storage/user-avito-review_44604ce7_222181ad.webp",
+  userReviews: publicAsset("images/reviews/reviews-real.webp"),
+  userBottomShield: publicAsset("images/work/bottom-shield.webp"),
+  userAfterWashing: publicAsset("images/work/after-washing.webp"),
+  userLogo: publicAsset("images/brand/site-logo-round.webp"),
+  userGravelBackfill: publicAsset("images/work/gravel-backfill.webp"),
+  userCurrentJointProblem: publicAsset("images/work/current-joint-problem.webp"),
+  userShiftedRingRepair: publicAsset("images/work/shifted-ring-repair.webp"),
+  userShaftWashing: publicAsset("images/work/shaft-washing.webp"),
+  userFinishedWell: publicAsset("images/work/finished-well.webp"),
+  userJointWaterproofing: publicAsset("images/work/joint-waterproofing.webp"),
+  userWellCleaningMain: publicAsset("images/work/well-cleaning-main.webp"),
+  userShaftDiagnostics: publicAsset("images/work/shaft-diagnostics.webp"),
+  userAvitoDmitriy: publicAsset("images/reviews/avito-dmitriy.webp"),
+  userAvitoOlesya: publicAsset("images/reviews/avito-olesya.webp"),
+  userAvitoLyubov: publicAsset("images/reviews/avito-lyubov.webp"),
+  userAvitoUser: publicAsset("images/reviews/avito-user.webp"),
 } as const;
 
 export const navigation = [
