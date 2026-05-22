@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://wells-mo.ru</loc>
+    <loc>https://wells-mo.ru/</loc>
     <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://wells-mo.ru/chistka-kolodcev</loc>
@@ -711,7 +711,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://wells-mo.ru/price</loc>
+    <loc>https://wells-mo.ru/price/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>

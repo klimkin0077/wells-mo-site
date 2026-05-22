@@ -41,8 +41,7 @@ priority_city_slugs = ["odincovo", "krasnogorsk", "nahabino", "novaya-riga", "ru
 urls = {
     "/",
     "/uslugi",
-    "/ceny",
-    "/price",
+    "/price/",
     "/nashi-raboty",
     "/o-kompanii",
     "/o-nas",
