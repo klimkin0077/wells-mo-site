@@ -563,6 +563,20 @@ function usePageSeo(title: string, description: string) {
     };
 
     const currentUrl = typeof window !== "undefined" ? window.location.href : "https://wells-mo.ru";
+    const canonicalUrl = (() => {
+      if (typeof window === "undefined") {
+        return "https://wells-mo.ru";
+      }
+
+      const { origin, pathname } = window.location;
+      const canonicalAliases = new Set(["/price", "/price/", "/ceny", "/ceny/"]);
+
+      if (canonicalAliases.has(pathname)) {
+        return `${origin}/price/`;
+      }
+
+      return `${origin}${pathname}`;
+    })();
     const keywordPool = [
       "чистка колодцев московская область",
       "ремонт колодцев московская область",
@@ -581,9 +595,9 @@ function usePageSeo(title: string, description: string) {
     ensureMeta('meta[name="robots"]', "name", "robots").setAttribute("content", "index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1");
     ensureMeta('meta[property="og:title"]', "property", "og:title").setAttribute("content", title);
     ensureMeta('meta[property="og:description"]', "property", "og:description").setAttribute("content", description);
-    ensureMeta('meta[property="og:url"]', "property", "og:url").setAttribute("content", currentUrl);
+    ensureMeta('meta[property="og:url"]', "property", "og:url").setAttribute("content", canonicalUrl);
     ensureMeta('meta[property="og:type"]', "property", "og:type").setAttribute("content", "website");
-    ensureLink('link[rel="canonical"]', "canonical").setAttribute("href", currentUrl);
+    ensureLink('link[rel="canonical"]', "canonical").setAttribute("href", canonicalUrl);
 
     let schemaScript = document.head.querySelector<HTMLScriptElement>('script[data-schema="wellsmo-localbusiness"]');
     if (!schemaScript) {
@@ -598,7 +612,7 @@ function usePageSeo(title: string, description: string) {
       "@type": "LocalBusiness",
       name: siteMeta.name,
       description,
-      url: currentUrl,
+      url: canonicalUrl,
       telephone: siteMeta.phoneHref.replace("tel:", "+"),
       email: siteMeta.email,
       areaServed: ["Московская область", "Одинцово", "Истра", "Дмитров", "Красногорск", "Солнечногорск", "Химки", "Лобня"],
