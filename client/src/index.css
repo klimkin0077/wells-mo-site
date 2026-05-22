@@ -9,6 +9,10 @@ Design reminder for this file:
 
 @custom-variant dark (&:is(.dark *));
 
+html {
+  scroll-behavior: smooth;
+}
+
 @theme inline {
   --font-sans: var(--font-body);
   --font-heading: var(--font-display);

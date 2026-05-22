@@ -1231,53 +1231,55 @@ function HomeHero() {
           </div>
           <div className="space-y-5">
             <h1 className="hero-title text-white">Чистка и ремонт колодцев в Московской области</h1>
-            <p className="max-w-2xl text-base leading-8 text-white/68 sm:text-lg lg:text-xl">
-              Откачка воды, мойка шахты до 400 бар, чистка дна, ремонт швов, гидроизоляция, скобирование, углубление пересохших колодцев и восстановление старых шахт.
+            <p className="max-w-2xl text-base leading-8 text-white/78 sm:text-lg lg:text-xl">
+              Откачка воды, мойка шахты до 400 бар, чистка дна, герметизация швов, скобирование колец, дезинфекция и восстановление колодцев без лишних услуг и размытых обещаний.
             </p>
-
           </div>
-          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-[1fr_1fr_1.15fr]">
             <a
-              href={siteMeta.phoneHref}
-              data-cta="hero_phone"
+              href="#services"
+              data-cta="hero_services"
               data-cta-placement="home_hero"
-              onClick={() => trackCtaClick("hero_phone", "home_hero")}
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-[#11141d] transition hover:translate-y-[-1px] hover:bg-primary/90"
+              onClick={() => trackCtaClick("hero_services", "home_hero")}
+              className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-[#11141d] transition hover:translate-y-[-1px] hover:bg-primary/90"
             >
-              <Phone className="size-4" />
-              Позвонить
+              Посмотреть услуги
+              <ArrowRight className="size-4" />
             </a>
             <a
-              href="/price#prices"
+              href="#prices"
               data-cta="hero_prices"
               data-cta-placement="home_hero"
               onClick={() => trackCtaClick("hero_prices", "home_hero")}
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-primary/22 bg-primary/10 px-6 py-3 text-sm font-semibold text-primary transition hover:translate-y-[-1px] hover:border-primary/38 hover:bg-primary/14"
+              className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full border border-primary/24 bg-primary/12 px-6 py-3 text-sm font-semibold text-primary transition hover:translate-y-[-1px] hover:border-primary/40 hover:bg-primary/16"
             >
-              Посмотреть цены
+              Узнать цены (без «от»)
               <ArrowRight className="size-4" />
             </a>
-            <RequestDialogButton trackingId="hero_request" trackingPlacement="home_hero">
-              Задать задачу
-              <ArrowRight className="size-4" />
-            </RequestDialogButton>
             <a
-              href={siteMeta.telegramUrl}
+              href={AVITO_BRAND_PROFILE_URL}
               target="_blank"
-              rel="noreferrer"
-              data-cta="hero_telegram"
+              rel="noopener noreferrer"
+              data-cta="hero_avito_reviews"
               data-cta-placement="home_hero"
-              onClick={() => trackCtaClick("hero_telegram", "home_hero")}
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/12 bg-white/4 px-6 py-3 text-sm font-semibold text-white/90 transition hover:border-primary/40 hover:bg-white/8"
+              onClick={() => trackCtaClick("hero_avito_reviews", "home_hero")}
+              className="inline-flex min-h-13 items-center justify-center gap-3 rounded-full border border-[#6ee7d2]/28 bg-[linear-gradient(135deg,rgba(18,124,107,0.42),rgba(15,22,30,0.98)_44%,rgba(0,170,239,0.18)_100%)] px-6 py-3 text-sm font-semibold text-white shadow-[0_22px_50px_rgba(2,8,12,0.28)] transition hover:translate-y-[-1px] hover:border-[#6ee7d2]/45"
             >
-              Telegram
+              <span className="relative flex size-5 shrink-0 items-center justify-center">
+                <span className="absolute left-0 top-0 size-2 rounded-full bg-[#97cf26]" />
+                <span className="absolute right-0 top-0.5 size-1.5 rounded-full bg-[#00aaef]" />
+                <span className="absolute left-0.5 bottom-0 size-1.5 rounded-full bg-[#ff6163]" />
+                <span className="absolute right-0 bottom-0 size-2 rounded-full bg-[#8dd6b7]" />
+              </span>
+              Честные отзывы на Авито
+              <ArrowRight className="size-4" />
             </a>
           </div>
           <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
             {trustMetrics.map((item) => (
               <div key={item.value} className="hero-stat p-4">
                 <div className="metric-value text-primary">{item.value}</div>
-                <div className="mt-2 text-sm leading-6 text-white/70">{item.label}</div>
+                <div className="mt-2 text-sm leading-6 text-white/78">{item.label}</div>
               </div>
             ))}
           </div>
@@ -1294,24 +1296,24 @@ function HomeHero() {
               className="absolute inset-0 h-full w-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f15] via-[#0b0f15]/42 to-transparent" />
-            <div className="absolute left-5 right-5 top-5 flex items-center justify-between rounded-full border border-white/12 bg-[#10151d]/72 px-4 py-3 backdrop-blur-md">
+            <div className="absolute left-5 right-5 top-5 flex items-center justify-between rounded-full border border-white/14 bg-[#10151d]/84 px-4 py-3 backdrop-blur-md">
               <div>
                 <div className="text-xs uppercase tracking-[0.24em] text-primary/90">WELLS-MO</div>
-                <div className="text-sm text-white/65">Чистка и ремонт колодцев</div>
+                <div className="text-sm text-white/78">Чистка и ремонт колодцев</div>
               </div>
               <ShieldCheck className="size-5 text-primary" />
             </div>
-            <div className="absolute inset-x-5 bottom-5 rounded-[1.6rem] border border-white/10 bg-[#0f141d]/68 p-5 backdrop-blur-xl">
+            <div className="absolute inset-x-5 bottom-5 rounded-[1.6rem] border border-white/12 bg-[#0f141d]/84 p-5 backdrop-blur-xl">
               <div className="mb-3 text-xs uppercase tracking-[0.22em] text-primary/90">
                 Что важно клиенту
               </div>
               <div className="grid gap-3 sm:grid-cols-3">
                 {[
-                  "Понятный объём работ и сметы",
-                  "Быстрый выезд по северу и северо-западу МО",
-                  "Реальные фото процессов и результата",
+                  "Сразу видно фиксированные цены без приставки «от»",
+                  "Под героем — реальные фото объектов и понятный порядок работ",
+                  "Нижняя панель связи остаётся, поэтому первый экран не перегружен",
                 ].map((item) => (
-                  <div key={item} className="rounded-2xl border border-white/8 bg-white/4 p-4 text-sm text-white/74">
+                  <div key={item} className="rounded-2xl border border-white/10 bg-white/6 p-4 text-sm text-white/82">
                     {item}
                   </div>
                 ))}
@@ -1410,12 +1412,12 @@ function ServicesPreview() {
   ] as const;
 
   return (
-    <section className="py-12 lg:py-16">
+    <section id="services" className="scroll-mt-28 py-12 lg:py-16">
       <div className="container space-y-10">
         <SectionHeading
-          eyebrow="Ключевые направления"
-          title="Чистка, ремонт и дополнительные услуги по колодцам"
-          description="Главный смысл сайта — чистка и ремонт колодцев. Ниже идут работы внутри ремонта, а копка, септики и водоснабжение вынесены во второстепенные направления."
+          eyebrow="Ключевые услуги"
+          title="Главные направления работ по колодцу"
+          description="После реестра цен и реальных фотографий показываем только те услуги, которые чаще всего ищут в горячем трафике: чистку, ремонт, герметизацию, скобирование и связанные работы по шахте."
         />
         <div className="grid gap-5 lg:grid-cols-2 xl:grid-cols-4">
           {featuredCards.map((service) => {
@@ -1427,19 +1429,19 @@ function ServicesPreview() {
                 href={service.href}
                 className="glass-panel card-hover flex h-full flex-col rounded-[1.8rem] p-5"
               >
-                <div className="mb-5 flex items-center justify-between">
+                <div className="mb-5 flex items-center justify-between gap-3">
                   <div className="flex size-12 items-center justify-center rounded-2xl border border-primary/18 bg-primary/10 text-primary">
                     <Icon className="size-5" />
                   </div>
-                  <div className="text-xs uppercase tracking-[0.2em] text-white/40">
+                  <div className="text-right text-xs uppercase tracking-[0.2em] text-white/46">
                     {service.eyebrow}
                   </div>
                 </div>
                 <div className="service-card-title text-white">{service.title}</div>
-                <p className="mt-4 text-sm leading-7 text-white/62">{service.description}</p>
+                <p className="mt-4 text-sm leading-7 text-white/72">{service.description}</p>
                 <div className="mt-6 flex items-center justify-between text-sm">
-                  <span className="text-primary">{service.price}</span>
-                  <span className="inline-flex items-center gap-2 text-white/62">
+                  <span className="text-primary/88">Технология и этапы</span>
+                  <span className="inline-flex items-center gap-2 text-white/68">
                     Подробнее <ArrowRight className="size-4" />
                   </span>
                 </div>
@@ -1499,9 +1501,9 @@ function ProcessSection() {
     <section className="py-12 lg:py-16">
       <div className="container space-y-10">
         <SectionHeading
-          eyebrow="Как проходит работа"
-          title="От обращения до готового результата"
-          description="Сначала разбираемся в проблеме, затем согласовываем объём работ и только после этого приступаем к объекту. Такой порядок снимает лишние вопросы ещё до выезда."
+          eyebrow="Этапы работ"
+          title="Выезд, откачка, мойка 400 бар и дезинфекция"
+          description="Ниже показана техническая последовательность работ по горячим заявкам: сначала выезд и диагностика, затем откачка воды, мойка шахты и только после этого герметизация, дезинфекция и финальная проверка."
         />
         <div className="grid gap-5 lg:grid-cols-4">
           {processSteps.map((step) => (
@@ -1522,14 +1524,14 @@ function CasesSection() {
     <section className="py-12 lg:py-16">
       <div className="container space-y-10">
         <SectionHeading
-          eyebrow="Реальные объекты"
+          eyebrow="Фотографии наших работ"
           title="Реальные объекты до и после работ"
-          description="Показываем объекты такими, какими они были в работе: с понятной задачей, реальным процессом и итогом, который можно оценить без лишних обещаний."
+          description="Сразу после прайса показываем реальные фотографии из объектов WELLS-MO, чтобы решение принималось по фактам: видно состояние шахты до работ и результат после чистки, герметизации и восстановления."
         />
-        <div className="grid gap-5 lg:grid-cols-3">
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {cases.map((item) => (
-            <article key={item.title} className="page-frame overflow-hidden rounded-[1.8rem]">
-              <div className="image-mask min-h-[300px] border-b border-white/8">
+            <figure key={item.title} className="page-frame overflow-hidden rounded-[1.8rem]">
+              <div className="image-mask min-h-[300px] border-b border-white/10 bg-[#0f141d]">
                 <img
                   src={item.image}
                   alt={item.title}
@@ -1538,12 +1540,27 @@ function CasesSection() {
                   className="absolute inset-0 h-full w-full object-cover"
                 />
               </div>
-              <div className="p-6">
-                <div className="text-xs uppercase tracking-[0.2em] text-primary/90">{item.location}</div>
-                <h3 className="mt-3 text-2xl font-semibold text-white">{item.title}</h3>
-                <p className="mt-4 text-sm leading-7 text-white/62">{item.result}</p>
-              </div>
-            </article>
+              <figcaption className="space-y-4 p-5 sm:p-6">
+                <div className="flex flex-wrap gap-2">
+                  <span
+                    className={cn(
+                      "inline-flex items-center rounded-full border px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.18em]",
+                      item.stage === "До работ"
+                        ? "border-rose-400/28 bg-rose-500/10 text-rose-100"
+                        : "border-emerald-400/28 bg-emerald-500/10 text-emerald-100",
+                    )}
+                  >
+                    {item.stage}
+                  </span>
+                  <span className="inline-flex items-center rounded-full border border-white/10 bg-white/6 px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-white/78">
+                    {item.service}
+                  </span>
+                </div>
+                <div className="text-xs uppercase tracking-[0.2em] text-primary/88">{item.location}</div>
+                <h3 className="text-xl font-semibold text-white sm:text-2xl">{item.title}</h3>
+                <p className="text-sm leading-7 text-white/74">{item.result}</p>
+              </figcaption>
+            </figure>
           ))}
         </div>
       </div>
@@ -1554,35 +1571,32 @@ function CasesSection() {
 function PricingSection() {
   return (
     <section id="prices" className="scroll-mt-28 py-12 lg:py-16">
-      <div className="container grid gap-8 lg:grid-cols-[1fr_1.15fr] lg:items-start">
+      <div className="container grid gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-start">
         <div className="reveal-rise space-y-5">
-          <div className="section-kicker">Цены и ориентиры</div>
-          <h2 className="section-title text-white">Стоимость без тумана и случайных цифр</h2>
-          <p className="story-copy">
-            Ниже указаны реальные стартовые ориентиры по основным работам. Итоговая смета
-            зависит от состояния шахты, глубины, материалов и состава решения, поэтому честнее
-            сразу показать факторы цены, чем обещать невозможное по телефону.
+          <div className="section-kicker">Единый реестр цен</div>
+          <h2 className="section-title text-white">Фиксированные цены без приставки «от»</h2>
+          <p className="story-copy text-white/78">
+            Сразу под первым экраном показываем единый прайс по самым частым работам: без размытых вилок, без «от» и без необходимости сначала звонить, чтобы понять порядок бюджета.
           </p>
           <div className="grid gap-3 sm:grid-cols-3">
             {[
-              "Ориентир до выезда",
-              "Состав работ без скрытых этапов",
-              "Точная смета после осмотра",
+              "Только горячие и часто заказываемые позиции",
+              "Фиксированная стоимость по каждой строке реестра",
+              "Единый якорь #prices для всех CTA на сайте",
             ].map((item) => (
-              <div key={item} className="rounded-[1.35rem] border border-white/8 bg-white/4 p-4 text-sm leading-6 text-white/72">
+              <div key={item} className="rounded-[1.35rem] border border-white/10 bg-white/6 p-4 text-sm leading-6 text-white/82">
                 {item}
               </div>
             ))}
           </div>
-          <SecondaryLink href="/price#prices" trackingId="pricing_details" trackingPlacement="pricing_section">Открыть страницу цен</SecondaryLink>
         </div>
-        <div className="reveal-rise reveal-rise-delay-1 page-frame overflow-hidden rounded-[2rem]">
-          <div className="divide-y divide-white/8">
+        <div className="reveal-rise reveal-rise-delay-1 page-frame overflow-hidden rounded-[2rem] border-white/12 bg-[#0d131b]/96">
+          <div className="divide-y divide-white/10">
             {pricing.map((item) => (
-              <div key={item.service} className="grid gap-3 p-5 md:grid-cols-[1.1fr_160px] md:items-center">
+              <div key={item.service} className="grid gap-3 p-5 md:grid-cols-[1.12fr_190px] md:items-center">
                 <div>
                   <div className="text-lg font-semibold text-white">{item.service}</div>
-                  <div className="mt-2 text-sm leading-6 text-white/58">{item.note}</div>
+                  <div className="mt-2 text-sm leading-6 text-white/74">{item.note}</div>
                 </div>
                 <div className="text-left font-heading text-2xl font-bold text-primary md:text-right">
                   {item.price}
@@ -1686,16 +1700,16 @@ function TestimonialsSection() {
     <section className="py-12 lg:py-16">
       <div className="container space-y-10">
         <SectionHeading
-          eyebrow="Отзывы"
-          title="Отзывы клиентов, которым уже помогли на объекте"
-          description="Здесь собраны реальные отзывы и скриншоты переписок, чтобы вы могли заранее понять стиль работы, уровень общения и результат по похожим задачам."
+          eyebrow="Отзывы и Avito"
+          title="Отзывы по видам работ и переход к полному профилю"
+          description="Финальный блок страницы собран как нижняя точка доверия: отзывы распределены по типам задач, а под ними остаётся прямой переход в официальный профиль WELLS-MO на Авито."
         />
         <div className="space-y-6">
           <div className="reveal-rise reveal-rise-delay-1 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {testimonials.map((item) =>
               "image" in item && item.image ? (
-                <figure key={item.quote} className="page-frame overflow-hidden rounded-[1.8rem]">
-                  <div className="image-mask min-h-[280px] border-b border-white/8 bg-[#0f141d]">
+                <figure key={item.quote} className="page-frame overflow-hidden rounded-[1.8rem] border-white/12 bg-[#0d131b]/96">
+                  <div className="image-mask min-h-[280px] border-b border-white/10 bg-[#0f141d]">
                     <img
                       src={item.image}
                       alt={item.alt ?? "Отзыв клиента WELLS-MO"}
@@ -1705,14 +1719,23 @@ function TestimonialsSection() {
                     />
                   </div>
                   <figcaption className="space-y-3 p-6">
-                    <div className="text-xs uppercase tracking-[0.2em] text-primary/90">Визуальное подтверждение</div>
-                    <p className="text-sm leading-7 text-white/70">{item.quote}</p>
+                    {"service" in item && item.service ? (
+                      <div className="inline-flex w-fit items-center rounded-full border border-primary/22 bg-primary/10 px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-primary">
+                        {item.service}
+                      </div>
+                    ) : null}
+                    <p className="text-sm leading-7 text-white/78">{item.quote}</p>
                     <div className="text-sm uppercase tracking-[0.18em] text-primary/85">{item.author}</div>
                   </figcaption>
                 </figure>
               ) : (
                 <blockquote key={item.quote} className="glass-panel rounded-[1.8rem] p-6">
-                  <p className="text-base leading-8 text-white/78">“{item.quote}”</p>
+                  {"service" in item && item.service ? (
+                    <div className="mb-4 inline-flex w-fit items-center rounded-full border border-primary/22 bg-primary/10 px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-primary">
+                      {item.service}
+                    </div>
+                  ) : null}
+                  <p className="text-base leading-8 text-white/82">“{item.quote}”</p>
                   <footer className="mt-6 text-sm uppercase tracking-[0.18em] text-primary/85">
                     {item.author}
                   </footer>
@@ -1739,7 +1762,7 @@ function TestimonialsSection() {
                   Посмотреть честные отзывы на Авито.
                 </div>
                 <p className="max-w-3xl text-sm leading-7 text-white/76 sm:text-[0.98rem]">
-                  Мы против накруток — только реальные объекты, оценки и истории наших клиентов с фотографиями.
+                  Там собраны реальные оценки по чистке, ремонту, герметизации швов и комплексному восстановлению колодцев без рекламной полировки.
                 </p>
               </div>
               <div className="flex min-h-16 w-full items-center justify-between gap-4 rounded-[1.35rem] border border-white/12 bg-white/8 px-4 py-4 text-left sm:px-5 xl:min-w-[18rem] xl:w-auto">
@@ -2199,22 +2222,17 @@ function ServiceContent({ slug }: { slug: string }) {
 export function HomePage() {
   usePageSeo(
     "Чистка и ремонт колодцев в Московской области | WELLS-MO",
-    "Профессиональная чистка и ремонт колодцев по Московской области: откачка воды, мойка шахты до 400 бар, чистка дна, ремонт швов, гидроизоляция, скобирование, углубление и восстановление старых шахт.",
+    "Профессиональная чистка и ремонт колодцев по Московской области: откачка воды, мойка шахты до 400 бар, чистка дна, герметизация швов, скобирование колец, дезинфекция и восстановление старых шахт.",
   );
 
   return (
     <SiteLayout>
       <HomeHero />
-      <ServicesPreview />
-      <WhyChooseSection />
-      <ProcessSection />
-      <CasesSection />
       <PricingSection />
-      <GuaranteeSection />
+      <CasesSection />
+      <ServicesPreview />
+      <ProcessSection />
       <TestimonialsSection />
-      <FaqSection />
-      <LocationHubSection />
-      <CtaSection />
     </SiteLayout>
   );
 }
