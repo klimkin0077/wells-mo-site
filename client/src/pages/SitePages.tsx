@@ -8,6 +8,7 @@ import { type ChangeEvent, type FormEvent, type ReactNode, createContext, useCon
 import { Link, useLocation } from "wouter";
 import {
   ArrowRight,
+  ArrowUp,
   Building2,
   ChevronDown,
   Droplets,
@@ -418,6 +419,37 @@ function ScrollToTop() {
   }, [location]);
 
   return null;
+}
+
+function ScrollTopFloatingButton() {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsVisible(window.scrollY > 400);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  return (
+    <button
+      type="button"
+      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      aria-label="Вернуться наверх"
+      className={cn(
+        "fixed right-4 bottom-[95px] z-40 inline-flex size-12 items-center justify-center rounded-full border border-primary/24 bg-[#0b1016]/88 text-primary shadow-[0_16px_40px_rgba(2,8,12,0.34)] backdrop-blur-xl transition-all duration-300 lg:bottom-8",
+        isVisible ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none translate-y-4 opacity-0",
+      )}
+    >
+      <ArrowUp className="size-5" />
+    </button>
+  );
 }
 
 function usePageSeo(title: string, description: string) {
@@ -968,13 +1000,13 @@ function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 border-b backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-300",
+        "fixed top-0 left-0 right-0 z-50 border-b backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-300",
         isScrolled
-          ? "border-white/14 bg-[#0b1016]/92 shadow-[0_20px_48px_rgba(2,8,12,0.45)]"
-          : "border-white/8 bg-[#0d1118]/72",
+          ? "border-white/14 bg-[#0b1016]/94 shadow-[0_20px_48px_rgba(2,8,12,0.45)]"
+          : "border-white/8 bg-[#0d1118]/82",
       )}
     >
-      <div className="container flex items-center justify-between gap-3 py-3 lg:gap-4">
+      <div className="container flex min-h-[72px] items-center justify-between gap-3 py-3 lg:min-h-[80px] lg:gap-4">
         <Link href="/" className="min-w-0 flex-1 lg:flex-none">
           <div className="flex items-center gap-3">
             <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl border border-primary/25 bg-primary/10 text-primary shadow-[0_10px_24px_rgba(199,154,63,0.18)] lg:size-11">
@@ -1191,10 +1223,11 @@ function SiteLayout({ children }: { children: ReactNode }) {
         <div className="mesh-glow left-[-8rem] top-24 h-72 w-72 bg-primary/18" />
         <div className="mesh-glow right-[-4rem] top-[30rem] h-64 w-64 bg-sky-400/8" />
         <Header />
-        <main>
+        <main className="pt-[72px] lg:pt-[80px]">
           <SiteBreadcrumbs />
           {children}
         </main>
+        <ScrollTopFloatingButton />
         <MobileStickyBar />
         <Footer />
       </div>
@@ -1222,7 +1255,7 @@ function SectionHeading({
 
 function HomeHero() {
   return (
-    <section className="relative overflow-hidden pb-10 pt-8 lg:pb-16 lg:pt-14">
+    <section className="relative overflow-hidden pb-10 pt-10 lg:pb-16 lg:pt-14">
       <div className="container hero-grid">
         <div className="reveal-rise space-y-8 pb-8 lg:pb-0">
           <div className="copper-chip">
