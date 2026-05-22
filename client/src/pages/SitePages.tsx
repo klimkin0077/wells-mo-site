@@ -397,6 +397,23 @@ function ScrollToTop() {
   const [location] = useLocation();
 
   useEffect(() => {
+    const hash = window.location.hash;
+
+    if (hash) {
+      requestAnimationFrame(() => {
+        const target = document.querySelector(hash);
+
+        if (target) {
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+          return;
+        }
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+      return;
+    }
+
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [location]);
 
@@ -929,13 +946,34 @@ function MobileStickyBar() {
 function Header() {
   const [location] = useLocation();
   const [open, setOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     setOpen(false);
   }, [location]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 12);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
-    <header className="sticky top-0 z-50 border-b border-white/8 bg-[#0d1118]/72 backdrop-blur-xl">
+    <header
+      className={cn(
+        "sticky top-0 z-50 border-b backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-300",
+        isScrolled
+          ? "border-white/14 bg-[#0b1016]/92 shadow-[0_20px_48px_rgba(2,8,12,0.45)]"
+          : "border-white/8 bg-[#0d1118]/72",
+      )}
+    >
       <div className="container flex items-center justify-between gap-3 py-3 lg:gap-4">
         <Link href="/" className="min-w-0 flex-1 lg:flex-none">
           <div className="flex items-center gap-3">
@@ -956,6 +994,16 @@ function Header() {
           >
             <Phone className="size-4 text-primary" />
             {siteMeta.phone}
+          </a>
+          <a
+            href="/price#prices"
+            data-cta="header_prices"
+            data-cta-placement="header_desktop"
+            onClick={() => trackCtaClick("header_prices", "header_desktop")}
+            className="inline-flex items-center gap-2 rounded-full border border-primary/24 bg-primary/10 px-4 py-2 text-sm font-medium text-primary transition hover:border-primary/40 hover:bg-primary/14"
+          >
+            Посмотреть цены
+            <ArrowRight className="size-4" />
           </a>
           <RequestDialogButton trackingId="header_request" trackingPlacement="header_desktop">Оставить заявку</RequestDialogButton>
           <button
@@ -1021,6 +1069,16 @@ function Header() {
                   <RequestDialogButton trackingId="header_request_menu" trackingPlacement="header_menu" className="w-full justify-center">
                     Оставить заявку
                   </RequestDialogButton>
+                  <a
+                    href="/price#prices"
+                    data-cta="header_prices"
+                    data-cta-placement="header_menu"
+                    onClick={() => trackCtaClick("header_prices", "header_menu")}
+                    className="inline-flex items-center justify-center gap-2 rounded-2xl border border-primary/22 bg-primary/10 px-4 py-3 text-sm font-semibold text-primary transition hover:border-primary/38 hover:bg-primary/14"
+                  >
+                    Посмотреть цены
+                    <ArrowRight className="size-4" />
+                  </a>
                   <div className="grid grid-cols-2 gap-3">
                     <a
                       href={siteMeta.telegramUrl}
@@ -1164,7 +1222,7 @@ function SectionHeading({
 
 function HomeHero() {
   return (
-    <section className="relative overflow-hidden pb-14 pt-10 lg:pb-24 lg:pt-20">
+    <section className="relative overflow-hidden pb-10 pt-8 lg:pb-16 lg:pt-14">
       <div className="container hero-grid">
         <div className="reveal-rise space-y-8 pb-8 lg:pb-0">
           <div className="copper-chip">
@@ -1188,6 +1246,16 @@ function HomeHero() {
             >
               <Phone className="size-4" />
               Позвонить
+            </a>
+            <a
+              href="/price#prices"
+              data-cta="hero_prices"
+              data-cta-placement="home_hero"
+              onClick={() => trackCtaClick("hero_prices", "home_hero")}
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-primary/22 bg-primary/10 px-6 py-3 text-sm font-semibold text-primary transition hover:translate-y-[-1px] hover:border-primary/38 hover:bg-primary/14"
+            >
+              Посмотреть цены
+              <ArrowRight className="size-4" />
             </a>
             <RequestDialogButton trackingId="hero_request" trackingPlacement="home_hero">
               Задать задачу
@@ -1342,7 +1410,7 @@ function ServicesPreview() {
   ] as const;
 
   return (
-    <section className="py-18 lg:py-24">
+    <section className="py-12 lg:py-16">
       <div className="container space-y-10">
         <SectionHeading
           eyebrow="Ключевые направления"
@@ -1386,7 +1454,7 @@ function ServicesPreview() {
 
 function WhyChooseSection() {
   return (
-    <section className="py-18 lg:py-24">
+    <section className="py-12 lg:py-16">
       <div className="container grid gap-8 lg:grid-cols-[1fr_1.15fr] lg:items-start">
         <div className="page-frame rounded-[2rem] p-6 lg:p-8">
           <div className="section-kicker">Почему доверяют</div>
@@ -1428,7 +1496,7 @@ function WhyChooseSection() {
 
 function ProcessSection() {
   return (
-    <section className="py-18 lg:py-24">
+    <section className="py-12 lg:py-16">
       <div className="container space-y-10">
         <SectionHeading
           eyebrow="Как проходит работа"
@@ -1451,7 +1519,7 @@ function ProcessSection() {
 
 function CasesSection() {
   return (
-    <section className="py-18 lg:py-24">
+    <section className="py-12 lg:py-16">
       <div className="container space-y-10">
         <SectionHeading
           eyebrow="Реальные объекты"
@@ -1485,7 +1553,7 @@ function CasesSection() {
 
 function PricingSection() {
   return (
-    <section className="py-18 lg:py-24">
+    <section id="prices" className="scroll-mt-28 py-12 lg:py-16">
       <div className="container grid gap-8 lg:grid-cols-[1fr_1.15fr] lg:items-start">
         <div className="reveal-rise space-y-5">
           <div className="section-kicker">Цены и ориентиры</div>
@@ -1506,7 +1574,7 @@ function PricingSection() {
               </div>
             ))}
           </div>
-          <SecondaryLink href="/ceny" trackingId="pricing_details" trackingPlacement="pricing_section">Открыть страницу цен</SecondaryLink>
+          <SecondaryLink href="/price#prices" trackingId="pricing_details" trackingPlacement="pricing_section">Открыть страницу цен</SecondaryLink>
         </div>
         <div className="reveal-rise reveal-rise-delay-1 page-frame overflow-hidden rounded-[2rem]">
           <div className="divide-y divide-white/8">
@@ -1554,7 +1622,7 @@ function GuaranteeSection() {
   ];
 
   return (
-    <section className="py-18 lg:py-24">
+    <section className="py-12 lg:py-16">
       <div className="container grid gap-8 xl:grid-cols-[0.92fr_1.08fr]">
         <div className="space-y-5">
           <div className="section-kicker">Гарантия и состав работ</div>
@@ -1615,7 +1683,7 @@ function AvitoBrandIcon({ className }: { className?: string }) {
 
 function TestimonialsSection() {
   return (
-    <section className="py-18 lg:py-24">
+    <section className="py-12 lg:py-16">
       <div className="container space-y-10">
         <SectionHeading
           eyebrow="Отзывы"
@@ -1691,7 +1759,7 @@ function TestimonialsSection() {
 
 function FaqSection({ items = globalFaq }: { items?: readonly { question: string; answer: string }[] }) {
   return (
-    <section className="py-18 lg:py-24">
+    <section className="py-12 lg:py-16">
       <div className="container grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
         <div>
           <div className="section-kicker">FAQ</div>
@@ -1719,7 +1787,7 @@ function FaqSection({ items = globalFaq }: { items?: readonly { question: string
 
 function LocationHubSection() {
   return (
-    <section className="py-18 lg:py-24">
+    <section className="py-12 lg:py-16">
       <div className="container space-y-10">
         <SectionHeading
           eyebrow="Города и районы"
@@ -1907,7 +1975,7 @@ function ServiceGallerySection({ defaultServiceSlug }: { defaultServiceSlug: str
   }, [activeFilter, defaultServiceSlug]);
 
   return (
-    <section className="py-18 lg:py-24">
+    <section className="py-12 lg:py-16">
       <div className="container space-y-10">
         <SectionHeading
           eyebrow="Фотогалерея"
@@ -2023,7 +2091,7 @@ function ServiceContent({ slug }: { slug: string }) {
         price={service.price}
       />
 
-      <section className="py-18 lg:py-24">
+      <section className="py-12 lg:py-16">
         <div className="container grid gap-8 xl:grid-cols-[1.05fr_0.95fr] xl:items-start">
           <div className="space-y-8">
             <div className="page-frame rounded-[2rem] p-6 lg:p-8">
@@ -2056,7 +2124,7 @@ function ServiceContent({ slug }: { slug: string }) {
         </div>
       </section>
 
-      <section className="py-18 lg:py-24">
+      <section className="py-12 lg:py-16">
         <div className="container space-y-10">
             <SectionHeading
               eyebrow="Этапы"
@@ -2079,7 +2147,7 @@ function ServiceContent({ slug }: { slug: string }) {
 
       <FaqSection items={service.faq} />
 
-      <section className="py-18 lg:py-24">
+      <section className="py-12 lg:py-16">
         <div className="container space-y-10">
             <SectionHeading
               eyebrow="Города выезда"
@@ -2101,7 +2169,7 @@ function ServiceContent({ slug }: { slug: string }) {
         </div>
       </section>
 
-      <section className="py-18 lg:py-24">
+      <section className="py-12 lg:py-16">
         <div className="container space-y-10">
           <SectionHeading
             eyebrow="Комплексный подход"
@@ -2353,7 +2421,7 @@ export function ContactsPage() {
         image={assets.waterSupply}
         price={siteMeta.coverage}
       />
-      <section className="py-18 lg:py-24">
+      <section className="py-12 lg:py-16">
         <div className="container grid gap-8 xl:grid-cols-[0.9fr_1.1fr]">
           <div className="page-frame rounded-[2rem] p-6 lg:p-8">
             <div className="section-kicker">Как связаться</div>
@@ -2519,7 +2587,7 @@ export function AboutPage() {
         image={assets.hero}
         price="Спокойный профессиональный тон"
       />
-      <section className="py-18 lg:py-24">
+      <section className="py-12 lg:py-16">
         <div className="container grid gap-8 xl:grid-cols-[1fr_1fr]">
           <div className="page-frame rounded-[2rem] p-6 lg:p-8">
             <div className="section-kicker">Позиционирование</div>
@@ -2645,7 +2713,7 @@ function LocalSeoPageContent({ location }: { location: LocalSeoLocation | undefi
         price={location.officialName}
       />
 
-      <section className="py-18 lg:py-24">
+      <section className="py-12 lg:py-16">
         <div className="container grid gap-8 xl:grid-cols-[1.05fr_0.95fr]">
           <div className="space-y-8">
             <div className="page-frame rounded-[2rem] p-6 lg:p-8">
@@ -2729,7 +2797,7 @@ function LocalSeoPageContent({ location }: { location: LocalSeoLocation | undefi
         </div>
       </section>
 
-      <section className="py-18 lg:py-24">
+      <section className="py-12 lg:py-16">
         <div className="container grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
           <div>
             <div className="section-kicker">Что важно по этому направлению</div>
@@ -2813,7 +2881,7 @@ function LocalServiceCityPageContent({
         price={page.badge}
       />
 
-      <section className="py-18 lg:py-24">
+      <section className="py-12 lg:py-16">
         <div className="container grid gap-8 xl:grid-cols-[1.02fr_0.98fr]">
           <div className="space-y-8">
             <div className="page-frame rounded-[2rem] p-6 lg:p-8">
@@ -2862,7 +2930,7 @@ function LocalServiceCityPageContent({
         </div>
       </section>
 
-      <section className="py-18 lg:py-24">
+      <section className="py-12 lg:py-16">
         <div className="container grid gap-8 lg:grid-cols-[0.92fr_1.08fr]">
           <div>
             <div className="section-kicker">Другие услуги по городу</div>
@@ -2919,7 +2987,7 @@ export function SeoAreasPage() {
         price={`${allSeoLocations.length} направлений`}
       />
       <LocationHubSection />
-      <section className="py-18 lg:py-24">
+      <section className="py-12 lg:py-16">
         <div className="container grid gap-8 xl:grid-cols-2">
           <div className="page-frame rounded-[2rem] p-6 lg:p-8">
             <div className="mb-6 flex items-center gap-3 text-primary">
@@ -2957,7 +3025,7 @@ export function SeoAreasPage() {
           </div>
         </div>
       </section>
-      <section className="py-18 lg:py-24">
+      <section className="py-12 lg:py-16">
         <div className="container space-y-10">
             <SectionHeading
               eyebrow="Приоритетные связки"

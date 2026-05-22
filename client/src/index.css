@@ -221,8 +221,8 @@ Design reminder for this file:
   }
 
   .glass-panel {
-    background: linear-gradient(180deg, rgba(24, 28, 40, 0.82), rgba(17, 20, 31, 0.7));
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: linear-gradient(180deg, rgba(28, 34, 48, 0.88), rgba(15, 20, 31, 0.78));
+    border: 1px solid rgba(255, 255, 255, 0.12);
     box-shadow: var(--shadow-panel);
     backdrop-filter: blur(18px);
   }
@@ -299,8 +299,8 @@ Design reminder for this file:
 
   .page-frame {
     position: relative;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    background: linear-gradient(180deg, rgba(18, 21, 31, 0.88), rgba(12, 15, 23, 0.74));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: linear-gradient(180deg, rgba(22, 27, 39, 0.92), rgba(11, 15, 24, 0.8));
     box-shadow: var(--shadow-panel);
     backdrop-filter: blur(16px);
   }
