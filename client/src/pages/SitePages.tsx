@@ -421,33 +421,92 @@ function ScrollToTop() {
   return null;
 }
 
+function getPageScrollContainers() {
+  if (typeof document === "undefined") {
+    return [] as HTMLElement[];
+  }
+
+  const containers = [
+    document.querySelector<HTMLElement>("[data-scroll-container='page']"),
+    document.scrollingElement instanceof HTMLElement ? document.scrollingElement : null,
+    document.documentElement,
+    document.body,
+    document.querySelector<HTMLElement>("main"),
+  ].filter(Boolean) as HTMLElement[];
+
+  return Array.from(new Set(containers));
+}
+
+function getCurrentPageScrollTop() {
+  if (typeof window === "undefined" || typeof document === "undefined") {
+    return 0;
+  }
+
+  const containerScrollTop = getPageScrollContainers().reduce((maxScroll, element) => Math.max(maxScroll, element.scrollTop || 0), 0);
+
+  return Math.max(window.scrollY || 0, document.documentElement.scrollTop || 0, document.body.scrollTop || 0, containerScrollTop);
+}
+
+function scrollPageToTop() {
+  if (typeof window === "undefined" || typeof document === "undefined") {
+    return;
+  }
+
+  for (const element of getPageScrollContainers()) {
+    element.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function subscribeToPageScroll(listener: () => void) {
+  if (typeof window === "undefined") {
+    return () => undefined;
+  }
+
+  const targets = Array.from(new Set<EventTarget>([window, ...getPageScrollContainers()]));
+
+  targets.forEach((target) => {
+    target.addEventListener("scroll", listener, { passive: true });
+  });
+
+  window.addEventListener("resize", listener, { passive: true });
+
+  return () => {
+    targets.forEach((target) => {
+      target.removeEventListener("scroll", listener);
+    });
+
+    window.removeEventListener("resize", listener);
+  };
+}
+
 function ScrollTopFloatingButton() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsVisible(window.scrollY > 400);
+      const viewportThreshold = typeof window === "undefined" ? 320 : Math.max(240, Math.min(360, Math.round(window.innerHeight * 0.5)));
+      setIsVisible(getCurrentPageScrollTop() > viewportThreshold);
     };
 
     handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    const unsubscribe = subscribeToPageScroll(handleScroll);
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    return unsubscribe;
   }, []);
 
   return (
     <button
       type="button"
-      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      onClick={scrollPageToTop}
       aria-label="Вернуться наверх"
       className={cn(
-        "fixed right-4 bottom-[95px] z-40 inline-flex size-12 items-center justify-center rounded-full border border-primary/24 bg-[#0b1016]/88 text-primary shadow-[0_16px_40px_rgba(2,8,12,0.34)] backdrop-blur-xl transition-all duration-300 lg:bottom-8",
+        "fixed right-4 bottom-[95px] !z-[9999] inline-flex size-12 items-center justify-center rounded-full border border-white/55 bg-primary text-[#111723] shadow-[0_20px_48px_rgba(199,154,63,0.52)] ring-2 ring-white/30 backdrop-blur-md transition-all duration-300 lg:bottom-8",
         isVisible ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none translate-y-4 opacity-0",
       )}
     >
-      <ArrowUp className="size-5" />
+      <ArrowUp className="size-5 stroke-[2.6]" />
     </button>
   );
 }
@@ -1218,7 +1277,7 @@ function Footer() {
 function SiteLayout({ children }: { children: ReactNode }) {
   return (
     <TaskDiscussionDialogProvider>
-      <div className="site-shell min-h-screen pb-28 lg:pb-0">
+      <div data-scroll-container="page" className="site-shell min-h-screen pb-28 lg:pb-0">
         <ScrollToTop />
         <div className="mesh-glow left-[-8rem] top-24 h-72 w-72 bg-primary/18" />
         <div className="mesh-glow right-[-4rem] top-[30rem] h-64 w-64 bg-sky-400/8" />
