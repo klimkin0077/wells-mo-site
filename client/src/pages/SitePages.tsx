@@ -71,6 +71,7 @@ const iconMap = {
 } as const;
 
 const AVITO_BRAND_PROFILE_URL = "https://www.avito.ru/brands/kolodceff";
+const YANDEX_METRIKA_ID = 109375117;
 
 const staticRouteLabels: Record<string, string> = {
   "/": "Главная",
@@ -344,28 +345,56 @@ function useTaskDiscussionDialog() {
 }
 
 const CTA_METRIKA_GOALS: Record<string, string[]> = {
-  header_request: ["leave_request_click"],
-  header_request_menu: ["leave_request_click"],
-  mobile_request: ["leave_request_click"],
-  hero_request: ["get_consultation_click"],
-  page_hero_discuss: ["get_consultation_click"],
-  final_request: ["next_step_request_click", "get_consultation_click"],
-  avito_reviews_banner: ["view_reviews_click"],
-  contact_form_submit: ["lead_form_submit", "next_step_submit"],
-  contact_form_success: ["lead_form_success"],
+  header_phone: ["click_phone"],
+  header_menu_phone: ["click_phone"],
+  mobile_phone: ["click_phone"],
+  final_phone: ["click_phone"],
+  footer_phone: ["click_phone"],
+  contacts_phone: ["click_phone"],
+  contacts_inline_phone: ["click_phone"],
+  mobile_telegram: ["click_tg"],
+  header_menu_telegram: ["click_tg"],
+  dialog_telegram: ["click_tg"],
+  mobile_max: ["click_max"],
+  header_menu_max: ["click_max"],
+  dialog_max: ["click_max"],
+  hero_avito_reviews: ["click_avito"],
+  avito_reviews_banner: ["click_avito"],
+  header_request: ["submit_lead"],
+  header_request_menu: ["submit_lead"],
+  mobile_request: ["submit_lead"],
+  final_request: ["submit_lead"],
+  page_hero_discuss: ["submit_lead"],
+  contacts_issue_card: ["submit_lead"],
+  desktop_floating_request: ["submit_lead"],
+  task_dialog_open: ["submit_lead"],
+  contact_form_success: ["submit_lead"],
 };
 
 function getMetrikaGoalList(ctaId: string) {
-  const normalizedGoal = ctaId.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
-  return Array.from(new Set(["cta_click", normalizedGoal, ...(CTA_METRIKA_GOALS[ctaId] ?? [])]));
+  return Array.from(new Set(CTA_METRIKA_GOALS[ctaId] ?? []));
 }
 
 function getPrimaryMetrikaGoal(ctaId?: string) {
   if (!ctaId) {
-    return "cta_click";
+    return "";
   }
 
-  return CTA_METRIKA_GOALS[ctaId]?.[0] ?? getMetrikaGoalList(ctaId)[1] ?? "cta_click";
+  return CTA_METRIKA_GOALS[ctaId]?.[0] ?? "";
+}
+
+function sendMetrikaGoal(goal: string, detail: Record<string, unknown>) {
+  if (!goal || typeof window === "undefined") {
+    return;
+  }
+
+  if (typeof (window as any).ym === "function") {
+    try {
+      (window as any).ym(YANDEX_METRIKA_ID, "reachGoal", goal, detail);
+    } catch {
+      // Analytics should never block navigation.
+    }
+  }
 }
 
 function trackCtaClick(ctaId: string, placement?: string) {
@@ -382,15 +411,8 @@ function trackCtaClick(ctaId: string, placement?: string) {
 
   window.dispatchEvent(new CustomEvent("wellsmo:cta-click", { detail }));
 
-  const metrikaId = window.__WELLS_MO_METRIKA_ID__;
-  if (typeof metrikaId === "number" && typeof window.ym === "function") {
-    try {
-      for (const goal of getMetrikaGoalList(ctaId)) {
-        window.ym(metrikaId, "reachGoal", goal, detail);
-      }
-    } catch {
-      // Analytics should never block navigation.
-    }
+  for (const goal of getMetrikaGoalList(ctaId)) {
+    sendMetrikaGoal(goal, detail);
   }
 }
 
@@ -808,12 +830,14 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
   const handleOpenTelegram = async () => {
     const text = await copyRequestToClipboard();
     if (!text) return;
+    trackCtaClick("dialog_telegram", dialogPlacement || "task_dialog");
     window.open(siteMeta.telegramUrl, "_blank", "noopener,noreferrer");
   };
 
   const handleOpenMax = async () => {
     const text = await copyRequestToClipboard();
     if (!text) return;
+    trackCtaClick("dialog_max", dialogPlacement || "task_dialog");
     window.open(siteMeta.maxUrl, "_blank", "noopener,noreferrer");
   };
 
@@ -1081,6 +1105,9 @@ function Header() {
         <div className="hidden items-center gap-3 lg:flex">
           <a
             href={siteMeta.phoneHref}
+            data-cta="header_phone"
+            data-cta-placement="header_desktop"
+            onClick={() => trackCtaClick("header_phone", "header_desktop")}
             className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/4 px-4 py-2 text-sm font-medium text-white/85"
           >
             <Phone className="size-4 text-primary" />
@@ -1152,6 +1179,9 @@ function Header() {
                 <div className="mt-4 grid gap-3">
                   <a
                     href={siteMeta.phoneHref}
+                    data-cta="header_menu_phone"
+                    data-cta-placement="header_menu"
+                    onClick={() => trackCtaClick("header_menu_phone", "header_menu")}
                     className="flex items-center gap-2 rounded-2xl border border-primary/20 bg-primary/10 px-4 py-3 text-sm font-semibold text-primary"
                   >
                     <Phone className="size-4" />
@@ -1175,6 +1205,9 @@ function Header() {
                       href={siteMeta.telegramUrl}
                       target="_blank"
                       rel="noreferrer"
+                      data-cta="header_menu_telegram"
+                      data-cta-placement="header_menu"
+                      onClick={() => trackCtaClick("header_menu_telegram", "header_menu")}
                       className="inline-flex items-center justify-center rounded-2xl border border-white/12 bg-white/5 px-4 py-3 text-sm font-medium text-white/88 transition hover:bg-white/8"
                     >
                       Telegram
@@ -1183,6 +1216,9 @@ function Header() {
                       href={siteMeta.maxUrl}
                       target="_blank"
                       rel="noreferrer"
+                      data-cta="header_menu_max"
+                      data-cta-placement="header_menu"
+                      onClick={() => trackCtaClick("header_menu_max", "header_menu")}
                       className="inline-flex items-center justify-center rounded-2xl border border-white/12 bg-white/5 px-4 py-3 text-sm font-medium text-white/88 transition hover:bg-white/8"
                     >
                       MAX
@@ -1259,7 +1295,13 @@ function Footer() {
             Связь
           </div>
           <div className="space-y-3 text-sm text-white/70">
-            <a href={siteMeta.phoneHref} className="block transition hover:text-white">
+            <a
+              href={siteMeta.phoneHref}
+              data-cta="footer_phone"
+              data-cta-placement="footer"
+              onClick={() => trackCtaClick("footer_phone", "footer")}
+              className="block transition hover:text-white"
+            >
               {siteMeta.phone}
             </a>
             <a href={`mailto:${siteMeta.email}`} className="block transition hover:text-white">
@@ -2553,7 +2595,13 @@ export function ContactsPage() {
           <div className="page-frame rounded-[2rem] p-6 lg:p-8">
             <div className="section-kicker">Как связаться</div>
             <div className="mt-5 space-y-5 text-white/72">
-              <a href={siteMeta.phoneHref} className="block text-2xl font-semibold text-white">
+              <a
+                href={siteMeta.phoneHref}
+                data-cta="contacts_phone"
+                data-cta-placement="contacts_page"
+                onClick={() => trackCtaClick("contacts_phone", "contacts_page")}
+                className="block text-2xl font-semibold text-white"
+              >
                 {siteMeta.phone}
               </a>
               <a href={`mailto:${siteMeta.email}`} className="block text-base transition hover:text-white">
@@ -2680,10 +2728,16 @@ export function ContactsPage() {
                 <ArrowRight className="size-4" />
               </button>
               <p className="text-sm leading-7 text-white/45">
-                Для быстрого контакта можно сразу{" "}
-                <a href={siteMeta.phoneHref} className="text-white transition hover:text-primary">
+                Для быстрого контакта можно сразу{" "}                <a
+                  href={siteMeta.phoneHref}
+                  data-cta="contacts_inline_phone"
+                  data-cta-placement="contacts_form"
+                  onClick={() => trackCtaClick("contacts_inline_phone", "contacts_form")}
+                  className="text-white transition hover:text-primary"
+                >
                   позвонить по номеру {siteMeta.phone}
-                </a>{" "}
+                </a>
+{" "}
                 или{" "}
                 <a href={`mailto:${siteMeta.email}`} className="text-white transition hover:text-primary">
                   написать на {siteMeta.email}
