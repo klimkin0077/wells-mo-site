@@ -69,6 +69,8 @@ const iconMap = {
   "vodosnabzhenie-iz-kolodca-v-dom": Droplets,
 } as const;
 
+const AVITO_BRAND_PROFILE_URL = "https://www.avito.ru/brands/kolodceff";
+
 const staticRouteLabels: Record<string, string> = {
   "/": "Главная",
   "/uslugi": "Услуги",
@@ -347,6 +349,7 @@ const CTA_METRIKA_GOALS: Record<string, string[]> = {
   hero_request: ["get_consultation_click"],
   page_hero_discuss: ["get_consultation_click"],
   final_request: ["next_step_request_click", "get_consultation_click"],
+  avito_reviews_banner: ["view_reviews_click"],
   contact_form_submit: ["lead_form_submit", "next_step_submit"],
   contact_form_success: ["lead_form_success"],
 };
@@ -1590,6 +1593,26 @@ function GuaranteeSection() {
   );
 }
 
+function AvitoBrandIcon({ className }: { className?: string }) {
+  return (
+    <div
+      className={cn(
+        "relative flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-[1.4rem] border border-white/14 bg-[#0d141b]/85 shadow-[0_18px_45px_rgba(2,8,12,0.36)]",
+        className,
+      )}
+      aria-hidden="true"
+    >
+      <span className="absolute left-[16%] top-[18%] size-4 rounded-full bg-[#97cf26] shadow-[0_0_28px_rgba(151,207,38,0.55)]" />
+      <span className="absolute right-[18%] top-[20%] size-3.5 rounded-full bg-[#00aaef] shadow-[0_0_24px_rgba(0,170,239,0.45)]" />
+      <span className="absolute left-[22%] bottom-[20%] size-4 rounded-full bg-[#ff6163] shadow-[0_0_24px_rgba(255,97,99,0.4)]" />
+      <span className="absolute right-[18%] bottom-[18%] size-5 rounded-full bg-[#8dd6b7] shadow-[0_0_28px_rgba(141,214,183,0.38)]" />
+      <div className="relative rounded-full border border-white/10 bg-[#0f1821]/90 px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/94">
+        Avito
+      </div>
+    </div>
+  );
+}
+
 function TestimonialsSection() {
   return (
     <section className="py-18 lg:py-24">
@@ -1599,34 +1622,67 @@ function TestimonialsSection() {
           title="Отзывы клиентов, которым уже помогли на объекте"
           description="Здесь собраны реальные отзывы и скриншоты переписок, чтобы вы могли заранее понять стиль работы, уровень общения и результат по похожим задачам."
         />
-        <div className="reveal-rise reveal-rise-delay-1 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {testimonials.map((item) =>
-            "image" in item && item.image ? (
-              <figure key={item.quote} className="page-frame overflow-hidden rounded-[1.8rem]">
-                <div className="image-mask min-h-[280px] border-b border-white/8 bg-[#0f141d]">
-                  <img
-                    src={item.image}
-                    alt={item.alt ?? "Отзыв клиента WELLS-MO"}
-                    loading="lazy"
-                    decoding="async"
-                    className="absolute inset-0 h-full w-full object-cover"
-                  />
+        <div className="space-y-6">
+          <div className="reveal-rise reveal-rise-delay-1 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {testimonials.map((item) =>
+              "image" in item && item.image ? (
+                <figure key={item.quote} className="page-frame overflow-hidden rounded-[1.8rem]">
+                  <div className="image-mask min-h-[280px] border-b border-white/8 bg-[#0f141d]">
+                    <img
+                      src={item.image}
+                      alt={item.alt ?? "Отзыв клиента WELLS-MO"}
+                      loading="lazy"
+                      decoding="async"
+                      className="absolute inset-0 h-full w-full object-cover"
+                    />
+                  </div>
+                  <figcaption className="space-y-3 p-6">
+                    <div className="text-xs uppercase tracking-[0.2em] text-primary/90">Визуальное подтверждение</div>
+                    <p className="text-sm leading-7 text-white/70">{item.quote}</p>
+                    <div className="text-sm uppercase tracking-[0.18em] text-primary/85">{item.author}</div>
+                  </figcaption>
+                </figure>
+              ) : (
+                <blockquote key={item.quote} className="glass-panel rounded-[1.8rem] p-6">
+                  <p className="text-base leading-8 text-white/78">“{item.quote}”</p>
+                  <footer className="mt-6 text-sm uppercase tracking-[0.18em] text-primary/85">
+                    {item.author}
+                  </footer>
+                </blockquote>
+              ),
+            )}
+          </div>
+          <a
+            href={AVITO_BRAND_PROFILE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Открыть официальный профиль WELLS-MO на Авито в новой вкладке"
+            onClick={() => trackCtaClick("avito_reviews_banner", "home_testimonials")}
+            className="group reveal-rise reveal-rise-delay-2 relative block overflow-hidden rounded-[2rem] border border-[#6ee7d2]/26 bg-[linear-gradient(135deg,rgba(18,124,107,0.38),rgba(15,22,30,0.98)_42%,rgba(0,170,239,0.16)_100%)] p-5 shadow-[0_28px_80px_rgba(2,8,12,0.4)] transition duration-300 hover:-translate-y-1 hover:border-[#6ee7d2]/42 sm:p-6 lg:p-7"
+          >
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(151,207,38,0.18),transparent_26%),radial-gradient(circle_at_bottom_right,rgba(0,170,239,0.16),transparent_32%)]" />
+            <div className="relative grid gap-5 sm:grid-cols-[auto_1fr] xl:grid-cols-[auto_1fr_auto] xl:items-center">
+              <AvitoBrandIcon className="size-[4.5rem] rounded-[1.55rem]" />
+              <div className="space-y-3">
+                <div className="inline-flex w-fit items-center rounded-full border border-white/12 bg-white/7 px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/82">
+                  Официальный профиль на Авито
                 </div>
-                <figcaption className="space-y-3 p-6">
-                  <div className="text-xs uppercase tracking-[0.2em] text-primary/90">Визуальное подтверждение</div>
-                  <p className="text-sm leading-7 text-white/70">{item.quote}</p>
-                  <div className="text-sm uppercase tracking-[0.18em] text-primary/85">{item.author}</div>
-                </figcaption>
-              </figure>
-            ) : (
-              <blockquote key={item.quote} className="glass-panel rounded-[1.8rem] p-6">
-                <p className="text-base leading-8 text-white/78">“{item.quote}”</p>
-                <footer className="mt-6 text-sm uppercase tracking-[0.18em] text-primary/85">
-                  {item.author}
-                </footer>
-              </blockquote>
-            ),
-          )}
+                <div className="max-w-3xl text-lg font-semibold leading-8 text-white sm:text-[1.35rem] sm:leading-9">
+                  Посмотреть честные отзывы на Авито.
+                </div>
+                <p className="max-w-3xl text-sm leading-7 text-white/76 sm:text-[0.98rem]">
+                  Мы против накруток — только реальные объекты, оценки и истории наших клиентов с фотографиями.
+                </p>
+              </div>
+              <div className="flex min-h-16 w-full items-center justify-between gap-4 rounded-[1.35rem] border border-white/12 bg-white/8 px-4 py-4 text-left sm:px-5 xl:min-w-[18rem] xl:w-auto">
+                <div>
+                  <div className="text-sm font-semibold text-white">Открыть профиль и отзывы</div>
+                  <div className="mt-1 text-xs uppercase tracking-[0.18em] text-[#6ee7d2]">Новая вкладка / мобильное приложение</div>
+                </div>
+                <ArrowRight className="size-5 shrink-0 text-[#6ee7d2] transition duration-300 group-hover:translate-x-1" />
+              </div>
+            </div>
+          </a>
         </div>
       </div>
     </section>
