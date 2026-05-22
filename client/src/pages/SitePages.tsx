@@ -340,6 +340,30 @@ function useTaskDiscussionDialog() {
   return context;
 }
 
+const CTA_METRIKA_GOALS: Record<string, string[]> = {
+  header_request: ["leave_request_click"],
+  header_request_menu: ["leave_request_click"],
+  mobile_request: ["leave_request_click"],
+  hero_request: ["get_consultation_click"],
+  page_hero_discuss: ["get_consultation_click"],
+  final_request: ["next_step_request_click", "get_consultation_click"],
+  contact_form_submit: ["lead_form_submit", "next_step_submit"],
+  contact_form_success: ["lead_form_success"],
+};
+
+function getMetrikaGoalList(ctaId: string) {
+  const normalizedGoal = ctaId.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
+  return Array.from(new Set(["cta_click", normalizedGoal, ...(CTA_METRIKA_GOALS[ctaId] ?? [])]));
+}
+
+function getPrimaryMetrikaGoal(ctaId?: string) {
+  if (!ctaId) {
+    return "cta_click";
+  }
+
+  return CTA_METRIKA_GOALS[ctaId]?.[0] ?? getMetrikaGoalList(ctaId)[1] ?? "cta_click";
+}
+
 function trackCtaClick(ctaId: string, placement?: string) {
   if (typeof window === "undefined") {
     return;
@@ -357,7 +381,9 @@ function trackCtaClick(ctaId: string, placement?: string) {
   const metrikaId = window.__WELLS_MO_METRIKA_ID__;
   if (typeof metrikaId === "number" && typeof window.ym === "function") {
     try {
-      window.ym(metrikaId, "reachGoal", "cta_click", detail);
+      for (const goal of getMetrikaGoalList(ctaId)) {
+        window.ym(metrikaId, "reachGoal", goal, detail);
+      }
     } catch {
       // Analytics should never block navigation.
     }
@@ -831,6 +857,7 @@ function RequestDialogButton({
       type="button"
       data-cta={trackingId ?? "task_dialog_open"}
       data-cta-placement={trackingPlacement ?? "dialog_button"}
+      data-metrika-goal={getPrimaryMetrikaGoal(trackingId ?? "task_dialog_open")}
       onClick={() =>
         openTaskDialog({
           trackingId,
@@ -841,7 +868,7 @@ function RequestDialogButton({
         })
       }
       className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition hover:translate-y-[-1px]",
+        "inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition hover:translate-y-[-1px] sm:w-auto",
         variant === "primary"
           ? "bg-primary text-primary-foreground hover:shadow-[0_12px_32px_rgba(193,145,71,0.25)]"
           : "border border-white/12 bg-white/4 text-white/90 hover:border-primary/40 hover:bg-white/8",
@@ -857,13 +884,13 @@ function MobileStickyBar() {
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 px-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] lg:hidden">
       <div className="mx-auto max-w-screen-sm rounded-[1.4rem] border border-white/10 bg-[#0b0f15]/72 shadow-[0_-12px_32px_rgba(0,0,0,0.28)] backdrop-blur-2xl">
-        <div className="grid grid-cols-4 gap-2 p-2.5">
+        <div className="grid grid-cols-2 gap-2 p-2.5 sm:grid-cols-4">
           <a
             href={siteMeta.phoneHref}
             data-cta="mobile_phone"
             data-cta-placement="mobile_sticky_bar"
             onClick={() => trackCtaClick("mobile_phone", "mobile_sticky_bar")}
-            className="inline-flex min-w-0 items-center justify-center rounded-full border border-primary/20 bg-primary/12 px-2 py-3 text-[11px] font-semibold text-primary"
+            className="inline-flex min-h-[46px] min-w-0 items-center justify-center rounded-full border border-primary/20 bg-primary/12 px-2 py-3 text-xs font-semibold text-primary"
           >
             Позвонить
           </a>
@@ -874,7 +901,7 @@ function MobileStickyBar() {
             data-cta="mobile_telegram"
             data-cta-placement="mobile_sticky_bar"
             onClick={() => trackCtaClick("mobile_telegram", "mobile_sticky_bar")}
-            className="inline-flex min-w-0 items-center justify-center rounded-full border border-white/12 bg-white/5 px-2 py-3 text-[11px] font-semibold text-white/88"
+            className="inline-flex min-h-[46px] min-w-0 items-center justify-center rounded-full border border-white/12 bg-white/5 px-2 py-3 text-xs font-semibold text-white/88"
           >
             Telegram
           </a>
@@ -885,11 +912,11 @@ function MobileStickyBar() {
             data-cta="mobile_max"
             data-cta-placement="mobile_sticky_bar"
             onClick={() => trackCtaClick("mobile_max", "mobile_sticky_bar")}
-            className="inline-flex min-w-0 items-center justify-center rounded-full border border-white/12 bg-white/5 px-2 py-3 text-[11px] font-semibold text-white/88"
+            className="inline-flex min-h-[46px] min-w-0 items-center justify-center rounded-full border border-white/12 bg-white/5 px-2 py-3 text-xs font-semibold text-white/88"
           >
             MAX
           </a>
-          <RequestDialogButton trackingId="mobile_request" trackingPlacement="mobile_sticky_bar" className="px-2 py-3 text-[11px]">Заявка</RequestDialogButton>
+          <RequestDialogButton trackingId="mobile_request" trackingPlacement="mobile_sticky_bar" className="px-2 py-3 text-xs">Заявка</RequestDialogButton>
         </div>
       </div>
     </div>
@@ -1235,7 +1262,7 @@ function ServicesPreview() {
       title: "Чистка колодцев",
       description:
         "Полная чистка шахты: откачка воды, мойка стенок, очистка дна и разбор реального состояния колодца без поверхностных решений.",
-      price: "от 14 000 ₽",
+      price: "14 000 ₽",
     },
     {
       slug: "remont-kolodcev",
@@ -1765,7 +1792,7 @@ function HeroPageBlock({
           <p className="max-w-2xl text-lg leading-8 text-white/68">{description}</p>
           <div className="flex flex-col gap-3 sm:flex-row">
             <RequestDialogButton trackingId="page_hero_discuss" trackingPlacement="page_hero">
-              Обсудить задачу <ArrowRight className="size-4" />
+              Получить консультацию <ArrowRight className="size-4" />
             </RequestDialogButton>
             <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-5 py-3 text-sm font-semibold text-primary">
               {price}
@@ -2251,6 +2278,7 @@ export function ContactsPage() {
       }
 
       setFormData(initialContactFormState);
+      trackCtaClick("contact_form_success", "contacts_form");
       setSubmitState("success");
       setSubmitMessage("Заявка отправлена. Мы получили обращение и свяжемся с вами после просмотра информации по объекту.");
     } catch (error) {
@@ -2393,14 +2421,23 @@ export function ContactsPage() {
                 disabled={submitState === "loading"}
                 data-cta="contact_form_submit"
                 data-cta-placement="contacts_form"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:translate-y-[-1px] disabled:cursor-not-allowed disabled:opacity-70"
+                data-metrika-goal={getPrimaryMetrikaGoal("contact_form_submit")}
+                aria-label="Следующий шаг — отправить заявку"
+                className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:translate-y-[-1px] disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
               >
                 {submitState === "loading" ? "Отправляем заявку..." : "Отправить заявку"}
                 <ArrowRight className="size-4" />
               </button>
               <p className="text-sm leading-7 text-white/45">
-                Для быстрого контакта можно сразу позвонить по номеру {siteMeta.phone} или
-                написать на {siteMeta.email}. Работаем по всей Московской области.
+                Для быстрого контакта можно сразу{" "}
+                <a href={siteMeta.phoneHref} className="text-white transition hover:text-primary">
+                  позвонить по номеру {siteMeta.phone}
+                </a>{" "}
+                или{" "}
+                <a href={`mailto:${siteMeta.email}`} className="text-white transition hover:text-primary">
+                  написать на {siteMeta.email}
+                </a>
+                . Работаем по всей Московской области.
               </p>
             </form>
           </div>

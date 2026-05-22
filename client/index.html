@@ -41,7 +41,44 @@
       rel="stylesheet"
     />
     <script>
-      window.__WELLS_MO_METRIKA_ID__ = window.__WELLS_MO_METRIKA_ID__ ?? null;
+      (() => {
+        const rawMetrikaId = "%VITE_YANDEX_METRIKA_ID%";
+        const parsedMetrikaId = Number(rawMetrikaId);
+        window.__WELLS_MO_METRIKA_ID__ =
+          Number.isFinite(parsedMetrikaId) && parsedMetrikaId > 0
+            ? parsedMetrikaId
+            : window.__WELLS_MO_METRIKA_ID__ ?? null;
+
+        if (typeof window.__WELLS_MO_METRIKA_ID__ !== "number") {
+          return;
+        }
+
+        (function (m, e, t, r, i, k, a) {
+          m[i] =
+            m[i] ||
+            function () {
+              (m[i].a = m[i].a || []).push(arguments);
+            };
+          m[i].l = Date.now();
+          for (let j = 0; j < document.scripts.length; j += 1) {
+            if (document.scripts[j].src === r) {
+              return;
+            }
+          }
+          k = e.createElement(t);
+          a = e.getElementsByTagName(t)[0];
+          k.async = true;
+          k.src = r;
+          a.parentNode.insertBefore(k, a);
+        })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+        window.ym(window.__WELLS_MO_METRIKA_ID__, "init", {
+          clickmap: true,
+          trackLinks: true,
+          accurateTrackBounce: true,
+          webvisor: true,
+        });
+      })();
     </script>
   </head>
   <body>
