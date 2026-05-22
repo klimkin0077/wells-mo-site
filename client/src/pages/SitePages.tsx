@@ -524,7 +524,7 @@ function ScrollTopFloatingButton() {
       onClick={scrollPageToTop}
       aria-label="Вернуться наверх"
       className={cn(
-        "fixed right-4 bottom-[95px] !z-[9999] inline-flex size-12 items-center justify-center rounded-full border border-white/55 bg-primary text-[#111723] shadow-[0_20px_48px_rgba(199,154,63,0.52)] ring-2 ring-white/30 backdrop-blur-md transition-all duration-300 lg:bottom-8",
+        "fixed right-4 bottom-[88px] z-[59] inline-flex size-12 items-center justify-center rounded-full border border-white/55 bg-primary text-[#111723] shadow-[0_20px_48px_rgba(199,154,63,0.52)] ring-2 ring-white/30 backdrop-blur-md transition-all duration-300 lg:right-8 lg:bottom-[110px]",
         isVisible ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none translate-y-4 opacity-0",
       )}
     >
@@ -878,7 +878,7 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
       <button
         type="button"
         onClick={() => openTaskDialog({ trackingId: "desktop_floating_request", placement: "desktop_floating_cta" })}
-        className="fixed bottom-6 right-6 z-40 hidden rounded-full border border-primary/30 bg-[#111723]/88 px-5 py-3 text-sm font-semibold text-primary shadow-[0_18px_42px_rgba(0,0,0,0.32)] backdrop-blur-xl transition hover:-translate-y-1 hover:shadow-[0_24px_48px_rgba(193,145,71,0.2)] lg:inline-flex"
+        className="fixed bottom-8 right-8 z-[60] hidden rounded-full border border-primary/30 bg-[#111723]/88 px-5 py-3 text-sm font-semibold text-primary shadow-[0_18px_42px_rgba(0,0,0,0.32)] backdrop-blur-xl transition hover:-translate-y-1 hover:shadow-[0_24px_48px_rgba(193,145,71,0.2)] lg:inline-flex"
       >
         Задать задачу
       </button>
