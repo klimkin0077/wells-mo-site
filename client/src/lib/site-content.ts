@@ -92,7 +92,7 @@ export const navigation = [
   { href: "/kopka-kolodcev", label: "Копка" },
   { href: "/septik-iz-zhb-kolec", label: "Септики" },
   { href: "/vodoprovod-iz-kolodca-v-dom", label: "Водоснабжение" },
-  { href: "/price", label: "Цены" },
+  { href: "/price/", label: "Цены" },
   { href: "/nashi-raboty", label: "Работы" },
   { href: "/contacts", label: "Контакты" },
 ] as const;

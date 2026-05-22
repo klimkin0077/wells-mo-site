@@ -61,7 +61,9 @@ function SiteRouter() {
       <Route path="/vodosnabzhenie-iz-kolodca-v-dom" component={WaterSupplyPage} />
       <Route path="/vodoprovod-iz-kolodca-v-dom" component={WaterSupplyPage} />
       <Route path="/ceny" component={PricingPage} />
+      <Route path="/ceny/" component={PricingPage} />
       <Route path="/price" component={PricingPage} />
+      <Route path="/price/" component={PricingPage} />
       <Route path="/nashi-raboty" component={WorksPage} />
       <Route path="/o-kompanii" component={AboutPage} />
       <Route path="/o-nas" component={AboutPage} />

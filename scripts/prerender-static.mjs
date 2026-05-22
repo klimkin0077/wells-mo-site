@@ -40,6 +40,7 @@ const ROUTES = [
   "/drenazhnyy-kolodec/",
   "/vodoprovod-iz-kolodca-v-dom/",
   "/price/",
+  "/ceny/",
   "/nashi-raboty/",
   "/o-nas/",
   "/contacts/",

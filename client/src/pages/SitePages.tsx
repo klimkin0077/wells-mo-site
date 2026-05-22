@@ -1114,7 +1114,7 @@ function Header() {
             {siteMeta.phone}
           </a>
           <a
-            href="/price#prices"
+            href="/price/#prices"
             data-cta="header_prices"
             data-cta-placement="header_desktop"
             onClick={() => trackCtaClick("header_prices", "header_desktop")}
@@ -1191,7 +1191,7 @@ function Header() {
                     Оставить заявку
                   </RequestDialogButton>
                   <a
-                    href="/price#prices"
+                    href="/price/#prices"
                     data-cta="header_prices"
                     data-cta-placement="header_menu"
                     onClick={() => trackCtaClick("header_prices", "header_menu")}
