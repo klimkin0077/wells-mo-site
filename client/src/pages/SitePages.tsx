@@ -73,13 +73,72 @@ const iconMap = {
 
 const AVITO_BRAND_PROFILE_URL = "https://www.avito.ru/brands/kolodceff";
 
+const canonicalPathByRoute: Record<string, string> = {
+  "/price": "/price/",
+  "/price/": "/price/",
+  "/ceny": "/price/",
+  "/ceny/": "/price/",
+  "/contacts": "/contacts/",
+  "/contacts/": "/contacts/",
+  "/kontakty": "/contacts/",
+  "/kontakty/": "/contacts/",
+  "/cleaning": "/cleaning/",
+  "/cleaning/": "/cleaning/",
+  "/chistka-kolodcev": "/cleaning/",
+  "/chistka-kolodcev/": "/cleaning/",
+  "/repair": "/repair/",
+  "/repair/": "/repair/",
+  "/remont-kolodcev": "/repair/",
+  "/remont-kolodcev/": "/repair/",
+  "/seam-sealing": "/seam-sealing/",
+  "/seam-sealing/": "/seam-sealing/",
+  "/gidroizolyaciya-shvov": "/seam-sealing/",
+  "/gidroizolyaciya-shvov/": "/seam-sealing/",
+  "/stapling": "/stapling/",
+  "/stapling/": "/stapling/",
+  "/skobirovanie-kolodca": "/stapling/",
+  "/skobirovanie-kolodca/": "/stapling/",
+  "/bottom-filter": "/bottom-filter/",
+  "/bottom-filter/": "/bottom-filter/",
+  "/disinfection": "/disinfection/",
+  "/disinfection/": "/disinfection/",
+};
+
+const serviceHrefBySlug: Record<string, string> = {
+  "chistka-kolodcev": "/cleaning/",
+  "remont-kolodcev": "/repair/",
+  "gidroizolyaciya-shvov": "/seam-sealing/",
+  "skobirovanie-kolodca": "/stapling/",
+  "uglublenie-kolodcev": "/uglublenie-kolodcev/",
+  "kopka-kolodcev": "/kopka-kolodcev/",
+  "septik-iz-zhbi-kolec": "/septik-iz-zhb-kolec/",
+  "drenazhnyy-kolodec": "/drenazhnyy-kolodec/",
+  "vodosnabzhenie-iz-kolodca-v-dom": "/vodoprovod-iz-kolodca-v-dom/",
+};
+
+function getServiceHref(slug: string) {
+  return serviceHrefBySlug[slug] ?? `/${slug}/`;
+}
+
 const staticRouteLabels: Record<string, string> = {
   "/": "Главная",
   "/uslugi": "Услуги",
+  "/cleaning": "Чистка колодцев",
+  "/cleaning/": "Чистка колодцев",
   "/chistka-kolodcev": "Чистка колодцев",
+  "/repair": "Ремонт колодцев",
+  "/repair/": "Ремонт колодцев",
   "/remont-kolodcev": "Ремонт колодцев",
+  "/seam-sealing": "Герметизация швов",
+  "/seam-sealing/": "Герметизация швов",
   "/gidroizolyaciya-shvov": "Гидроизоляция швов",
+  "/stapling": "Скобирование колодца",
+  "/stapling/": "Скобирование колодца",
   "/skobirovanie-kolodca": "Скобирование колодца",
+  "/bottom-filter": "Донный фильтр",
+  "/bottom-filter/": "Донный фильтр",
+  "/disinfection": "Дезинфекция колодца",
+  "/disinfection/": "Дезинфекция колодца",
   "/uglublenie-kolodcev": "Углубление колодцев",
   "/kopka-kolodcev": "Копка колодцев",
   "/septik-iz-zhb-kolec": "Септик из ЖБ колец",
@@ -93,6 +152,7 @@ const staticRouteLabels: Record<string, string> = {
   "/o-nas": "О нас",
   "/o-kompanii": "О компании",
   "/contacts": "Контакты",
+  "/contacts/": "Контакты",
   "/kontakty": "Контакты",
   "/faq": "FAQ",
   "/goroda": "Города",
@@ -557,13 +617,9 @@ function usePageSeo(title: string, description: string) {
       }
 
       const { origin, pathname } = window.location;
-      const canonicalAliases = new Set(["/price", "/price/", "/ceny", "/ceny/"]);
+      const canonicalPath = canonicalPathByRoute[pathname] ?? pathname;
 
-      if (canonicalAliases.has(pathname)) {
-        return `${origin}/price/`;
-      }
-
-      return `${origin}${pathname}`;
+      return `${origin}${canonicalPath}`;
     })();
     const keywordPool = [
       "чистка колодцев московская область",
@@ -1129,7 +1185,7 @@ function Header() {
             {siteMeta.phone}
           </a>
           <a
-            href="/price/#prices"
+            href="/price/"
             data-cta="header_prices"
             data-cta-placement="header_desktop"
             onClick={() => trackCtaClick("header_prices", "header_desktop")}
@@ -1206,7 +1262,7 @@ function Header() {
                     Оставить заявку
                   </RequestDialogButton>
                   <a
-                    href="/price/#prices"
+                    href="/price/"
                     data-cta="header_prices"
                     data-cta-placement="header_menu"
                     onClick={() => trackCtaClick("header_prices", "header_menu")}
@@ -1480,7 +1536,7 @@ function ServicesPreview() {
   const featuredCards = [
     {
       slug: "chistka-kolodcev",
-      href: "/chistka-kolodcev",
+      href: "/cleaning/",
       eyebrow: "Главная услуга",
       title: "Чистка колодцев",
       description:
@@ -1489,7 +1545,7 @@ function ServicesPreview() {
     },
     {
       slug: "remont-kolodcev",
-      href: "/remont-kolodcev",
+      href: "/repair/",
       eyebrow: "Главная услуга",
       title: "Ремонт колодцев",
       description:
@@ -1498,7 +1554,7 @@ function ServicesPreview() {
     },
     {
       slug: "skobirovanie-kolodca",
-      href: "/skobirovanie-kolodca",
+      href: "/stapling/",
       eyebrow: "Внутри ремонта",
       title: "Скобирование колец",
       description:
@@ -1507,7 +1563,7 @@ function ServicesPreview() {
     },
     {
       slug: "gidroizolyaciya-shvov",
-      href: "/gidroizolyaciya-shvov",
+      href: "/seam-sealing/",
       eyebrow: "Внутри ремонта",
       title: "Гидроизоляция швов",
       description:
@@ -2368,7 +2424,233 @@ function ServiceContent({ slug }: { slug: string }) {
           />
           <div className="grid gap-5 lg:grid-cols-3">
             {related.map((item) => (
-              <Link key={item.slug} href={`/${item.slug}`} className="glass-panel card-hover rounded-[1.8rem] p-6">
+              <Link key={item.slug} href={getServiceHref(item.slug)} className="glass-panel card-hover rounded-[1.8rem] p-6">
+                <div className="section-kicker">{item.eyebrow}</div>
+                <div className="mt-4 text-2xl font-semibold text-white">{item.title}</div>
+                <p className="mt-4 text-sm leading-7 text-white/62">{item.description}</p>
+                <div className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary">
+                  Подробнее об услуге <ArrowRight className="size-4" />
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <CtaSection />
+    </SiteLayout>
+  );
+}
+
+const supplementalServicePages = {
+  "bottom-filter": {
+    seoTitle: `Донный фильтр для колодца — ${siteMeta.region} | ${siteMeta.name}`,
+    seoDescription:
+      "Донный фильтр для колодца в Московской области: восстановление нижней части шахты, подбор лиственницы, гальки или щебня и аккуратная сборка после осмотра состояния дна.",
+    eyebrow: "Восстановление нижней части шахты",
+    title: "Донный фильтр для колодца",
+    description:
+      "Если дно заилилось, фильтрующий слой разрушен или нижняя зона колодца требует восстановления, помогаем собрать донный фильтр под состояние конкретной шахты, а не по шаблону.",
+    image: assets.userBottomShield,
+    price: "от 5 000 ₽",
+    intro:
+      "Донный фильтр нужен, когда нижняя часть колодца потеряла рабочую структуру и источник требует аккуратного восстановления после осмотра.",
+    body:
+      "На таких объектах важно сначала посмотреть, что происходит на дне: есть ли песок, размыв, просадка, старый щит или разрушенный фильтрующий слой. После этого подбираем решение — лиственница, галька, щебень или комбинированная сборка — и объясняем, почему именно оно подходит этому колодцу.",
+    includes: [
+      "Осмотр нижней части шахты и состояния дна",
+      "Подбор материала фильтра под конкретный объект",
+      "Подготовка основания перед монтажом",
+      "Сборка фильтрующего слоя и рекомендации по эксплуатации",
+    ],
+    highlights: [
+      "Работаем после диагностики, а не по универсальной схеме",
+      "Учитываем состав дна, песок, глину и разрушение старого слоя",
+      "Можно совместить с чисткой, дезинфекцией и локальным ремонтом",
+      "Объясняем, когда донный фильтр действительно нужен, а когда нет",
+    ],
+    steps: [
+      {
+        title: "Осмотр основания",
+        text: "Смотрим нижнюю часть шахты, оцениваем размыв, заиливание, остатки старого щита и реальную геометрию дна.",
+      },
+      {
+        title: "Подбор решения",
+        text: "Определяем, нужен ли щит, галька, щебень или комбинированный вариант, чтобы не ставить лишние материалы.",
+      },
+      {
+        title: "Монтаж фильтра",
+        text: "Подготавливаем основание и собираем донный фильтр аккуратно, с учётом состояния шахты и глубины.",
+      },
+      {
+        title: "Финальная проверка",
+        text: "Показываем результат, объясняем дальнейшую эксплуатацию и подсказываем, нужны ли дополнительные работы по шахте.",
+      },
+    ],
+    faq: [
+      {
+        question: "Когда нужен донный фильтр, а когда достаточно чистки?",
+        answer:
+          "Если проблема только в загрязнении ила и налёта, часто хватает чистки. Если нижний фильтрующий слой разрушен, дно размыто или основание уже не держит структуру, нужен донный фильтр или восстановление нижней части шахты.",
+      },
+      {
+        question: "Из чего собирается донный фильтр?",
+        answer:
+          "В зависимости от состояния колодца используем лиственницу, речную гальку, щебень или комбинируем материалы. Решение принимается после осмотра, а не заранее по телефону.",
+      },
+      {
+        question: "Можно ли сделать донный фильтр в один выезд с чисткой?",
+        answer:
+          "Во многих случаях да. Если объект позволяет, совмещаем чистку, дезинфекцию, восстановление дна и другие необходимые этапы в одном рабочем выезде.",
+      },
+    ],
+  },
+  disinfection: {
+    seoTitle: `Дезинфекция колодца — ${siteMeta.region} | ${siteMeta.name}`,
+    seoDescription:
+      "Дезинфекция колодца в Московской области после чистки, застоя воды или загрязнений. Помогаем вернуть колодец в рабочее состояние и объясняем, когда нужна именно дезинфекция, а не только откачка.",
+    eyebrow: "Санитарная обработка после работ",
+    title: "Дезинфекция колодца",
+    description:
+      "Когда вода получила запах, колодец долго стоял без обслуживания или после чистки нужна финальная санитарная обработка, выполняем дезинфекцию как часть реального восстановления источника.",
+    image: assets.userAfterWashing,
+    price: "от 14 000 ₽ в составе работ",
+    intro:
+      "Дезинфекция нужна не как формальность, а как этап после чистки, загрязнений, застоя воды или обслуживания колодца по фактическому состоянию объекта.",
+    body:
+      "Одна только откачка воды не решает вопрос с налётом, запахом и накопившимися загрязнениями. Поэтому сначала приводим шахту в порядок, оцениваем состояние воды, стенок и дна, а затем выполняем дезинфекцию и объясняем, что важно контролировать после завершения работ.",
+    includes: [
+      "Осмотр воды, стенок и нижней части шахты",
+      "Подготовка колодца после чистки или перед санитарной обработкой",
+      "Дезинфекция по фактическому состоянию объекта",
+      "Рекомендации по дальнейшей эксплуатации и повторной проверке воды",
+    ],
+    highlights: [
+      "Дезинфекцию не отделяем от реального состояния шахты",
+      "Часто выполняем в комплексе с чисткой и восстановлением дна",
+      "Объясняем, когда проблема в загрязнении, а когда — в конструкции",
+      "Подходим аккуратно к колодцам после простоя и сезонных загрязнений",
+    ],
+    steps: [
+      {
+        title: "Диагностика воды",
+        text: "Понимаем, что именно беспокоит владельца: запах, мутность, застой воды или последствия долгого простоя без обслуживания.",
+      },
+      {
+        title: "Подготовка колодца",
+        text: "При необходимости выполняем чистку, откачку и удаление загрязнений, чтобы дезинфекция имела смысл и не была поверхностной мерой.",
+      },
+      {
+        title: "Санитарная обработка",
+        text: "Проводим дезинфекцию как финальный этап восстановления источника и контролируем состояние основных зон шахты.",
+      },
+      {
+        title: "Рекомендации",
+        text: "Подсказываем, когда можно возвращаться к обычной эксплуатации и какие признаки важно отслеживать после обработки.",
+      },
+    ],
+    faq: [
+      {
+        question: "Можно ли сделать только дезинфекцию без чистки?",
+        answer:
+          "Иногда да, но если в шахте есть ил, налёт, осадок и загрязнения, одной дезинфекции недостаточно. Сначала нужно привести объект в рабочее состояние.",
+      },
+      {
+        question: "Когда особенно часто нужна дезинфекция?",
+        answer:
+          "После долгого простоя, при запахе, помутнении воды, сезонных загрязнениях и как финальный этап после комплексной чистки колодца.",
+      },
+      {
+        question: "Нужен ли осмотр перед работой?",
+        answer:
+          "Да. Даже для дезинфекции важно понять состояние шахты, воды, дна и швов, чтобы не пропустить проблему, которую одна санитарная обработка не решит.",
+      },
+    ],
+  },
+} as const;
+
+type SupplementalServiceKey = keyof typeof supplementalServicePages;
+
+function SupplementalServicePage({ slug }: { slug: SupplementalServiceKey }) {
+  const page = supplementalServicePages[slug];
+  const related = services.filter((item) => ["chistka-kolodcev", "remont-kolodcev", "gidroizolyaciya-shvov"].includes(item.slug));
+
+  usePageSeo(page.seoTitle, page.seoDescription);
+
+  return (
+    <SiteLayout>
+      <HeroPageBlock
+        eyebrow={page.eyebrow}
+        title={page.title}
+        description={page.description}
+        image={page.image}
+        price={page.price}
+      />
+
+      <section className="py-12 lg:py-16">
+        <div className="container grid gap-8 xl:grid-cols-[1.05fr_0.95fr] xl:items-start">
+          <div className="space-y-8">
+            <div className="page-frame rounded-[2rem] p-6 lg:p-8">
+              <div className="section-kicker">Когда нужна услуга</div>
+              <h2 className="mt-4 text-3xl font-bold text-white md:text-4xl">{page.intro}</h2>
+              <p className="story-copy mt-5">{page.body}</p>
+            </div>
+            <div className="page-frame rounded-[2rem] p-6 lg:p-8">
+              <div className="section-kicker">Что входит</div>
+              <div className="mt-6 grid gap-4 md:grid-cols-2">
+                {page.includes.map((item) => (
+                  <div key={item} className="rounded-[1.4rem] border border-white/8 bg-white/4 p-4 text-sm leading-7 text-white/74">
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="page-frame rounded-[2rem] p-6 lg:sticky lg:top-24 lg:p-8">
+            <div className="section-kicker">Ключевые акценты</div>
+            <div className="mt-6 space-y-4">
+              {page.highlights.map((item) => (
+                <div key={item} className="rounded-[1.4rem] border border-primary/16 bg-primary/8 p-4 text-sm leading-7 text-white/80">
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-12 lg:py-16">
+        <div className="container space-y-10">
+          <SectionHeading
+            eyebrow="Этапы"
+            title="Как проходит работа от осмотра до результата"
+            description="Показываем понятную логику действий по объекту, чтобы было ясно, где начинается диагностика и из чего складывается итоговый результат по колодцу."
+          />
+          <div className="grid gap-5 lg:grid-cols-4">
+            {page.steps.map((step, index) => (
+              <div key={step.title} className="glass-panel rounded-[1.8rem] p-6">
+                <div className="metric-value text-primary">0{index + 1}</div>
+                <div className="mt-4 text-xl font-semibold text-white">{step.title}</div>
+                <p className="mt-3 text-sm leading-7 text-white/62">{step.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <FaqSection items={page.faq} />
+
+      <section className="py-12 lg:py-16">
+        <div className="container space-y-10">
+          <SectionHeading
+            eyebrow="Комплексный подход"
+            title="Что ещё часто делают вместе с этой услугой"
+            description="На реальном объекте дезинфекция, донный фильтр, чистка и ремонт нередко связаны между собой, поэтому ниже собраны страницы, которые чаще всего дополняют друг друга."
+          />
+          <div className="grid gap-5 lg:grid-cols-3">
+            {related.map((item) => (
+              <Link key={item.slug} href={getServiceHref(item.slug)} className="glass-panel card-hover rounded-[1.8rem] p-6">
                 <div className="section-kicker">{item.eyebrow}</div>
                 <div className="mt-4 text-2xl font-semibold text-white">{item.title}</div>
                 <p className="mt-4 text-sm leading-7 text-white/62">{item.description}</p>
@@ -2429,17 +2711,17 @@ export function ServicesPage() {
 export function PricingPage() {
   usePageSeo(
     `Цены на чистку и ремонт колодцев — ${siteMeta.region} | ${siteMeta.name}`,
-    "Ориентировочные цены на чистку, ремонт, гидроизоляцию швов, скобирование и углубление колодцев по Московской области. Дополнительные услуги: копка колодцев, септики из ЖБ колец, дренаж и водоснабжение из колодца в дом.",
+    "Цены на чистку и ремонт колодцев в Московской области: стартовые ориентиры по чистке, герметизации швов, скобированию, донному фильтру и дополнительным работам с пояснением, от чего зависит итоговая смета.",
   );
 
   return (
     <SiteLayout>
       <HeroPageBlock
         eyebrow="Цены и условия"
-        title="Цены на услуги"
-        description="На странице указаны стартовые ориентиры по основным работам, факторы формирования цены и пояснения, почему точная смета рассчитывается только после осмотра объекта."
+        title="Цены на чистку и ремонт колодцев"
+        description="На странице собраны стартовые цены по основным работам. Точная смета зависит от глубины шахты, состояния швов, дна, объёма загрязнений, материалов и дополнительных операций после осмотра объекта."
         image={assets.repair}
-        price="Ориентиры по стоимости"
+        price="Стартовые ориентиры"
       />
       <PricingSection />
       <GuaranteeSection />
@@ -2473,8 +2755,8 @@ export function WorksPage() {
 
 export function ContactsPage() {
   usePageSeo(
-    `Контакты и заявка на чистку и ремонт колодцев — ${siteMeta.region} | ${siteMeta.name}`,
-    "Контакты, форма заявки и быстрый способ связаться по вопросам чистки, ремонта, гидроизоляции швов, скобирования и углубления колодцев по всей Московской области.",
+    `Контакты для чистки и ремонта колодцев — ${siteMeta.region} | ${siteMeta.name}`,
+    "Контакты для чистки и ремонта колодцев в Московской области: телефон, Telegram, MAX и форма заявки. Можно сразу прислать фото или видео колодца, чтобы быстрее получить предварительный разбор ситуации.",
   );
 
   const [formData, setFormData] = useState<ContactFormState>(initialContactFormState);
@@ -2601,9 +2883,9 @@ export function ContactsPage() {
     <SiteLayout>
       <HeroPageBlock
         eyebrow="Связь и заявка"
-        title="Контакты"
-        description="Позвоните, напишите или оставьте заявку. Мы работаем по всей Московской области и быстро помогаем понять, какой формат работ нужен именно по вашему объекту."
-        image={assets.waterSupply}
+        title="Контакты для чистки и ремонта колодцев"
+        description="Позвоните, напишите в Telegram или MAX либо оставьте заявку. Если есть фото или видео колодца, сразу пришлите их вместе с адресом и описанием проблемы — так проще дать предварительную оценку и понять порядок работ."
+        image={assets.fieldCrew}
         price={siteMeta.coverage}
       />
       <section className="py-12 lg:py-16">
@@ -2627,6 +2909,9 @@ export function ContactsPage() {
                 Базируемся в {siteMeta.baseLocation}. Сообщите район, задачу и текущее состояние
                 колодца, чтобы быстрее понять формат работ и сориентировать вас по выезду.
               </p>
+              <div className="rounded-[1.4rem] border border-primary/18 bg-primary/8 p-4 text-sm leading-7 text-white/78">
+                Для предварительной оценки удобно сразу отправить фото или короткое видео шахты, воды, швов и нижней части колодца. Это не заменяет осмотр, но помогает быстрее понять, идёт ли речь о чистке, ремонте, донном фильтре или комплексной заявке.
+              </div>
             </div>
             <div className="mt-8 grid gap-4">
               {[
@@ -2851,6 +3136,14 @@ export function WaterproofingPage() {
   return <ServiceContent slug="gidroizolyaciya-shvov" />;
 }
 
+export function BottomFilterPage() {
+  return <SupplementalServicePage slug="bottom-filter" />;
+}
+
+export function DisinfectionPage() {
+  return <SupplementalServicePage slug="disinfection" />;
+}
+
 export function WellBracingPage() {
   return <ServiceContent slug="skobirovanie-kolodca" />;
 }
@@ -2929,11 +3222,12 @@ function LocalSeoPageContent({ location }: { location: LocalSeoLocation | undefi
                   const priorityPage = findPriorityServiceCityPage(location.slug, service.slug);
 
                   return (
-                    <Link
-                      key={service.slug}
-                      href={priorityPage?.path ?? `/${service.slug}`}
-                      className="rounded-[1.4rem] border border-white/8 bg-white/4 p-4 transition hover:border-primary/25 hover:bg-white/6"
-                    >
+                      <Link
+                        key={service.slug}
+                        href={priorityPage?.path ?? getServiceHref(service.slug)}
+                        className="rounded-[1.4rem] border border-white/8 bg-white/4 p-4 transition hover:border-primary/25 hover:bg-white/6"
+                      >
+
                       <div className="text-lg font-semibold text-white">{service.title}</div>
                       <p className="mt-2 text-sm leading-7 text-white/62">
                         {service.shortTitle} — {location.name}. {service.price}

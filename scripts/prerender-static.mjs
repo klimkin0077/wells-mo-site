@@ -30,6 +30,12 @@ const MIME_TYPES = {
 
 const ROUTES = [
   "/",
+  "/cleaning/",
+  "/repair/",
+  "/seam-sealing/",
+  "/stapling/",
+  "/bottom-filter/",
+  "/disinfection/",
   "/chistka-kolodcev/",
   "/remont-kolodcev/",
   "/gidroizolyaciya-shvov/",
@@ -44,6 +50,7 @@ const ROUTES = [
   "/nashi-raboty/",
   "/o-nas/",
   "/contacts/",
+  "/kontakty/",
   "/goroda/odincovo/",
   "/goroda/odintsovo/",
   "/goroda/krasnogorsk/",

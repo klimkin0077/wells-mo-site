@@ -6,27 +6,32 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://wells-mo.ru/chistka-kolodcev</loc>
+    <loc>https://wells-mo.ru/bottom-filter/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://wells-mo.ru/contacts</loc>
+    <loc>https://wells-mo.ru/cleaning/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://wells-mo.ru/drenazhnyy-kolodec</loc>
+    <loc>https://wells-mo.ru/contacts/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/disinfection/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://wells-mo.ru/drenazhnyy-kolodec/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://wells-mo.ru/faq</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://wells-mo.ru/gidroizolyaciya-shvov</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -686,12 +691,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://wells-mo.ru/kontakty</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://wells-mo.ru/kopka-kolodcev</loc>
+    <loc>https://wells-mo.ru/kopka-kolodcev/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -702,11 +702,6 @@
   </url>
   <url>
     <loc>https://wells-mo.ru/o-kompanii</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://wells-mo.ru/o-nas</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -791,27 +786,27 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://wells-mo.ru/remont-kolodcev</loc>
+    <loc>https://wells-mo.ru/repair/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://wells-mo.ru/septik-iz-zhb-kolec</loc>
+    <loc>https://wells-mo.ru/seam-sealing/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://wells-mo.ru/septik-iz-zhbi-kolec</loc>
+    <loc>https://wells-mo.ru/septik-iz-zhb-kolec/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://wells-mo.ru/skobirovanie-kolodca</loc>
+    <loc>https://wells-mo.ru/stapling/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://wells-mo.ru/uglublenie-kolodcev</loc>
+    <loc>https://wells-mo.ru/uglublenie-kolodcev/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -821,12 +816,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://wells-mo.ru/vodoprovod-iz-kolodca-v-dom</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://wells-mo.ru/vodosnabzhenie-iz-kolodca-v-dom</loc>
+    <loc>https://wells-mo.ru/vodoprovod-iz-kolodca-v-dom/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>

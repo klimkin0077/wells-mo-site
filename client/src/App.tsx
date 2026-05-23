@@ -9,9 +9,11 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import {
   AboutPage,
+  BottomFilterPage,
   CleaningPage,
   ContactsPage,
   DeepeningPage,
+  DisinfectionPage,
   FAQPage,
   HomePage,
   WaterproofingPage,
@@ -49,10 +51,26 @@ function SiteRouter() {
     <Switch>
       <Route path="/" component={HomePage} />
       <Route path="/uslugi" component={ServicesPage} />
+      <Route path="/cleaning" component={CleaningPage} />
+      <Route path="/cleaning/" component={CleaningPage} />
       <Route path="/chistka-kolodcev" component={CleaningPage} />
+      <Route path="/chistka-kolodcev/" component={CleaningPage} />
+      <Route path="/repair" component={RepairPage} />
+      <Route path="/repair/" component={RepairPage} />
       <Route path="/remont-kolodcev" component={RepairPage} />
+      <Route path="/remont-kolodcev/" component={RepairPage} />
+      <Route path="/seam-sealing" component={WaterproofingPage} />
+      <Route path="/seam-sealing/" component={WaterproofingPage} />
       <Route path="/gidroizolyaciya-shvov" component={WaterproofingPage} />
+      <Route path="/gidroizolyaciya-shvov/" component={WaterproofingPage} />
+      <Route path="/stapling" component={WellBracingPage} />
+      <Route path="/stapling/" component={WellBracingPage} />
       <Route path="/skobirovanie-kolodca" component={WellBracingPage} />
+      <Route path="/skobirovanie-kolodca/" component={WellBracingPage} />
+      <Route path="/bottom-filter" component={BottomFilterPage} />
+      <Route path="/bottom-filter/" component={BottomFilterPage} />
+      <Route path="/disinfection" component={DisinfectionPage} />
+      <Route path="/disinfection/" component={DisinfectionPage} />
       <Route path="/drenazhnyy-kolodec" component={DrainageWellPage} />
       <Route path="/kopka-kolodcev" component={WellDiggingPage} />
       <Route path="/septik-iz-zhbi-kolec" component={SepticPage} />
@@ -76,7 +94,9 @@ function SiteRouter() {
       <Route path="/goroda/:slug">{(params) => <LocalCityPage slug={params.slug} />}</Route>
       <Route path="/rajony/:slug">{(params) => <LocalDistrictPage slug={params.slug} />}</Route>
       <Route path="/kontakty" component={ContactsPage} />
+      <Route path="/kontakty/" component={ContactsPage} />
       <Route path="/contacts" component={ContactsPage} />
+      <Route path="/contacts/" component={ContactsPage} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
