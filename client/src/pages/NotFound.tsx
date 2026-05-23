@@ -5,6 +5,7 @@ Design reminder for this file:
 
 import { ArrowLeft, Phone } from "lucide-react";
 import { Link } from "wouter";
+import { trackPhoneClick } from "@/lib/metrika";
 import { siteMeta } from "@/lib/site-content";
 
 export default function NotFound() {
@@ -27,6 +28,7 @@ export default function NotFound() {
           </Link>
           <a
             href={siteMeta.phoneHref}
+            onClick={() => trackPhoneClick("not_found_page")}
             className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/4 px-6 py-3 text-sm font-semibold text-white/88 transition hover:border-primary/35 hover:text-white"
           >
             <Phone className="size-4 text-primary" />

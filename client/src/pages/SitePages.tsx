@@ -4,7 +4,7 @@ Design reminder for this file:
 Каждая страница должна ощущаться как часть единого дорогого интерфейса: крупные заголовки, воздух, стеклянные панели, тёмная база, латунные акценты и реальные изображения.
 */
 
-import { type ChangeEvent, type FormEvent, type ReactNode, createContext, useContext, useEffect, useMemo, useState } from "react";
+import { type ChangeEvent, type FormEvent, type ReactNode, createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "wouter";
 import {
   ArrowRight,
@@ -31,6 +31,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { sendMetrikaGoal, sendMetrikaHit } from "@/lib/metrika";
 import { cn } from "@/lib/utils";
 import {
   allSeoLocations,
@@ -71,7 +72,6 @@ const iconMap = {
 } as const;
 
 const AVITO_BRAND_PROFILE_URL = "https://www.avito.ru/brands/kolodceff";
-const YANDEX_METRIKA_ID = 109375117;
 
 const staticRouteLabels: Record<string, string> = {
   "/": "Главная",
@@ -155,13 +155,6 @@ function buildBreadcrumbItems(pathname: string) {
   }
 
   return items;
-}
-
-declare global {
-  interface Window {
-    ym?: (...args: unknown[]) => void;
-    __WELLS_MO_METRIKA_ID__?: number | null;
-  }
 }
 
 const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
@@ -360,14 +353,7 @@ const CTA_METRIKA_GOALS: Record<string, string[]> = {
   dialog_max: ["click_max"],
   hero_avito_reviews: ["click_avito"],
   avito_reviews_banner: ["click_avito"],
-  header_request: ["submit_lead"],
-  header_request_menu: ["submit_lead"],
-  mobile_request: ["submit_lead"],
-  final_request: ["submit_lead"],
-  page_hero_discuss: ["submit_lead"],
-  contacts_issue_card: ["submit_lead"],
-  desktop_floating_request: ["submit_lead"],
-  task_dialog_open: ["submit_lead"],
+  task_dialog_success: ["submit_lead"],
   contact_form_success: ["submit_lead"],
 };
 
@@ -383,18 +369,20 @@ function getPrimaryMetrikaGoal(ctaId?: string) {
   return CTA_METRIKA_GOALS[ctaId]?.[0] ?? "";
 }
 
-function sendMetrikaGoal(goal: string, detail: Record<string, unknown>) {
-  if (!goal || typeof window === "undefined") {
-    return;
-  }
+function MetrikaRouteTracker() {
+  const [location] = useLocation();
+  const isFirstRouteRender = useRef(true);
 
-  if (typeof (window as any).ym === "function") {
-    try {
-      (window as any).ym(YANDEX_METRIKA_ID, "reachGoal", goal, detail);
-    } catch {
-      // Analytics should never block navigation.
+  useEffect(() => {
+    if (isFirstRouteRender.current) {
+      isFirstRouteRender.current = false;
+      return;
     }
-  }
+
+    sendMetrikaHit(window.location.href);
+  }, [location]);
+
+  return null;
 }
 
 function trackCtaClick(ctaId: string, placement?: string) {
@@ -684,6 +672,7 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
   const [submitState, setSubmitState] = useState<"idle" | "success" | "error">("idle");
   const [submitMessage, setSubmitMessage] = useState("");
   const [dialogPlacement, setDialogPlacement] = useState("");
+  const leadTrackedRef = useRef(false);
 
   const resetSubmitState = () => {
     if (submitState !== "idle") {
@@ -751,8 +740,18 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
     });
     setSubmitState("idle");
     setSubmitMessage("");
+    leadTrackedRef.current = false;
     setOpen(true);
     trackCtaClick(resolvedTrackingId, resolvedPlacement);
+  };
+
+  const trackSuccessfulLead = () => {
+    if (leadTrackedRef.current) {
+      return;
+    }
+
+    leadTrackedRef.current = true;
+    trackCtaClick("task_dialog_success", dialogPlacement || "task_dialog");
   };
 
   const handleOpenChange = (nextOpen: boolean) => {
@@ -826,6 +825,7 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
 
     try {
       await navigator.clipboard.writeText(payload.text);
+      trackSuccessfulLead();
       setSubmitState("success");
       setSubmitMessage("Заявка собрана и скопирована. Теперь можно отправить её через Telegram, MAX или почту.");
       return payload.text;
@@ -865,6 +865,7 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
     }
 
     const mailtoHref = `mailto:${siteMeta.email}?subject=${encodeURIComponent("Заявка с сайта WELLS-MO")}&body=${encodeURIComponent(payload.text)}`;
+    trackSuccessfulLead();
     window.location.href = mailtoHref;
     setSubmitState("success");
     setSubmitMessage("Почтовый клиент открыт. Если нужно, сначала можно скопировать заявку и отправить её в Telegram или MAX.");
@@ -1335,6 +1336,7 @@ function SiteLayout({ children }: { children: ReactNode }) {
     <TaskDiscussionDialogProvider>
       <div data-scroll-container="page" className="site-shell min-h-screen pb-28 lg:pb-0">
         <ScrollToTop />
+        <MetrikaRouteTracker />
         <div className="mesh-glow left-[-8rem] top-24 h-72 w-72 bg-primary/18" />
         <div className="mesh-glow right-[-4rem] top-[30rem] h-64 w-64 bg-sky-400/8" />
         <Header />

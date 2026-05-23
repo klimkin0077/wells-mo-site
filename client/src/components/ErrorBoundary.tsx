@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import { AlertTriangle, Home, RotateCcw } from "lucide-react";
 import { Component, ReactNode } from "react";
+import { trackPhoneClick } from "@/lib/metrika";
 import { siteMeta } from "@/lib/site-content";
 
 interface Props {
@@ -61,6 +62,7 @@ class ErrorBoundary extends Component<Props, State> {
 
             <a
               href={siteMeta.phoneHref}
+              onClick={() => trackPhoneClick("error_boundary")}
               className="mt-5 inline-flex items-center justify-center rounded-full border border-white/10 bg-white/4 px-5 py-3 text-sm font-semibold text-white/82 transition hover:border-primary/30 hover:text-white"
             >
               {siteMeta.phone}
