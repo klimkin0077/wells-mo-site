@@ -1440,25 +1440,31 @@ function SectionHeading({
 
 function HomeHero() {
   return (
-    <section className="relative overflow-hidden pb-8 pt-8 lg:pb-14 lg:pt-12">
+    <section className="relative overflow-hidden pb-[5.75rem] pt-7 sm:pb-10 sm:pt-8 lg:pb-14 lg:pt-12">
       <div className="container hero-grid lg:items-center">
-        <div className="reveal-rise space-y-6 pb-4 lg:space-y-7 lg:pb-0">
+        <div className="reveal-rise space-y-5 pb-1 lg:space-y-7 lg:pb-0">
           <div className="copper-chip">
             <span className="inline-block size-2 rounded-full bg-primary" />
             {siteMeta.coverage.replace(/\.$/, "")}
           </div>
-          <div className="relative isolate space-y-4 overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(19,25,34,0.88),rgba(11,15,24,0.38))] px-5 py-5 shadow-[0_24px_64px_rgba(0,0,0,0.24)] md:overflow-visible md:rounded-none md:border-0 md:bg-transparent md:px-0 md:py-0 md:shadow-none">
-            <div className="absolute inset-x-8 -top-12 h-24 rounded-full bg-primary/18 blur-3xl motion-safe:animate-pulse motion-reduce:animate-none md:hidden" />
-            <div className="absolute -right-10 top-1/2 size-28 -translate-y-1/2 rounded-full border border-white/10 bg-white/6 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-xl md:hidden" />
-            <div className="absolute left-5 top-5 size-10 rounded-2xl border border-primary/28 bg-primary/10 shadow-[0_12px_28px_rgba(193,145,71,0.18)] md:hidden" />
-            <h1 className="text-[clamp(2.7rem,9vw,5.8rem)] leading-[0.94] font-bold tracking-[-0.065em] text-white max-md:text-center">
-              Чистка и ремонт колодцев
-            </h1>
-            <p className="max-w-2xl text-sm leading-7 text-white/78 max-md:text-center sm:text-base lg:text-[1.05rem] lg:leading-8">
-              Откачка воды, мойка шахты до 400 бар, чистка дна, герметизация швов, скобирование колец, дезинфекция и восстановление колодцев без лишних услуг и размытых обещаний.
-            </p>
+          <div className="hero-mobile-card relative isolate space-y-3 overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(19,25,34,0.88),rgba(11,15,24,0.38))] px-4 py-4 shadow-[0_24px_64px_rgba(0,0,0,0.24)] min-[390px]:px-5 min-[390px]:py-5 md:overflow-visible md:rounded-none md:border-0 md:bg-transparent md:px-0 md:py-0 md:shadow-none">
+            <div className="hero-mobile-beam absolute inset-x-8 -top-10 h-20 rounded-full bg-primary/18 blur-3xl motion-safe:animate-pulse motion-reduce:animate-none md:hidden" />
+            <div className="hero-mobile-orb absolute -right-8 top-1/2 hidden -translate-y-1/2 rounded-full border border-white/10 bg-white/6 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-xl min-[390px]:block md:hidden" />
+            <div className="hero-mobile-accent absolute left-4 top-4 size-10 rounded-2xl border border-primary/28 bg-primary/10 shadow-[0_12px_28px_rgba(193,145,71,0.18)] md:hidden" />
+            <div className="hero-mobile-copy space-y-3">
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-3 py-1.5 text-[0.63rem] font-semibold uppercase tracking-[0.22em] text-white/74 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] md:hidden">
+                <Sparkles className="size-3 text-primary" />
+                Премиальный выезд и аккуратная смета
+              </div>
+              <h1 className="text-[clamp(2.45rem,8.4vw,5.8rem)] leading-[0.94] font-bold tracking-[-0.065em] text-white max-md:text-center">
+                Чистка и ремонт колодцев
+              </h1>
+              <p className="max-w-2xl text-[0.95rem] leading-6 text-white/78 max-md:text-center sm:text-base lg:text-[1.05rem] lg:leading-8">
+                Откачка воды, мойка шахты до 400 бар, чистка дна, герметизация швов, скобирование колец, дезинфекция и восстановление колодцев без лишних услуг и размытых обещаний.
+              </p>
+            </div>
           </div>
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-[1fr_1fr_1.15fr]">
+          <div className="grid gap-3 pt-1 sm:grid-cols-2 xl:grid-cols-[1fr_1fr_1.15fr]">
             <RequestDialogButton
               trackingId="hero_request"
               trackingPlacement="home_hero"
@@ -1496,7 +1502,7 @@ function HomeHero() {
               <ArrowRight className="size-4" />
             </a>
           </div>
-          <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
+          <div className="hidden gap-3 pt-3 md:grid md:grid-cols-2 xl:grid-cols-4">
             {trustMetrics.map((item) => (
               <div key={item.value} className="hero-stat p-4">
                 <div className="metric-value text-primary">{item.value}</div>
