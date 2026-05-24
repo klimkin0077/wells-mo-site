@@ -1440,35 +1440,31 @@ function SectionHeading({
 
 function HomeHero() {
   return (
-    <section className="relative overflow-hidden pb-[5.75rem] pt-7 sm:pb-10 sm:pt-8 lg:pb-14 lg:pt-12">
+    <section className="relative overflow-hidden pb-[7.75rem] pt-7 sm:pb-[7rem] sm:pt-8 lg:pb-14 lg:pt-12">
       <div className="container hero-grid lg:items-center">
         <div className="reveal-rise space-y-5 pb-1 lg:space-y-7 lg:pb-0">
           <div className="copper-chip">
             <span className="inline-block size-2 rounded-full bg-primary" />
             {siteMeta.coverage.replace(/\.$/, "")}
           </div>
-          <div className="hero-mobile-card relative isolate space-y-3 overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(19,25,34,0.88),rgba(11,15,24,0.38))] px-4 py-4 shadow-[0_24px_64px_rgba(0,0,0,0.24)] min-[390px]:px-5 min-[390px]:py-5 md:overflow-visible md:rounded-none md:border-0 md:bg-transparent md:px-0 md:py-0 md:shadow-none">
+          <div className="hero-mobile-card relative isolate overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(19,25,34,0.88),rgba(11,15,24,0.38))] px-4 py-[1.15rem] shadow-[0_24px_64px_rgba(0,0,0,0.24)] min-[390px]:px-5 min-[390px]:py-[1.3rem] md:overflow-visible md:rounded-none md:border-0 md:bg-transparent md:px-0 md:py-0 md:shadow-none">
             <div className="hero-mobile-beam absolute inset-x-8 -top-10 h-20 rounded-full bg-primary/18 blur-3xl motion-safe:animate-pulse motion-reduce:animate-none md:hidden" />
-            <div className="hero-mobile-orb absolute -right-8 top-1/2 hidden -translate-y-1/2 rounded-full border border-white/10 bg-white/6 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-xl min-[390px]:block md:hidden" />
-            <div className="hero-mobile-accent absolute left-4 top-4 size-10 rounded-2xl border border-primary/28 bg-primary/10 shadow-[0_12px_28px_rgba(193,145,71,0.18)] md:hidden" />
-            <div className="hero-mobile-copy space-y-3">
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-3 py-1.5 text-[0.63rem] font-semibold uppercase tracking-[0.22em] text-white/74 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] md:hidden">
-                <Sparkles className="size-3 text-primary" />
-                Премиальный выезд и аккуратная смета
-              </div>
-              <h1 className="text-[clamp(2.45rem,8.4vw,5.8rem)] leading-[0.94] font-bold tracking-[-0.065em] text-white max-md:text-center">
+            <div className="hero-mobile-orb absolute -right-10 top-1/2 hidden -translate-y-1/2 rounded-full border border-white/10 bg-white/6 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-xl min-[390px]:block md:hidden" />
+            <div className="hero-mobile-accent absolute left-4 top-4 size-9 rounded-2xl border border-primary/24 bg-primary/8 shadow-[0_10px_24px_rgba(193,145,71,0.14)] md:hidden" />
+            <div className="hero-mobile-copy space-y-2.5">
+              <h1 className="hero-mobile-title text-[clamp(2.16rem,7.6vw,5.8rem)] leading-[0.9] font-bold tracking-[-0.068em] text-white max-md:text-center">
                 Чистка и ремонт колодцев
               </h1>
-              <p className="max-w-2xl text-[0.95rem] leading-6 text-white/78 max-md:text-center sm:text-base lg:text-[1.05rem] lg:leading-8">
-                Откачка воды, мойка шахты до 400 бар, чистка дна, герметизация швов, скобирование колец, дезинфекция и восстановление колодцев без лишних услуг и размытых обещаний.
+              <p className="hero-mobile-subtitle max-w-2xl text-[0.92rem] leading-[1.52] text-white/76 max-md:text-center sm:text-base lg:text-[1.05rem] lg:leading-8">
+                Откачка, мойка шахты до 400 бар, чистка дна, герметизация швов и восстановление колодцев.
               </p>
             </div>
           </div>
-          <div className="grid gap-3 pt-1 sm:grid-cols-2 xl:grid-cols-[1fr_1fr_1.15fr]">
+          <div className="grid gap-2.5 pt-0.5 sm:grid-cols-2 xl:grid-cols-[1fr_1fr_1.15fr]">
             <RequestDialogButton
               trackingId="hero_request"
               trackingPlacement="home_hero"
-              className="min-h-12 bg-primary px-5 py-3 text-sm font-semibold text-[#11141d] hover:bg-primary/90 hover:shadow-none lg:min-h-[3.25rem] lg:px-6"
+              className="min-h-[3rem] bg-primary px-5 py-3 text-sm font-semibold text-[#11141d] hover:bg-primary/90 hover:shadow-none lg:min-h-[3.25rem] lg:px-6"
             >
               Оставить заявку
               <ArrowRight className="size-4" />
@@ -1478,7 +1474,7 @@ function HomeHero() {
               data-cta="hero_prices"
               data-cta-placement="home_hero"
               onClick={() => trackCtaClick("hero_prices", "home_hero")}
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-primary/24 bg-primary/12 px-5 py-3 text-sm font-semibold text-primary transition hover:translate-y-[-1px] hover:border-primary/40 hover:bg-primary/16 lg:min-h-[3.25rem] lg:px-6"
+              className="inline-flex min-h-[3rem] items-center justify-center gap-2 rounded-full border border-primary/24 bg-primary/12 px-5 py-3 text-sm font-semibold text-primary transition hover:translate-y-[-1px] hover:border-primary/40 hover:bg-primary/16 lg:min-h-[3.25rem] lg:px-6"
             >
               Посмотреть цены
               <ArrowRight className="size-4" />
@@ -1490,7 +1486,7 @@ function HomeHero() {
               data-cta="hero_avito_reviews"
               data-cta-placement="home_hero"
               onClick={() => trackCtaClick("hero_avito_reviews", "home_hero")}
-              className="inline-flex min-h-12 items-center justify-center gap-3 rounded-full border border-[#6ee7d2]/28 bg-[linear-gradient(135deg,rgba(18,124,107,0.42),rgba(15,22,30,0.98)_44%,rgba(0,170,239,0.18)_100%)] px-5 py-3 text-sm font-semibold text-white shadow-[0_22px_50px_rgba(2,8,12,0.28)] transition hover:translate-y-[-1px] hover:border-[#6ee7d2]/45 lg:min-h-[3.25rem] lg:px-6"
+              className="inline-flex min-h-[3rem] items-center justify-center gap-3 rounded-full border border-[#6ee7d2]/28 bg-[linear-gradient(135deg,rgba(18,124,107,0.42),rgba(15,22,30,0.98)_44%,rgba(0,170,239,0.18)_100%)] px-5 py-3 text-sm font-semibold text-white shadow-[0_22px_50px_rgba(2,8,12,0.28)] transition hover:translate-y-[-1px] hover:border-[#6ee7d2]/45 lg:min-h-[3.25rem] lg:px-6"
             >
               <span className="relative flex size-5 shrink-0 items-center justify-center">
                 <span className="absolute left-0 top-0 size-2 rounded-full bg-[#97cf26]" />
