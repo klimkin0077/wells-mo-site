@@ -572,7 +572,7 @@ function ScrollTopFloatingButton() {
       onClick={scrollPageToTop}
       aria-label="Вернуться наверх"
       className={cn(
-        "fixed right-4 bottom-[88px] z-[59] inline-flex size-12 items-center justify-center rounded-full border border-white/55 bg-primary text-[#111723] shadow-[0_20px_48px_rgba(199,154,63,0.52)] ring-2 ring-white/30 backdrop-blur-md transition-all duration-300 lg:right-8 lg:bottom-[110px]",
+        "fixed right-4 bottom-[calc(104px+env(safe-area-inset-bottom))] z-[59] inline-flex size-12 items-center justify-center rounded-full border border-white/55 bg-primary text-[#111723] shadow-[0_20px_48px_rgba(199,154,63,0.52)] ring-2 ring-white/30 backdrop-blur-md transition-all duration-300 lg:right-8 lg:bottom-[110px]",
         isVisible ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none translate-y-4 opacity-0",
       )}
     >
@@ -1088,15 +1088,15 @@ function RequestDialogButton({
 
 function MobileStickyBar() {
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 px-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] lg:hidden">
-      <div className="mx-auto max-w-screen-sm rounded-[1.4rem] border border-white/10 bg-[#0b0f15]/72 shadow-[0_-12px_32px_rgba(0,0,0,0.28)] backdrop-blur-2xl">
-        <div className="grid grid-cols-2 gap-2 p-2.5 sm:grid-cols-4">
+    <div className="mobile-sticky-cta fixed inset-x-0 bottom-0 z-40 px-2 pb-[calc(env(safe-area-inset-bottom)+0.45rem)] lg:hidden">
+      <div className="mx-auto max-w-screen-sm rounded-[1.2rem] border border-white/10 bg-[#0b0f15]/88 shadow-[0_-12px_32px_rgba(0,0,0,0.28)] backdrop-blur-2xl">
+        <div className="grid grid-cols-4 gap-1.5 p-2">
           <a
             href={siteMeta.phoneHref}
             data-cta="mobile_phone"
             data-cta-placement="mobile_sticky_bar"
             onClick={() => trackCtaClick("mobile_phone", "mobile_sticky_bar")}
-            className="inline-flex min-h-[46px] min-w-0 items-center justify-center rounded-full border border-primary/20 bg-primary/12 px-2 py-3 text-xs font-semibold text-primary"
+            className="inline-flex min-h-[44px] min-w-0 items-center justify-center rounded-full border border-primary/20 bg-primary/12 px-1.5 py-2 text-[11px] font-semibold text-primary whitespace-nowrap"
           >
             Позвонить
           </a>
@@ -1107,7 +1107,7 @@ function MobileStickyBar() {
             data-cta="mobile_telegram"
             data-cta-placement="mobile_sticky_bar"
             onClick={() => trackCtaClick("mobile_telegram", "mobile_sticky_bar")}
-            className="inline-flex min-h-[46px] min-w-0 items-center justify-center rounded-full border border-white/12 bg-white/5 px-2 py-3 text-xs font-semibold text-white/88"
+            className="inline-flex min-h-[44px] min-w-0 items-center justify-center rounded-full border border-white/12 bg-white/5 px-1.5 py-2 text-[11px] font-semibold text-white/88 whitespace-nowrap"
           >
             Telegram
           </a>
@@ -1118,11 +1118,11 @@ function MobileStickyBar() {
             data-cta="mobile_max"
             data-cta-placement="mobile_sticky_bar"
             onClick={() => trackCtaClick("mobile_max", "mobile_sticky_bar")}
-            className="inline-flex min-h-[46px] min-w-0 items-center justify-center rounded-full border border-white/12 bg-white/5 px-2 py-3 text-xs font-semibold text-white/88"
+            className="inline-flex min-h-[44px] min-w-0 items-center justify-center rounded-full border border-white/12 bg-white/5 px-1.5 py-2 text-[11px] font-semibold text-white/88 whitespace-nowrap"
           >
             MAX
           </a>
-          <RequestDialogButton trackingId="mobile_request" trackingPlacement="mobile_sticky_bar" className="px-2 py-3 text-xs">Заявка</RequestDialogButton>
+          <RequestDialogButton trackingId="mobile_request" trackingPlacement="mobile_sticky_bar" className="min-h-[44px] px-1.5 py-2 text-[11px] whitespace-nowrap">Заявка</RequestDialogButton>
         </div>
       </div>
     </div>
@@ -1168,7 +1168,10 @@ function Header() {
             </div>
             <div className="min-w-0">
               <div className="font-heading text-base font-bold tracking-[-0.04em] text-white lg:text-lg">{siteMeta.name}</div>
-              <div className="truncate text-[11px] text-white/55 lg:text-xs">{siteMeta.tagline}</div>
+              <div className="text-[11px] text-white/55 lg:text-xs">
+                <span className="lg:hidden">Чистка и ремонт колодцев</span>
+                <span className="hidden lg:inline">{siteMeta.tagline}</span>
+              </div>
             </div>
           </div>
         </Link>
@@ -1390,7 +1393,7 @@ function Footer() {
 function SiteLayout({ children }: { children: ReactNode }) {
   return (
     <TaskDiscussionDialogProvider>
-      <div data-scroll-container="page" className="site-shell min-h-screen pb-28 lg:pb-0">
+      <div data-scroll-container="page" className="site-shell min-h-screen pb-[calc(140px+env(safe-area-inset-bottom))] lg:pb-0">
         <ScrollToTop />
         <MetrikaRouteTracker />
         <div className="mesh-glow left-[-8rem] top-24 h-72 w-72 bg-primary/18" />
@@ -1457,7 +1460,7 @@ function HomeHero() {
               onClick={() => trackCtaClick("hero_prices", "home_hero")}
               className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full border border-primary/24 bg-primary/12 px-6 py-3 text-sm font-semibold text-primary transition hover:translate-y-[-1px] hover:border-primary/40 hover:bg-primary/16"
             >
-              Узнать цены (без «от»)
+              Посмотреть цены
               <ArrowRight className="size-4" />
             </a>
             <a
@@ -1489,7 +1492,7 @@ function HomeHero() {
           </div>
         </div>
 
-        <div className="reveal-rise reveal-rise-delay-1 page-frame overflow-hidden rounded-[2rem] p-3">
+        <div className="what-client-visual reveal-rise reveal-rise-delay-1 hidden page-frame overflow-hidden rounded-[2rem] p-3 md:block">
           <div className="image-mask min-h-[380px] sm:min-h-[460px] lg:min-h-[620px]">
             <img
               src={assets.hero}
@@ -1513,9 +1516,9 @@ function HomeHero() {
               </div>
               <div className="grid gap-3 sm:grid-cols-3">
                 {[
-                  "Сразу видно фиксированные цены без приставки «от»",
-                  "Под героем — реальные фото объектов и понятный порядок работ",
-                  "Нижняя панель связи остаётся, поэтому первый экран не перегружен",
+                  "Понятно, сколько стоит работа",
+                  "Видно, что входит в чистку и ремонт",
+                  "Показываем реальные фото объектов",
                 ].map((item) => (
                   <div key={item} className="rounded-2xl border border-white/10 bg-white/6 p-4 text-sm text-white/82">
                     {item}
@@ -1794,10 +1797,10 @@ function PricingSection() {
     <section id="prices" className="scroll-mt-28 py-12 lg:py-16">
       <div className="container grid gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-start">
         <div className="reveal-rise space-y-5">
-          <div className="section-kicker">Единый реестр цен</div>
-          <h2 className="section-title text-white">Фиксированные цены без приставки «от»</h2>
+          <div className="section-kicker">Прайс по частым работам</div>
+          <h2 className="section-title text-white">Понятные цены по частым работам</h2>
           <p className="story-copy text-white/78">
-            Сразу под первым экраном показываем единый прайс по самым частым работам: без размытых вилок, без «от» и без необходимости сначала звонить, чтобы понять порядок бюджета.
+            Показываем единый прайс по самым частым работам с понятным ориентиром по бюджету ещё до звонка.
           </p>
           <div className="grid gap-3 sm:grid-cols-2">
             {[
