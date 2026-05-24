@@ -1442,16 +1442,14 @@ function HomeHero() {
             </p>
           </div>
           <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-[1fr_1fr_1.15fr]">
-            <a
-              href="#services"
-              data-cta="hero_services"
-              data-cta-placement="home_hero"
-              onClick={() => trackCtaClick("hero_services", "home_hero")}
-              className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-[#11141d] transition hover:translate-y-[-1px] hover:bg-primary/90"
+            <RequestDialogButton
+              trackingId="hero_request"
+              trackingPlacement="home_hero"
+              className="min-h-13 bg-primary px-6 py-3 text-sm font-semibold text-[#11141d] hover:bg-primary/90 hover:shadow-none"
             >
-              Посмотреть услуги
+              Оставить заявку
               <ArrowRight className="size-4" />
-            </a>
+            </RequestDialogButton>
             <a
               href="#prices"
               data-cta="hero_prices"
@@ -1801,11 +1799,12 @@ function PricingSection() {
           <p className="story-copy text-white/78">
             Сразу под первым экраном показываем единый прайс по самым частым работам: без размытых вилок, без «от» и без необходимости сначала звонить, чтобы понять порядок бюджета.
           </p>
-          <div className="grid gap-3 sm:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-2">
             {[
-              "Только горячие и часто заказываемые позиции",
-              "Фиксированная стоимость по каждой строке реестра",
-              "Единый якорь #prices для всех CTA на сайте",
+              "Понятные цены по частым работам",
+              "Фиксированная стоимость — там, где её можно назвать заранее",
+              "Нижняя граница — там, где цена зависит от глубины, состояния шахты, объёма ила, активных течей, плывуна, количества материалов и сложности подъезда",
+              "Один раздел с ценами для всех переходов по сайту",
             ].map((item) => (
               <div key={item} className="rounded-[1.35rem] border border-white/10 bg-white/6 p-4 text-sm leading-6 text-white/82">
                 {item}
