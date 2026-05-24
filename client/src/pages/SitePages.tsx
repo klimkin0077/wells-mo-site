@@ -572,7 +572,7 @@ function ScrollTopFloatingButton() {
       onClick={scrollPageToTop}
       aria-label="Вернуться наверх"
       className={cn(
-        "fixed right-4 bottom-[calc(104px+env(safe-area-inset-bottom))] z-[59] inline-flex size-12 items-center justify-center rounded-full border border-white/55 bg-primary text-[#111723] shadow-[0_20px_48px_rgba(199,154,63,0.52)] ring-2 ring-white/30 backdrop-blur-md transition-all duration-300 lg:right-8 lg:bottom-[110px]",
+        "fixed right-4 bottom-[calc(104px+env(safe-area-inset-bottom))] z-[59] hidden size-12 items-center justify-center rounded-full border border-white/55 bg-primary text-[#111723] shadow-[0_20px_48px_rgba(199,154,63,0.52)] ring-2 ring-white/30 backdrop-blur-md transition-all duration-300 md:inline-flex lg:right-8 lg:bottom-[110px]",
         isVisible ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none translate-y-4 opacity-0",
       )}
     >
@@ -1310,7 +1310,12 @@ function Header() {
 
 function SiteBreadcrumbs() {
   const [location] = useLocation();
+  const normalizedLocation = location === "/" ? "/" : location.replace(/\/+$/, "");
   const items = useMemo(() => buildBreadcrumbItems(location), [location]);
+
+  if (normalizedLocation === "/") {
+    return null;
+  }
 
   return (
     <div className="border-b border-white/6 bg-white/[0.02]">
@@ -1344,19 +1349,19 @@ function SiteBreadcrumbs() {
 
 function Footer() {
   return (
-    <footer className="border-t border-white/8 py-10">
-      <div className="container grid gap-8 lg:grid-cols-[1.1fr_0.9fr_0.9fr]">
-        <div className="space-y-4">
+    <footer className="border-t border-white/8 pt-8 pb-[calc(160px+env(safe-area-inset-bottom))] md:py-10">
+      <div className="container grid gap-6 md:gap-8 lg:grid-cols-[1.1fr_0.9fr_0.9fr]">
+        <div className="hidden space-y-3 md:block md:space-y-4">
           <div className="font-heading text-2xl font-bold text-white">{siteMeta.name}</div>
           <p className="max-w-md text-sm leading-7 text-white/62">
             Чистка, ремонт, гидроизоляция, скобирование и углубление колодцев по Московской области.
           </p>
         </div>
         <div>
-          <div className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-primary/85">
+          <div className="mb-3 text-sm font-semibold uppercase tracking-[0.22em] text-primary/85 md:mb-4">
             Навигация
           </div>
-          <div className="grid gap-3 text-sm text-white/70">
+          <div className="grid grid-cols-2 gap-x-6 gap-y-2.5 text-sm text-white/70 md:grid-cols-1 md:gap-3">
             {[...navigation, { href: "/rajony-rabot", label: "Районы" }].map((item) => (
               <Link key={item.href} href={item.href} className="transition hover:text-white">
                 {item.label}
@@ -1365,10 +1370,10 @@ function Footer() {
           </div>
         </div>
         <div>
-          <div className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-primary/85">
+          <div className="mb-3 text-sm font-semibold uppercase tracking-[0.22em] text-primary/85 md:mb-4">
             Связь
           </div>
-          <div className="space-y-3 text-sm text-white/70">
+          <div className="space-y-2.5 text-sm text-white/70 md:space-y-3">
             <a
               href={siteMeta.phoneHref}
               data-cta="footer_phone"
@@ -1399,7 +1404,7 @@ function SiteLayout({ children }: { children: ReactNode }) {
         <div className="mesh-glow left-[-8rem] top-24 h-72 w-72 bg-primary/18" />
         <div className="mesh-glow right-[-4rem] top-[30rem] h-64 w-64 bg-sky-400/8" />
         <Header />
-        <main className="pt-[72px] lg:pt-[80px]">
+        <main className="pt-[72px] pb-[calc(130px+env(safe-area-inset-bottom))] md:pb-0 lg:pt-[80px]">
           <SiteBreadcrumbs />
           {children}
         </main>
@@ -1436,7 +1441,7 @@ function HomeHero() {
         <div className="reveal-rise space-y-8 pb-8 lg:pb-0">
           <div className="copper-chip">
             <span className="inline-block size-2 rounded-full bg-primary" />
-            {siteMeta.coverage}
+            {siteMeta.coverage.replace(/\.$/, "")}
           </div>
           <div className="space-y-5">
             <h1 className="hero-title text-white">Чистка и ремонт колодцев в Московской области</h1>
@@ -1595,7 +1600,7 @@ function ServicesPreview() {
       eyebrow: "Дополнительная услуга",
       title: "Копка колодцев",
       description:
-        "Копаем новые колодцы из ЖБ колец, но оставляем это как отдельное направление, а не как главное лицо сайта.",
+        "Копаем новые колодцы из ЖБ колец как отдельное направление, когда по объекту нужен новый источник с понятным составом работ.",
       price: "от 8 500 ₽ за кольцо",
     },
     {
@@ -1604,7 +1609,7 @@ function ServicesPreview() {
       eyebrow: "Дополнительная услуга",
       title: "Септики из ЖБ колец",
       description:
-        "Собираем септики из ЖБ колец под ключ с доставкой и монтажом, но держим эту услугу во второстепенном блоке сайта.",
+        "Собираем септики из ЖБ колец под ключ с доставкой, монтажом и понятным составом работ по объекту.",
       price: "от 11 000 ₽ за кольцо Ø1 м",
     },
     {
@@ -1624,7 +1629,7 @@ function ServicesPreview() {
         <SectionHeading
           eyebrow="Ключевые услуги"
           title="Главные направления работ по колодцу"
-          description="После реестра цен и реальных фотографий показываем только те услуги, которые чаще всего ищут в горячем трафике: чистку, ремонт, герметизацию, скобирование и связанные работы по шахте."
+          description="Собрали основные услуги по колодцу в одном месте: чистку, ремонт, герметизацию, скобирование и другие работы, которые чаще всего нужны по реальному состоянию шахты."
         />
         <div className="grid gap-5 lg:grid-cols-2 xl:grid-cols-4">
           {featuredCards.map((service) => {
@@ -1727,7 +1732,7 @@ function ProcessSection() {
         <SectionHeading
           eyebrow="Этапы работ"
           title="Выезд, откачка, мойка 400 бар и дезинфекция"
-          description="Ниже показана техническая последовательность работ по горячим заявкам: сначала выезд и диагностика, затем откачка воды, мойка шахты и только после этого герметизация, дезинфекция и финальная проверка."
+          description="Ниже показана обычная последовательность работ на объекте: сначала выезд и диагностика, затем откачка воды, мойка шахты, а после этого — герметизация, дезинфекция и финальная проверка результата."
         />
         <div className="grid gap-5 lg:grid-cols-4">
           {processSteps.map((step) => (
@@ -1794,7 +1799,7 @@ function CasesSection() {
 
 function PricingSection() {
   return (
-    <section id="prices" className="scroll-mt-28 py-12 lg:py-16">
+    <section id="prices" className="scroll-mt-28 py-12 mb-[110px] md:mb-0 lg:py-16">
       <div className="container grid gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-start">
         <div className="reveal-rise space-y-5">
           <div className="section-kicker">Прайс по частым работам</div>
@@ -1927,7 +1932,7 @@ function TestimonialsSection() {
         <SectionHeading
           eyebrow="Отзывы и Avito"
           title="Отзывы по видам работ и переход к полному профилю"
-          description="Финальный блок страницы собран как нижняя точка доверия: отзывы распределены по типам задач, а под ними остаётся прямой переход в официальный профиль WELLS-MO на Авито."
+          description="Собрали отзывы по разным видам работ, чтобы можно было посмотреть реальные впечатления клиентов и при желании сразу перейти в официальный профиль WELLS-MO на Авито."
         />
         <div className="space-y-6">
           <div className="reveal-rise reveal-rise-delay-1 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
@@ -1993,7 +1998,7 @@ function TestimonialsSection() {
               <div className="flex min-h-16 w-full items-center justify-between gap-4 rounded-[1.35rem] border border-white/12 bg-white/8 px-4 py-4 text-left sm:px-5 xl:min-w-[18rem] xl:w-auto">
                 <div>
                   <div className="text-sm font-semibold text-white">Открыть профиль и отзывы</div>
-                  <div className="mt-1 text-xs uppercase tracking-[0.18em] text-[#6ee7d2]">Новая вкладка / мобильное приложение</div>
+                  <div className="mt-1 text-sm text-[#6ee7d2]">Отзывы и фото работ на Авито</div>
                 </div>
                 <ArrowRight className="size-5 shrink-0 text-[#6ee7d2] transition duration-300 group-hover:translate-x-1" />
               </div>
@@ -2040,7 +2045,7 @@ function LocationHubSection() {
         <SectionHeading
           eyebrow="Города и районы"
           title="Выезжаем по всей Московской области"
-          description="Работаем по Московской области. В приоритете — Одинцово, Красногорск, Истра, Дмитров, Нахабино, Дедовск, Звенигород, Новая Рига, Рублёвка, Барвиха и Павловская Слобода. Дополнительные направления показываем ниже отдельно."
+          description="Работаем по всей Московской области. Чаще всего выезжаем в Одинцово, Красногорск, Истру, Дмитров, Нахабино, Дедовск, Звенигород, по Новорижскому и Рублёво-Успенскому направлениям, а также в соседние районы."
         />
         <div className="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
           <div className="page-frame rounded-[2rem] p-6 lg:p-8">
@@ -2908,7 +2913,7 @@ export function ContactsPage() {
                 {siteMeta.email}
               </a>
               <p className="story-copy">
-                Базируемся в {siteMeta.baseLocation}. Сообщите район, задачу и текущее состояние
+                Работаем по {siteMeta.baseLocation}. Сообщите район, задачу и текущее состояние
                 колодца, чтобы быстрее понять формат работ и сориентировать вас по выезду.
               </p>
               <div className="rounded-[1.4rem] border border-primary/18 bg-primary/8 p-4 text-sm leading-7 text-white/78">
