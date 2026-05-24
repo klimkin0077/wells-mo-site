@@ -43,6 +43,8 @@ import {
   featuredSeoLocations,
   findPriorityServiceCityPage,
   globalFaq,
+  getCityNameIn,
+  getCityPreposition,
   navigation,
   pricing,
   priorityServiceCities,
@@ -72,6 +74,7 @@ const iconMap = {
 } as const;
 
 const AVITO_BRAND_PROFILE_URL = "https://www.avito.ru/brands/kolodceff";
+const getCityLabelWithPreposition = (city: LocalSeoLocation) => `${getCityPreposition(city)} ${getCityNameIn(city)}`;
 
 const canonicalPathByRoute: Record<string, string> = {
   "/price": "/price/",
@@ -572,7 +575,7 @@ function ScrollTopFloatingButton() {
       onClick={scrollPageToTop}
       aria-label="Вернуться наверх"
       className={cn(
-        "fixed right-4 bottom-[calc(104px+env(safe-area-inset-bottom))] z-[59] hidden size-12 items-center justify-center rounded-full border border-white/55 bg-primary text-[#111723] shadow-[0_20px_48px_rgba(199,154,63,0.52)] ring-2 ring-white/30 backdrop-blur-md transition-all duration-300 md:inline-flex lg:right-8 lg:bottom-[110px]",
+        "fixed right-4 bottom-[calc(104px+env(safe-area-inset-bottom))] z-[59] hidden size-12 items-center justify-center rounded-full border border-white/55 bg-primary text-[#111723] shadow-[0_20px_48px_rgba(199,154,63,0.52)] ring-2 ring-white/30 backdrop-blur-md transition-all duration-300 lg:inline-flex lg:right-8 lg:bottom-[110px]",
         isVisible ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none translate-y-4 opacity-0",
       )}
     >
@@ -1349,7 +1352,7 @@ function SiteBreadcrumbs() {
 
 function Footer() {
   return (
-    <footer className="border-t border-white/8 pt-8 pb-[calc(160px+env(safe-area-inset-bottom))] md:py-10">
+    <footer className="border-t border-white/8 pt-10 pb-[calc(104px+env(safe-area-inset-bottom))] md:py-10">
       <div className="container grid gap-6 md:gap-8 lg:grid-cols-[1.1fr_0.9fr_0.9fr]">
         <div className="hidden space-y-3 md:block md:space-y-4">
           <div className="font-heading text-2xl font-bold text-white">{siteMeta.name}</div>
@@ -1398,13 +1401,13 @@ function Footer() {
 function SiteLayout({ children }: { children: ReactNode }) {
   return (
     <TaskDiscussionDialogProvider>
-      <div data-scroll-container="page" className="site-shell min-h-screen pb-[calc(140px+env(safe-area-inset-bottom))] lg:pb-0">
+      <div data-scroll-container="page" className="site-shell min-h-screen">
         <ScrollToTop />
         <MetrikaRouteTracker />
         <div className="mesh-glow left-[-8rem] top-24 h-72 w-72 bg-primary/18" />
         <div className="mesh-glow right-[-4rem] top-[30rem] h-64 w-64 bg-sky-400/8" />
         <Header />
-        <main className="pt-[72px] pb-[calc(130px+env(safe-area-inset-bottom))] md:pb-0 lg:pt-[80px]">
+        <main className="pt-[72px] lg:pt-[80px]">
           <SiteBreadcrumbs />
           {children}
         </main>
@@ -1498,7 +1501,7 @@ function HomeHero() {
         </div>
 
         <div className="what-client-visual reveal-rise reveal-rise-delay-1 hidden page-frame overflow-hidden rounded-[2rem] p-3 md:block">
-          <div className="image-mask min-h-[380px] sm:min-h-[460px] lg:min-h-[620px]">
+          <div className="image-mask min-h-[340px] sm:min-h-[430px] lg:min-h-[560px] xl:min-h-[620px]">
             <img
               src={assets.hero}
               alt="Чистка и ремонт колодца в Московской области — объект WELLS-MO"
@@ -1600,7 +1603,7 @@ function ServicesPreview() {
       eyebrow: "Дополнительная услуга",
       title: "Копка колодцев",
       description:
-        "Копаем новые колодцы из ЖБ колец как отдельное направление, когда по объекту нужен новый источник с понятным составом работ.",
+        "Копка новых колодцев — отдельная услуга для участков, где нужен новый источник воды из ЖБ колец.",
       price: "от 8 500 ₽ за кольцо",
     },
     {
@@ -1609,7 +1612,7 @@ function ServicesPreview() {
       eyebrow: "Дополнительная услуга",
       title: "Септики из ЖБ колец",
       description:
-        "Собираем септики из ЖБ колец под ключ с доставкой, монтажом и понятным составом работ по объекту.",
+        "Собираем септики из ЖБ колец под ключ: доставка, монтаж, переливы и подготовка конструкции под эксплуатацию.",
       price: "от 11 000 ₽ за кольцо Ø1 м",
     },
     {
@@ -1618,7 +1621,7 @@ function ServicesPreview() {
       eyebrow: "Дополнительная услуга",
       title: "Водоснабжение из колодца в дом",
       description:
-        "Подводим воду из колодца в дом как отдельную дополнительную услугу, не смешивая её с главным ремонтом и чисткой шахты.",
+        "Подводим воду из колодца в дом: траншея, труба, подключение, насосное оборудование и запуск системы по согласованной схеме.",
       price: "от 2 500 ₽ / пог. м",
     },
   ] as const;
@@ -1629,7 +1632,7 @@ function ServicesPreview() {
         <SectionHeading
           eyebrow="Ключевые услуги"
           title="Главные направления работ по колодцу"
-          description="Собрали основные услуги по колодцу в одном месте: чистку, ремонт, герметизацию, скобирование и другие работы, которые чаще всего нужны по реальному состоянию шахты."
+          description="Ниже собраны основные работы по колодцу: чистка, ремонт, герметизация швов, скобирование, углубление и восстановление нижней части шахты. Эти услуги чаще всего нужны, когда вода мутнеет, через швы идёт верховодка, кольца смещаются или колодец теряет нормальную работу."
         />
         <div className="grid gap-5 lg:grid-cols-2 xl:grid-cols-4">
           {featuredCards.map((service) => {
@@ -1652,7 +1655,7 @@ function ServicesPreview() {
                 <h3 className="service-card-title text-white">{service.title}</h3>
                 <p className="mt-4 text-sm leading-7 text-white/72">{service.description}</p>
                 <div className="mt-6 flex items-center justify-between text-sm">
-                  <span className="text-primary/88">Технология и этапы</span>
+                  <span className="text-primary/88">Что входит в работу</span>
                   <span className="inline-flex items-center gap-2 text-white/68">
                     Подробнее <ArrowRight className="size-4" />
                   </span>
@@ -1732,7 +1735,7 @@ function ProcessSection() {
         <SectionHeading
           eyebrow="Этапы работ"
           title="Выезд, откачка, мойка 400 бар и дезинфекция"
-          description="Ниже показана обычная последовательность работ на объекте: сначала выезд и диагностика, затем откачка воды, мойка шахты, а после этого — герметизация, дезинфекция и финальная проверка результата."
+          description="Показываем обычный порядок работ: сначала осматриваем колодец и откачиваем воду, потом моем шахту, чистим дно, проверяем швы и объясняем, какие работы действительно нужны."
         />
         <div className="grid gap-5 lg:grid-cols-4">
           {processSteps.map((step) => (
@@ -1799,7 +1802,7 @@ function CasesSection() {
 
 function PricingSection() {
   return (
-    <section id="prices" className="scroll-mt-28 py-12 mb-[110px] md:mb-0 lg:py-16">
+    <section id="prices" className="scroll-mt-28 py-12 mb-16 md:mb-0 lg:py-16">
       <div className="container grid gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-start">
         <div className="reveal-rise space-y-5">
           <div className="section-kicker">Прайс по частым работам</div>
@@ -1931,8 +1934,8 @@ function TestimonialsSection() {
       <div className="container space-y-10">
         <SectionHeading
           eyebrow="Отзывы и Avito"
-          title="Отзывы по видам работ и переход к полному профилю"
-          description="Собрали отзывы по разным видам работ, чтобы можно было посмотреть реальные впечатления клиентов и при желании сразу перейти в официальный профиль WELLS-MO на Авито."
+          title="Отзывы клиентов и профиль на Авито"
+          description="Отзывы помогают понять, как мы работаем на реальных объектах: что было с колодцем до выезда, какие работы выполнили и какой результат получил клиент."
         />
         <div className="space-y-6">
           <div className="reveal-rise reveal-rise-delay-1 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
@@ -1977,7 +1980,7 @@ function TestimonialsSection() {
             href={AVITO_BRAND_PROFILE_URL}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Открыть официальный профиль WELLS-MO на Авито в новой вкладке"
+            aria-label="Открыть официальный профиль WELLS-MO на Авито"
             onClick={() => trackCtaClick("avito_reviews_banner", "home_testimonials")}
             className="group reveal-rise reveal-rise-delay-2 relative block overflow-hidden rounded-[2rem] border border-[#6ee7d2]/26 bg-[linear-gradient(135deg,rgba(18,124,107,0.38),rgba(15,22,30,0.98)_42%,rgba(0,170,239,0.16)_100%)] p-5 shadow-[0_28px_80px_rgba(2,8,12,0.4)] transition duration-300 hover:-translate-y-1 hover:border-[#6ee7d2]/42 sm:p-6 lg:p-7"
           >
@@ -1989,10 +1992,10 @@ function TestimonialsSection() {
                   Официальный профиль на Авито
                 </div>
                 <div className="max-w-3xl text-lg font-semibold leading-8 text-white sm:text-[1.35rem] sm:leading-9">
-                  Посмотреть честные отзывы на Авито.
+                  Отзывы и фото работ на Авито
                 </div>
                 <p className="max-w-3xl text-sm leading-7 text-white/76 sm:text-[0.98rem]">
-                  Там собраны реальные оценки по чистке, ремонту, герметизации швов и комплексному восстановлению колодцев без рекламной полировки.
+                  Открывайте профиль, смотрите реальные отзывы клиентов и фотографии объектов по чистке, ремонту, герметизации швов и восстановлению колодцев.
                 </p>
               </div>
               <div className="flex min-h-16 w-full items-center justify-between gap-4 rounded-[1.35rem] border border-white/12 bg-white/8 px-4 py-4 text-left sm:px-5 xl:min-w-[18rem] xl:w-auto">
@@ -2044,8 +2047,8 @@ function LocationHubSection() {
       <div className="container space-y-10">
         <SectionHeading
           eyebrow="Города и районы"
-          title="Выезжаем по всей Московской области"
-          description="Работаем по всей Московской области. Чаще всего выезжаем в Одинцово, Красногорск, Истру, Дмитров, Нахабино, Дедовск, Звенигород, по Новорижскому и Рублёво-Успенскому направлениям, а также в соседние районы."
+          title="Работаем по Московской области и приоритетным направлениям"
+          description="Работаем по Московской области. Приоритетные выезды — Одинцово, Красногорск, Истра, Дмитров, Нахабино, Дедовск, Звенигород, Новорижское направление, Рублёвка и соседние районы."
         />
         <div className="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
           <div className="page-frame rounded-[2rem] p-6 lg:p-8">
@@ -2099,7 +2102,7 @@ function LocationHubSection() {
 
 function CtaSection() {
   return (
-    <section className="pb-18 pt-10 lg:pb-24">
+    <section className="pb-12 pt-10 lg:pb-24">
       <div className="container">
         <div className="page-frame overflow-hidden rounded-[2rem] p-8 lg:p-12">
           <div className="relative grid gap-8 lg:grid-cols-[1fr_0.8fr] lg:items-end">
@@ -3050,7 +3053,7 @@ export function ContactsPage() {
                 <a href={`mailto:${siteMeta.email}`} className="text-white transition hover:text-primary">
                   написать на {siteMeta.email}
                 </a>
-                . Работаем по всей Московской области.
+                . Работаем по Московской области.
               </p>
             </form>
           </div>
@@ -3216,7 +3219,7 @@ function LocalSeoPageContent({ location }: { location: LocalSeoLocation | undefi
             <div className="page-frame rounded-[2rem] p-6 lg:p-8">
               <div className="section-kicker">Работа по направлению</div>
               <h2 className="mt-4 text-3xl font-bold text-white md:text-4xl">
-                Работаем по объектам в {location.name} и рядом
+                Работаем по объектам {getCityLabelWithPreposition(location)} и рядом
               </h2>
               <p className="story-copy mt-5">
                 Ниже собраны основные услуги по вашему направлению, чтобы можно было сразу понять формат работ и быстро обсудить объект по телефону или через заявку.
@@ -3306,7 +3309,7 @@ function LocalSeoPageContent({ location }: { location: LocalSeoLocation | undefi
           </div>
           <div className="grid gap-5 lg:grid-cols-3">
             {[
-              `Услуги по ${location.name} без лишней теории`,
+              "Услуги по этому направлению без лишней теории",
               `Быстрый контакт и понятный состав работ`,
               `Соседние города и районы Московской области`,
             ].map((item) => (
@@ -3384,7 +3387,7 @@ function LocalServiceCityPageContent({
           <div className="space-y-8">
             <div className="page-frame rounded-[2rem] p-6 lg:p-8">
               <div className="section-kicker">По конкретной услуге</div>
-              <h2 className="mt-4 text-3xl font-bold text-white md:text-4xl">{service.title} в {city.name} с акцентом на реальную задачу клиента</h2>
+              <h2 className="mt-4 text-3xl font-bold text-white md:text-4xl">{service.title} {getCityLabelWithPreposition(city)} с акцентом на реальную задачу клиента</h2>
               <p className="story-copy mt-5">{page.description}</p>
               <p className="story-copy mt-5">{page.focus}</p>
             </div>
@@ -3405,7 +3408,7 @@ function LocalServiceCityPageContent({
               <div className="section-kicker">Работа по городу</div>
               <div className="mt-4 text-2xl font-semibold text-white">{city.officialName}</div>
               <p className="story-copy mt-5">
-                Здесь можно сразу увидеть услугу именно по {city.name}: без общих формулировок,
+                Здесь можно сразу увидеть услугу именно для объектов {getCityLabelWithPreposition(city)}: без общих формулировок,
                 с понятным описанием работ и быстрым переходом к заявке по вашему объекту.
               </p>
             </div>
@@ -3432,7 +3435,7 @@ function LocalServiceCityPageContent({
         <div className="container grid gap-8 lg:grid-cols-[0.92fr_1.08fr]">
           <div>
             <div className="section-kicker">Другие услуги по городу</div>
-            <h2 className="section-title mt-4 text-white">Другие услуги в {city.name}</h2>
+            <h2 className="section-title mt-4 text-white">Другие услуги {getCityLabelWithPreposition(city)}</h2>
             <p className="story-copy mt-5">
               Если по объекту нужна не одна работа, здесь можно сразу посмотреть дополняющие услуги и обсудить полный объём работ без повторных объяснений.
             </p>
@@ -3533,7 +3536,7 @@ export function SeoAreasPage() {
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
             {featuredPriorityServiceCityPages.map((page) => (
               <Link key={page.path} href={page.path} className="glass-panel card-hover rounded-[1.7rem] p-5">
-                <div className="section-kicker">Приоритетная посадочная</div>
+                <div className="section-kicker">Популярное направление</div>
                 <div className="mt-3 text-xl font-semibold text-white">{page.title}</div>
                 <p className="mt-3 text-sm leading-7 text-white/62">{page.focus}</p>
               </Link>

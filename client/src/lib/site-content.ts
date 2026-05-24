@@ -522,7 +522,7 @@ export const services: ServiceItem[] = [
       "Скобируем кольца, когда шахту нужно механически зафиксировать и остановить дальнейшее смещение стыков.",
     description:
       "Если кольца смещены или швы уже начали расходиться, нормальный ремонт часто невозможен без механической фиксации. Скобирование связывает конструкцию и делает дальнейшую гидроизоляцию осмысленной, а не временной.",
-    price: "от 1 500 ₽ за шов",
+    price: "от 1 500 ₽ / шов",
     image: assets.userShiftedRingRepair,
     highlights: [
       "Механическая фиксация колец при смещении",
@@ -568,7 +568,7 @@ export const services: ServiceItem[] = [
       {
         question: "Сколько стоит скобирование?",
         answer:
-          "Ориентир начинается от 1 500 ₽ за шов, но итог зависит от количества точек фиксации, глубины и доступа внутри шахты.",
+          "Базовый ориентир — от 1 500 ₽ / шов. Обычно ставим 3 скобы на один шов, а итог зависит от глубины и доступа внутри шахты.",
       },
     ],
   },
@@ -649,8 +649,8 @@ export const whyChooseUs = [
     text: "Берём в работу чистку, ремонт, гидроизоляцию, скобирование и углубление колодцев. Дополнительные задачи — копка, септики и водоснабжение из колодца в дом — подключаем только когда они действительно нужны по объекту.",
   },
   {
-    title: "Выезд по всей Московской области",
-    text: "Работаем по всей Московской области, особенно часто выезжаем в Одинцово, Истру, Красногорск, Дмитров и по Новорижскому направлению.",
+    title: "Выезд по Московской области",
+    text: "Работаем по Московской области, особенно часто выезжаем в Одинцово, Истру, Красногорск, Дмитров и по Новорижскому направлению.",
   },
 ] as const;
 
@@ -667,8 +667,8 @@ export const pricing = [
   },
   {
     service: "Скобирование колец",
-    price: "от 1 500 ₽ за точку крепления",
-    note: "Фиксация смещённых колец и усиление стыков по точкам крепления.",
+    price: "от 1 500 ₽ / шов",
+    note: "Обычно ставим 3 скобы на один шов. Итоговая стоимость зависит от глубины шахты и доступа к рабочей зоне.",
   },
   {
     service: "Фильтр из лиственницы",
@@ -927,7 +927,7 @@ export const globalFaq = [
   {
     question: "Где вы работаете и как быстро можно договориться о выезде?",
     answer:
-          "Работаем по всей Московской области. Чаще всего выезжаем в Одинцово, Красногорск, Истру, Дмитров и по Новорижскому направлению. Выезд согласовываем под конкретную задачу и состояние объекта.",
+          "Работаем по Московской области. Чаще всего выезжаем в Одинцово, Красногорск, Истру, Дмитров и по Новорижскому направлению. Выезд согласовываем под конкретную задачу и состояние объекта.",
 
   },
   {
@@ -1061,7 +1061,7 @@ export const citySeoLocations: LocalSeoLocation[] = [
   ["Подольск", "Городской округ Подольск"],
   ["Пушкино", "Городской округ Пушкинский"],
   ["Реутов", "Городской округ Реутов"],
-  ["Рублёвка", "Рублёво-Успенское направление"],
+  ["Рублёвка", "Рублёвка"],
   ["Сергиев Посад", "Сергиево-Посадский городской округ"],
   ["Серпухов", "Городской округ Серпухов"],
   ["Солнечногорск", "Городской округ Солнечногорск"],
@@ -1151,12 +1151,14 @@ const cityNameInMap: Record<string, string> = {
   dedovsk: "Дедовске",
   zvenigorod: "Звенигороде",
   "novaya-riga": "на Новорижском направлении",
-  rublevka: "на Рублёво-Успенском направлении",
+  rublevka: "на Рублёвке",
   barviha: "Барвихе",
   "pavlovskaya-sloboda": "Павловской Слободе",
 };
 
-const getCityNameIn = (city: LocalSeoLocation) => cityNameInMap[city.slug] ?? city.name;
+export const getCityNameIn = (city: LocalSeoLocation) => cityNameInMap[city.slug] ?? city.name;
+export const getCityPreposition = (city: LocalSeoLocation) =>
+  city.slug === "novaya-riga" || city.slug === "rublevka" ? "на" : "в";
 
 const serviceCityLeadMap: Record<string, string> = {
   "chistka-kolodcev": "Чистка колодцев с акцентом на состояние воды, обслуживание шахты и аккуратный выезд по объекту.",
@@ -1187,16 +1189,17 @@ const buildPriorityServiceCityPage = (
   city: LocalSeoLocation,
 ): PriorityServiceCityPage => {
   const cityNameIn = getCityNameIn(city);
+  const cityPreposition = getCityPreposition(city);
 
   return {
     serviceSlug: service.slug,
     citySlug: city.slug,
     path: `/goroda/${city.slug}/${service.slug}`,
-    title: `${service.title} в ${cityNameIn}`,
-    description: `${service.title} в ${cityNameIn}, Московская область. ${service.intro}`,
+    title: `${service.title} ${cityPreposition} ${cityNameIn}`,
+    description: `${service.title} ${cityPreposition} ${cityNameIn}, Московская область. ${service.intro}`,
     lead: serviceCityLeadMap[service.slug] ?? service.intro,
-    seoTitle: `${service.title} в ${cityNameIn} | ${siteMeta.name}`,
-    seoDescription: `${service.title} в ${cityNameIn}, Московская область. ${service.description}`,
+    seoTitle: `${service.title} ${cityPreposition} ${cityNameIn} | ${siteMeta.name}`,
+    seoDescription: `${service.title} ${cityPreposition} ${cityNameIn}, Московская область. ${service.description}`,
     badge: `${city.name} · ${service.price}`,
     focus: serviceCityFocusMap[service.slug] ?? city.focus,
   };
