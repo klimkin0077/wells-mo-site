@@ -160,6 +160,7 @@ const staticRouteLabels: Record<string, string> = {
   "/faq": "FAQ",
   "/goroda": "Города",
   "/rajony-rabot": "Районы работ",
+  "/areas": "Районы работ",
   "/rajony": "Районы",
 };
 
@@ -944,34 +945,34 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
       </button>
       <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent
-          className="max-h-[calc(100vh-2rem)] max-w-[min(72rem,calc(100%-2rem))] overflow-y-auto border border-white/10 bg-[#0d1219] p-0 text-white shadow-[0_32px_120px_rgba(0,0,0,0.58)]"
+          className="max-h-[min(100vh-1rem,60rem)] w-[calc(100vw-1rem)] max-w-none overflow-y-auto border border-white/10 bg-[#0d1219] p-0 text-white shadow-[0_32px_120px_rgba(0,0,0,0.58)] sm:w-[calc(100vw-2rem)] sm:max-w-none lg:w-[min(74rem,calc(100vw-3rem))] xl:w-[min(82rem,calc(100vw-4rem))]"
           showCloseButton
         >
-          <div className="grid lg:grid-cols-[0.82fr_1.18fr]">
-            <div className="border-b border-white/8 bg-[radial-gradient(circle_at_top,_rgba(193,145,71,0.18),_transparent_55%),linear-gradient(180deg,#111723_0%,#0b0f15_100%)] p-6 lg:border-b-0 lg:border-r lg:p-8">
+          <div className="grid lg:grid-cols-[0.6fr_1.4fr]">
+            <div className="border-b border-white/8 bg-[radial-gradient(circle_at_top,_rgba(193,145,71,0.18),_transparent_55%),linear-gradient(180deg,#111723_0%,#0b0f15_100%)] p-5 sm:p-6 lg:border-b-0 lg:border-r lg:p-6 xl:p-7">
               <div className="section-kicker">Задать задачу</div>
               <DialogHeader className="mt-4 text-left">
-                <DialogTitle className="font-heading text-3xl font-bold tracking-[-0.04em] text-white sm:text-4xl">
+                <DialogTitle className="font-heading text-[2.15rem] font-bold tracking-[-0.04em] text-white sm:text-[2.8rem] xl:text-[3rem]">
                   Заявка без лишних созвонов
                 </DialogTitle>
                 <DialogDescription className="max-w-md text-sm leading-7 text-white/62">
                   Заполните объект по делу. Мы соберём текст заявки, чтобы вы могли сразу отправить его в Telegram, MAX или на почту.
                 </DialogDescription>
               </DialogHeader>
-              <div className="mt-8 grid gap-3">
+              <div className="mt-5 grid gap-2">
                 {[
                   "Если швы текут, одной чистки мало — это сразу видно по форме заявки.",
                   "Если кольца смещены, мы увидим, что нужен не косметический ремонт, а фиксация конструкции.",
                   "Лучше сразу дать адрес, глубину и фото или видео — так проще назвать реальный порядок работ.",
                 ].map((item) => (
-                  <div key={item} className="rounded-[1.3rem] border border-white/10 bg-white/5 px-4 py-4 text-sm leading-7 text-white/72">
+                  <div key={item} className="rounded-[1.3rem] border border-white/10 bg-white/5 px-4 py-3.5 text-sm leading-6 text-white/70">
                     {item}
                   </div>
                 ))}
               </div>
             </div>
-            <div className="p-6 lg:p-8">
-              <form className="grid gap-4" onSubmit={handleSubmit}>
+            <div className="p-5 sm:p-6 lg:p-6 xl:p-7">
+              <form className="grid gap-3.5 lg:gap-4" onSubmit={handleSubmit}>
                 <input type="text" name="botcheck" tabIndex={-1} autoComplete="off" className="hidden" value={formData.botcheck} onChange={handleFieldChange("botcheck")} />
                 <div className="grid gap-4 sm:grid-cols-2">
                   <input name="name" autoComplete="name" value={formData.name} onChange={handleFieldChange("name")} className="h-14 rounded-2xl border border-white/10 bg-white/4 px-4 text-base text-white placeholder:text-white/34" placeholder="Имя" />
@@ -983,53 +984,53 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
                 </div>
                 <div className="space-y-3">
                   <div className="text-sm font-semibold uppercase tracking-[0.18em] text-primary/85">Тип услуги</div>
-                  <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                  <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-3">
                     {discussionServiceOptions.map((option) => (
-                      <button key={option} type="button" onClick={() => handleChoiceChange("service", option)} className={cn("rounded-[1.3rem] border px-4 py-4 text-left text-sm font-medium transition", formData.service === option ? "border-primary/45 bg-primary/14 text-primary shadow-[0_14px_32px_rgba(193,145,71,0.18)]" : "border-white/10 bg-white/4 text-white/78 hover:border-primary/30 hover:bg-white/7")}>{option}</button>
+                      <button key={option} type="button" onClick={() => handleChoiceChange("service", option)} className={cn("rounded-[1.3rem] border px-3.5 py-3 text-left text-[0.92rem] leading-6 font-medium transition", formData.service === option ? "border-primary/45 bg-primary/14 text-primary shadow-[0_14px_32px_rgba(193,145,71,0.18)]" : "border-white/10 bg-white/4 text-white/78 hover:border-primary/30 hover:bg-white/7")}>{option}</button>
                     ))}
                   </div>
                 </div>
-                <div className="grid gap-4 lg:grid-cols-[1.05fr_0.95fr]">
+                <div className="grid gap-3.5 lg:grid-cols-[1.05fr_0.95fr]">
                   <div className="space-y-3">
                     <div className="text-sm font-semibold uppercase tracking-[0.18em] text-primary/85">Количество колец / глубина</div>
-                    <div className="grid gap-3 sm:grid-cols-2">
+                    <div className="grid gap-2.5 sm:grid-cols-2">
                       {discussionDepthOptions.map((option) => (
-                        <button key={option} type="button" onClick={() => handleChoiceChange("depth", option)} className={cn("rounded-[1.3rem] border px-4 py-4 text-left text-sm font-medium transition", formData.depth === option ? "border-primary/45 bg-primary/14 text-primary shadow-[0_14px_32px_rgba(193,145,71,0.18)]" : "border-white/10 bg-white/4 text-white/78 hover:border-primary/30 hover:bg-white/7")}>{option}</button>
+                        <button key={option} type="button" onClick={() => handleChoiceChange("depth", option)} className={cn("rounded-[1.3rem] border px-3.5 py-3 text-left text-[0.92rem] leading-6 font-medium transition", formData.depth === option ? "border-primary/45 bg-primary/14 text-primary shadow-[0_14px_32px_rgba(193,145,71,0.18)]" : "border-white/10 bg-white/4 text-white/78 hover:border-primary/30 hover:bg-white/7")}>{option}</button>
                       ))}
                     </div>
                   </div>
                   <div className="space-y-3">
                     <div className="text-sm font-semibold uppercase tracking-[0.18em] text-primary/85">Есть ли подъезд</div>
-                    <div className="grid gap-3">
+                    <div className="grid gap-2.5">
                       {discussionAccessOptions.map((option) => (
-                        <button key={option} type="button" onClick={() => handleChoiceChange("access", option)} className={cn("rounded-[1.3rem] border px-4 py-4 text-left text-sm font-medium transition", formData.access === option ? "border-primary/45 bg-primary/14 text-primary shadow-[0_14px_32px_rgba(193,145,71,0.18)]" : "border-white/10 bg-white/4 text-white/78 hover:border-primary/30 hover:bg-white/7")}>{option}</button>
+                        <button key={option} type="button" onClick={() => handleChoiceChange("access", option)} className={cn("rounded-[1.3rem] border px-3.5 py-3 text-left text-[0.92rem] leading-6 font-medium transition", formData.access === option ? "border-primary/45 bg-primary/14 text-primary shadow-[0_14px_32px_rgba(193,145,71,0.18)]" : "border-white/10 bg-white/4 text-white/78 hover:border-primary/30 hover:bg-white/7")}>{option}</button>
                       ))}
                     </div>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <div className="text-sm font-semibold uppercase tracking-[0.18em] text-primary/85">Что происходит</div>
-                  <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                  <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-3">
                     {discussionIssueOptions.map((option) => (
-                      <button key={option} type="button" onClick={() => handleChoiceChange("issue", option)} className={cn("rounded-[1.3rem] border px-4 py-4 text-left text-sm font-medium transition", formData.issue === option ? "border-primary/45 bg-primary/14 text-primary shadow-[0_14px_32px_rgba(193,145,71,0.18)]" : "border-white/10 bg-white/4 text-white/78 hover:border-primary/30 hover:bg-white/7")}>{option}</button>
+                      <button key={option} type="button" onClick={() => handleChoiceChange("issue", option)} className={cn("rounded-[1.3rem] border px-3.5 py-3 text-left text-[0.92rem] leading-6 font-medium transition", formData.issue === option ? "border-primary/45 bg-primary/14 text-primary shadow-[0_14px_32px_rgba(193,145,71,0.18)]" : "border-white/10 bg-white/4 text-white/78 hover:border-primary/30 hover:bg-white/7")}>{option}</button>
                     ))}
                   </div>
                 </div>
                 <div className="space-y-3">
                   <div className="text-sm font-semibold uppercase tracking-[0.18em] text-primary/85">Как удобнее связаться</div>
-                  <div className="grid gap-3 sm:grid-cols-3">
+                  <div className="grid gap-2.5 sm:grid-cols-3">
                     {discussionContactMethodOptions.map((option) => (
-                      <button key={option} type="button" onClick={() => handleChoiceChange("contactMethod", option)} className={cn("rounded-[1.3rem] border px-4 py-4 text-left text-sm font-medium transition", formData.contactMethod === option ? "border-primary/45 bg-primary/14 text-primary shadow-[0_14px_32px_rgba(193,145,71,0.18)]" : "border-white/10 bg-white/4 text-white/78 hover:border-primary/30 hover:bg-white/7")}>{option}</button>
+                      <button key={option} type="button" onClick={() => handleChoiceChange("contactMethod", option)} className={cn("rounded-[1.3rem] border px-3.5 py-3 text-left text-[0.92rem] leading-6 font-medium transition", formData.contactMethod === option ? "border-primary/45 bg-primary/14 text-primary shadow-[0_14px_32px_rgba(193,145,71,0.18)]" : "border-white/10 bg-white/4 text-white/78 hover:border-primary/30 hover:bg-white/7")}>{option}</button>
                     ))}
                   </div>
                 </div>
-                <textarea name="details" value={formData.details} onChange={handleFieldChange("details")} className="min-h-32 rounded-2xl border border-white/10 bg-white/4 px-4 py-4 text-base text-white placeholder:text-white/34" placeholder="Комментарий: что уже делали, когда появилась проблема, есть ли фото/видео, какая точка на карте..." />
+                <textarea name="details" value={formData.details} onChange={handleFieldChange("details")} className="min-h-[7rem] rounded-2xl border border-white/10 bg-white/4 px-4 py-3.5 text-base text-white placeholder:text-white/34" placeholder="Комментарий: что уже делали, когда появилась проблема, есть ли фото/видео, какая точка на карте..." />
                 {submitState !== "idle" ? <div className={cn("rounded-[1.4rem] border px-4 py-3 text-sm leading-7", submitState === "success" && "border-emerald-400/30 bg-emerald-500/10 text-emerald-50", submitState === "error" && "border-rose-400/30 bg-rose-500/10 text-rose-50")}>{submitMessage}</div> : null}
-                <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-                  <button type="submit" className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:translate-y-[-1px]">Скопировать заявку</button>
-                  <button type="button" onClick={handleOpenMail} className="inline-flex items-center justify-center gap-2 rounded-full border border-white/12 bg-white/4 px-6 py-3 text-sm font-semibold text-white/90 transition hover:border-primary/40 hover:bg-white/8">На почту</button>
-                  <button type="button" onClick={handleOpenTelegram} className="inline-flex items-center justify-center gap-2 rounded-full border border-white/12 bg-white/4 px-6 py-3 text-sm font-semibold text-white/90 transition hover:border-primary/40 hover:bg-white/8">Telegram</button>
-                  <button type="button" onClick={handleOpenMax} className="inline-flex items-center justify-center gap-2 rounded-full border border-white/12 bg-white/4 px-6 py-3 text-sm font-semibold text-white/90 transition hover:border-primary/40 hover:bg-white/8">MAX</button>
+                <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
+                  <button type="submit" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition hover:translate-y-[-1px]">Скопировать заявку</button>
+                  <button type="button" onClick={handleOpenMail} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/12 bg-white/4 px-5 py-3 text-sm font-semibold text-white/90 transition hover:border-primary/40 hover:bg-white/8">На почту</button>
+                  <button type="button" onClick={handleOpenTelegram} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/12 bg-white/4 px-5 py-3 text-sm font-semibold text-white/90 transition hover:border-primary/40 hover:bg-white/8">Telegram</button>
+                  <button type="button" onClick={handleOpenMax} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/12 bg-white/4 px-5 py-3 text-sm font-semibold text-white/90 transition hover:border-primary/40 hover:bg-white/8">MAX</button>
                 </div>
               </form>
             </div>
@@ -1245,7 +1246,7 @@ function Header() {
                   href="/rajony-rabot"
                   className={cn(
                     "block rounded-2xl px-4 py-3 text-base font-medium text-white/78 transition hover:bg-white/6 hover:text-white",
-                    location === "/rajony-rabot" && "bg-white/6 text-white",
+                    (location === "/rajony-rabot" || location === "/areas" || location === "/areas/") && "bg-white/6 text-white",
                   )}
                 >
                   Районы
@@ -1352,7 +1353,7 @@ function SiteBreadcrumbs() {
 
 function Footer() {
   return (
-    <footer className="border-t border-white/8 pt-10 pb-[calc(104px+env(safe-area-inset-bottom))] md:py-10">
+    <footer className="border-t border-white/8 pt-10 pb-[calc(118px+env(safe-area-inset-bottom))] md:py-10">
       <div className="container grid gap-6 md:gap-8 lg:grid-cols-[1.1fr_0.9fr_0.9fr]">
         <div className="hidden space-y-3 md:block md:space-y-4">
           <div className="font-heading text-2xl font-bold text-white">{siteMeta.name}</div>
@@ -1439,16 +1440,21 @@ function SectionHeading({
 
 function HomeHero() {
   return (
-    <section className="relative overflow-hidden pb-10 pt-10 lg:pb-16 lg:pt-14">
-      <div className="container hero-grid">
-        <div className="reveal-rise space-y-8 pb-8 lg:pb-0">
+    <section className="relative overflow-hidden pb-8 pt-8 lg:pb-14 lg:pt-12">
+      <div className="container hero-grid lg:items-center">
+        <div className="reveal-rise space-y-6 pb-4 lg:space-y-7 lg:pb-0">
           <div className="copper-chip">
             <span className="inline-block size-2 rounded-full bg-primary" />
             {siteMeta.coverage.replace(/\.$/, "")}
           </div>
-          <div className="space-y-5">
-            <h1 className="hero-title text-white">Чистка и ремонт колодцев в Московской области</h1>
-            <p className="max-w-2xl text-base leading-8 text-white/78 sm:text-lg lg:text-xl">
+          <div className="relative isolate space-y-4 overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(19,25,34,0.88),rgba(11,15,24,0.38))] px-5 py-5 shadow-[0_24px_64px_rgba(0,0,0,0.24)] md:overflow-visible md:rounded-none md:border-0 md:bg-transparent md:px-0 md:py-0 md:shadow-none">
+            <div className="absolute inset-x-8 -top-12 h-24 rounded-full bg-primary/18 blur-3xl motion-safe:animate-pulse motion-reduce:animate-none md:hidden" />
+            <div className="absolute -right-10 top-1/2 size-28 -translate-y-1/2 rounded-full border border-white/10 bg-white/6 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-xl md:hidden" />
+            <div className="absolute left-5 top-5 size-10 rounded-2xl border border-primary/28 bg-primary/10 shadow-[0_12px_28px_rgba(193,145,71,0.18)] md:hidden" />
+            <h1 className="text-[clamp(2.7rem,9vw,5.8rem)] leading-[0.94] font-bold tracking-[-0.065em] text-white max-md:text-center">
+              Чистка и ремонт колодцев
+            </h1>
+            <p className="max-w-2xl text-sm leading-7 text-white/78 max-md:text-center sm:text-base lg:text-[1.05rem] lg:leading-8">
               Откачка воды, мойка шахты до 400 бар, чистка дна, герметизация швов, скобирование колец, дезинфекция и восстановление колодцев без лишних услуг и размытых обещаний.
             </p>
           </div>
@@ -1456,7 +1462,7 @@ function HomeHero() {
             <RequestDialogButton
               trackingId="hero_request"
               trackingPlacement="home_hero"
-              className="min-h-13 bg-primary px-6 py-3 text-sm font-semibold text-[#11141d] hover:bg-primary/90 hover:shadow-none"
+              className="min-h-12 bg-primary px-5 py-3 text-sm font-semibold text-[#11141d] hover:bg-primary/90 hover:shadow-none lg:min-h-[3.25rem] lg:px-6"
             >
               Оставить заявку
               <ArrowRight className="size-4" />
@@ -1466,7 +1472,7 @@ function HomeHero() {
               data-cta="hero_prices"
               data-cta-placement="home_hero"
               onClick={() => trackCtaClick("hero_prices", "home_hero")}
-              className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full border border-primary/24 bg-primary/12 px-6 py-3 text-sm font-semibold text-primary transition hover:translate-y-[-1px] hover:border-primary/40 hover:bg-primary/16"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-primary/24 bg-primary/12 px-5 py-3 text-sm font-semibold text-primary transition hover:translate-y-[-1px] hover:border-primary/40 hover:bg-primary/16 lg:min-h-[3.25rem] lg:px-6"
             >
               Посмотреть цены
               <ArrowRight className="size-4" />
@@ -1478,7 +1484,7 @@ function HomeHero() {
               data-cta="hero_avito_reviews"
               data-cta-placement="home_hero"
               onClick={() => trackCtaClick("hero_avito_reviews", "home_hero")}
-              className="inline-flex min-h-13 items-center justify-center gap-3 rounded-full border border-[#6ee7d2]/28 bg-[linear-gradient(135deg,rgba(18,124,107,0.42),rgba(15,22,30,0.98)_44%,rgba(0,170,239,0.18)_100%)] px-6 py-3 text-sm font-semibold text-white shadow-[0_22px_50px_rgba(2,8,12,0.28)] transition hover:translate-y-[-1px] hover:border-[#6ee7d2]/45"
+              className="inline-flex min-h-12 items-center justify-center gap-3 rounded-full border border-[#6ee7d2]/28 bg-[linear-gradient(135deg,rgba(18,124,107,0.42),rgba(15,22,30,0.98)_44%,rgba(0,170,239,0.18)_100%)] px-5 py-3 text-sm font-semibold text-white shadow-[0_22px_50px_rgba(2,8,12,0.28)] transition hover:translate-y-[-1px] hover:border-[#6ee7d2]/45 lg:min-h-[3.25rem] lg:px-6"
             >
               <span className="relative flex size-5 shrink-0 items-center justify-center">
                 <span className="absolute left-0 top-0 size-2 rounded-full bg-[#97cf26]" />
@@ -1500,8 +1506,8 @@ function HomeHero() {
           </div>
         </div>
 
-        <div className="what-client-visual reveal-rise reveal-rise-delay-1 hidden page-frame overflow-hidden rounded-[2rem] p-3 md:block">
-          <div className="image-mask min-h-[340px] sm:min-h-[430px] lg:min-h-[560px] xl:min-h-[620px]">
+        <div className="what-client-visual reveal-rise reveal-rise-delay-1 hidden self-center page-frame overflow-hidden rounded-[2rem] p-3 md:block">
+          <div className="image-mask min-h-[300px] sm:min-h-[400px] lg:min-h-[500px] xl:min-h-[560px]">
             <img
               src={assets.hero}
               alt="Чистка и ремонт колодца в Московской области — объект WELLS-MO"
@@ -1802,7 +1808,7 @@ function CasesSection() {
 
 function PricingSection() {
   return (
-    <section id="prices" className="scroll-mt-28 py-12 mb-16 md:mb-0 lg:py-16">
+    <section id="prices" className="scroll-mt-28 mb-8 py-10 md:mb-0 lg:py-14">
       <div className="container grid gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-start">
         <div className="reveal-rise space-y-5">
           <div className="section-kicker">Прайс по частым работам</div>
@@ -1930,7 +1936,7 @@ function AvitoBrandIcon({ className }: { className?: string }) {
 
 function TestimonialsSection() {
   return (
-    <section className="py-12 lg:py-16">
+    <section className="py-10 lg:py-14">
       <div className="container space-y-10">
         <SectionHeading
           eyebrow="Отзывы и Avito"
@@ -2102,7 +2108,7 @@ function LocationHubSection() {
 
 function CtaSection() {
   return (
-    <section className="pb-12 pt-10 lg:pb-24">
+    <section className="pb-8 pt-8 lg:pb-20">
       <div className="container">
         <div className="page-frame overflow-hidden rounded-[2rem] p-8 lg:p-12">
           <div className="relative grid gap-8 lg:grid-cols-[1fr_0.8fr] lg:items-end">
@@ -2156,21 +2162,23 @@ function HeroPageBlock({
   description,
   image,
   price,
+  compact = false,
 }: {
   eyebrow: string;
   title: string;
   description: string;
   image: string;
   price: string;
+  compact?: boolean;
 }) {
   return (
-    <section className="pb-12 pt-14 lg:pb-16 lg:pt-20">
-      <div className="container grid gap-8 lg:grid-cols-[1fr_0.95fr] lg:items-end">
-        <div className="space-y-5">
+    <section className={cn("pb-12 pt-14 lg:pb-16 lg:pt-20", compact && "pb-10 pt-10 lg:pb-12 lg:pt-14")}>
+      <div className={cn("container grid gap-8 lg:grid-cols-[1fr_0.95fr] lg:items-end", compact && "lg:grid-cols-[1.04fr_0.96fr] lg:items-center")}>
+        <div className={cn("space-y-5", compact && "space-y-4")}>
           <div className="section-kicker">{eyebrow}</div>
-          <h1 className="hero-title text-white">{title}</h1>
-          <p className="max-w-2xl text-lg leading-8 text-white/68">{description}</p>
-          <div className="flex flex-col gap-3 sm:flex-row">
+          <h1 className={cn("hero-title text-white", compact && "text-[clamp(2.5rem,5vw,4.5rem)] leading-[0.96]")}>{title}</h1>
+          <p className={cn("max-w-2xl text-lg leading-8 text-white/68", compact && "max-w-[46rem] text-base leading-7 lg:text-[1.02rem]")}>{description}</p>
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <RequestDialogButton trackingId="page_hero_discuss" trackingPlacement="page_hero">
               Получить консультацию <ArrowRight className="size-4" />
             </RequestDialogButton>
@@ -2179,8 +2187,8 @@ function HeroPageBlock({
             </div>
           </div>
         </div>
-        <div className="page-frame overflow-hidden rounded-[2rem] p-3">
-          <div className="image-mask min-h-[340px] lg:min-h-[480px]">
+        <div className={cn("page-frame overflow-hidden rounded-[2rem] p-3", compact && "lg:p-2.5")}>
+          <div className={cn("image-mask min-h-[340px] lg:min-h-[480px]", compact && "min-h-[280px] lg:min-h-[390px] xl:min-h-[420px]")}>
             <img
               src={image}
               alt={`${title} в Московской области — WELLS-MO`}
@@ -2732,6 +2740,7 @@ export function PricingPage() {
         description="На странице собраны стартовые цены по основным работам. Точная смета зависит от глубины шахты, состояния швов, дна, объёма загрязнений, материалов и дополнительных операций после осмотра объекта."
         image={assets.repair}
         price="Стартовые ориентиры"
+        compact
       />
       <PricingSection />
       <GuaranteeSection />
@@ -2897,8 +2906,9 @@ export function ContactsPage() {
         description="Позвоните, напишите в Telegram или MAX либо оставьте заявку. Если есть фото или видео колодца, сразу пришлите их вместе с адресом и описанием проблемы — так проще дать предварительную оценку и понять порядок работ."
         image={assets.fieldCrew}
         price={siteMeta.coverage}
+        compact
       />
-      <section className="py-12 lg:py-16">
+      <section className="py-10 lg:py-14">
         <div className="container grid gap-8 xl:grid-cols-[0.9fr_1.1fr]">
           <div className="page-frame rounded-[2rem] p-6 lg:p-8">
             <div className="section-kicker">Как связаться</div>
@@ -2916,8 +2926,9 @@ export function ContactsPage() {
                 {siteMeta.email}
               </a>
               <p className="story-copy">
-                Работаем по {siteMeta.baseLocation}. Сообщите район, задачу и текущее состояние
-                колодца, чтобы быстрее понять формат работ и сориентировать вас по выезду.
+                Работаем по Московской области. Приоритет: Одинцово, Красногорск, Истра, Дмитров,
+                Новорижское направление и соседние районы. Сообщите район, задачу и текущее
+                состояние колодца, чтобы быстрее понять формат работ и сориентировать вас по выезду.
               </p>
               <div className="rounded-[1.4rem] border border-primary/18 bg-primary/8 p-4 text-sm leading-7 text-white/78">
                 Для предварительной оценки удобно сразу отправить фото или короткое видео шахты, воды, швов и нижней части колодца. Это не заменяет осмотр, но помогает быстрее понять, идёт ли речь о чистке, ремонте, донном фильтре или комплексной заявке.
@@ -2962,7 +2973,7 @@ export function ContactsPage() {
           </div>
           <div className="page-frame rounded-[2rem] p-6 lg:p-8">
             <div className="section-kicker">Форма заявки</div>
-            <form className="mt-6 grid gap-4" onSubmit={handleSubmit}>
+            <form className="mt-6 grid gap-4 lg:gap-5" onSubmit={handleSubmit}>
               <input
                 type="text"
                 name="botcheck"
@@ -3053,7 +3064,7 @@ export function ContactsPage() {
                 <a href={`mailto:${siteMeta.email}`} className="text-white transition hover:text-primary">
                   написать на {siteMeta.email}
                 </a>
-                . Работаем по Московской области.
+                . Работаем по Московской области. Приоритет: Одинцово, Красногорск, Истра, Дмитров, Новорижское направление и соседние районы.
               </p>
             </form>
           </div>
@@ -3486,6 +3497,7 @@ export function SeoAreasPage() {
         description="Принимаем заявки по городам и районам Московской области на чистку, ремонт, гидроизоляцию, скобирование и углубление колодцев. Дополнительные работы — копка колодцев, септики из ЖБ колец и водоснабжение из колодца в дом."
         image={assets.hero}
         price={`${allSeoLocations.length} направлений`}
+        compact
       />
       <LocationHubSection />
       <section className="py-12 lg:py-16">

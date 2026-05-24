@@ -87,6 +87,8 @@ function SiteRouter() {
       <Route path="/o-nas" component={AboutPage} />
       <Route path="/faq" component={FAQPage} />
       <Route path="/rajony-rabot" component={SeoAreasPage} />
+      <Route path="/areas" component={SeoAreasPage} />
+      <Route path="/areas/" component={SeoAreasPage} />
       <Route path="/goroda/odintsovo" component={() => <LocalCityPage slug="odincovo" />} />
       <Route path="/goroda/:citySlug/:serviceSlug">
         {(params) => <LocalCityServicePage citySlug={params.citySlug} serviceSlug={params.serviceSlug} />}
