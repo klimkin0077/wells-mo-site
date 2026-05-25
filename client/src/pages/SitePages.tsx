@@ -1484,20 +1484,20 @@ function HomeHero() {
             <span className="inline-block size-2 rounded-full bg-primary" />
             {siteMeta.coverage.replace(/\.$/, "")}
           </div>
-          <div className="hero-mobile-card relative isolate flex items-center overflow-hidden rounded-[2rem] border border-white/10 px-4 py-6 min-h-[18.35rem] min-[390px]:px-5 min-[390px]:py-7 min-[390px]:min-h-[19.1rem] md:overflow-visible md:rounded-none md:border-0 md:bg-transparent md:px-0 md:py-0 md:min-h-0 md:shadow-none">
+          <div className="hero-mobile-card relative isolate flex items-center overflow-hidden rounded-[2rem] border border-white/10 px-4 py-5 min-h-[19.6rem] min-[390px]:px-5 min-[390px]:py-6 min-[390px]:min-h-[20.2rem] md:overflow-visible md:rounded-none md:border-0 md:bg-transparent md:px-0 md:py-0 md:min-h-0 md:shadow-none">
             <div className="hero-mobile-media pointer-events-none absolute inset-0 z-0 md:hidden">
-              <img src={assets.userWellCleaningMain} alt="" className="h-full w-full object-cover object-center opacity-42" loading="eager" decoding="async" />
+              <img src={assets.hero} alt="" className="hero-mobile-media-base h-full w-full object-cover object-center" loading="eager" decoding="async" />
             </div>
-            <div className="hero-mobile-copy space-y-4">
-              <h1 data-text="Чистка и ремонт колодцев" className="hero-mobile-title text-[clamp(2.34rem,8.1vw,5.8rem)] leading-[0.92] font-bold tracking-[-0.066em] max-md:text-center">
+            <div className="hero-mobile-copy space-y-3.5">
+              <h1 data-text="Чистка и ремонт колодцев" className="hero-mobile-title text-[clamp(2.48rem,8.6vw,5.8rem)] leading-[0.9] font-bold tracking-[-0.07em] max-md:text-left">
                 Чистка и ремонт колодцев
               </h1>
-              <p className="hero-mobile-subtitle max-w-2xl text-[0.95rem] leading-[1.56] max-md:text-center sm:text-base lg:text-[1.05rem] lg:leading-8">
-                Откачка воды, мойка шахты аппаратом высокого давления, чистка дна, герметизация швов и восстановление колодцев.
+              <p className="hero-mobile-subtitle max-w-2xl text-[0.94rem] leading-[1.52] max-md:text-left sm:text-base lg:text-[1.05rem] lg:leading-8">
+                Откачка воды, мойка шахты, чистка дна, герметизация швов и восстановление колодцев.
               </p>
             </div>
           </div>
-          <div className="home-hero-cta-grid grid gap-2.5 pt-2 sm:grid-cols-2 xl:grid-cols-[1fr_1fr_1.15fr]">
+          <div className="home-hero-cta-grid grid gap-2.5 pt-1.5 sm:grid-cols-2 xl:grid-cols-[1fr_1fr_1.15fr]">
             <RequestDialogButton
               trackingId="hero_request"
               trackingPlacement="home_hero"
