@@ -1447,17 +1447,17 @@ function HomeHero() {
             <span className="inline-block size-2 rounded-full bg-primary" />
             {siteMeta.coverage.replace(/\.$/, "")}
           </div>
-          <div className="hero-mobile-card relative isolate flex items-center overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(19,25,34,0.88),rgba(11,15,24,0.38))] px-4 py-6 shadow-[0_24px_64px_rgba(0,0,0,0.24)] min-h-[18.75rem] min-[390px]:px-5 min-[390px]:py-7 min-[390px]:min-h-[20rem] md:overflow-visible md:rounded-none md:border-0 md:bg-transparent md:px-0 md:py-0 md:min-h-0 md:shadow-none">
+          <div className="hero-mobile-card relative isolate flex items-center overflow-hidden rounded-[2rem] border border-white/10 px-4 py-6 min-h-[18.75rem] min-[390px]:px-5 min-[390px]:py-7 min-[390px]:min-h-[20rem] md:overflow-visible md:rounded-none md:border-0 md:bg-transparent md:px-0 md:py-0 md:min-h-0 md:shadow-none">
             <div className="hero-mobile-copy space-y-4">
-              <h1 className="hero-mobile-title text-[clamp(2.32rem,8vw,5.8rem)] leading-[0.92] font-bold tracking-[-0.064em] text-white max-md:text-center">
+              <h1 data-text="Чистка и ремонт колодцев" className="hero-mobile-title text-[clamp(2.34rem,8.1vw,5.8rem)] leading-[0.92] font-bold tracking-[-0.066em] max-md:text-center">
                 Чистка и ремонт колодцев
               </h1>
-              <p className="hero-mobile-subtitle max-w-2xl text-[0.96rem] leading-[1.58] text-white/76 max-md:text-center sm:text-base lg:text-[1.05rem] lg:leading-8">
+              <p className="hero-mobile-subtitle max-w-2xl text-[0.95rem] leading-[1.56] max-md:text-center sm:text-base lg:text-[1.05rem] lg:leading-8">
                 Откачка, мойка шахты до 400 бар, чистка дна, герметизация швов и восстановление колодцев.
               </p>
             </div>
           </div>
-          <div className="grid gap-2.5 pt-3 sm:grid-cols-2 xl:grid-cols-[1fr_1fr_1.15fr]">
+          <div className="grid gap-2.5 pt-2.5 sm:grid-cols-2 xl:grid-cols-[1fr_1fr_1.15fr]">
             <RequestDialogButton
               trackingId="hero_request"
               trackingPlacement="home_hero"
