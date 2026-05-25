@@ -576,7 +576,7 @@ function ScrollTopFloatingButton() {
       onClick={scrollPageToTop}
       aria-label="Вернуться наверх"
       className={cn(
-        "fixed right-4 bottom-[calc(104px+env(safe-area-inset-bottom))] z-[59] hidden size-12 items-center justify-center rounded-full border border-white/55 bg-primary text-[#111723] shadow-[0_20px_48px_rgba(199,154,63,0.52)] ring-2 ring-white/30 backdrop-blur-md transition-all duration-300 lg:inline-flex lg:right-8 lg:bottom-[110px]",
+        "fixed right-4 bottom-[calc(104px+env(safe-area-inset-bottom))] z-[59] inline-flex size-11 items-center justify-center rounded-full border border-white/55 bg-primary text-[#111723] shadow-[0_20px_48px_rgba(199,154,63,0.52)] ring-2 ring-white/30 backdrop-blur-md transition-all duration-300 md:size-12 lg:right-8 lg:bottom-[110px]",
         isVisible ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none translate-y-4 opacity-0",
       )}
     >
@@ -945,7 +945,7 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
       </button>
       <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent
-          className="max-h-[min(100vh-1rem,60rem)] w-[calc(100vw-1rem)] max-w-none overflow-y-auto border border-white/10 bg-[#0d1219] p-0 text-white shadow-[0_32px_120px_rgba(0,0,0,0.58)] sm:w-[calc(100vw-2rem)] sm:max-w-none lg:w-[min(74rem,calc(100vw-3rem))] xl:w-[min(82rem,calc(100vw-4rem))]"
+          className="request-dialog-content max-h-[min(100vh-1rem,60rem)] w-[calc(100vw-1rem)] max-w-none overflow-y-auto border border-white/10 bg-[#0d1219] p-0 text-white shadow-[0_32px_120px_rgba(0,0,0,0.58)] sm:w-[calc(100vw-2rem)] sm:max-w-none lg:w-[min(74rem,calc(100vw-3rem))] xl:w-[min(82rem,calc(100vw-4rem))]"
           showCloseButton
         >
           <div className="grid lg:grid-cols-[0.6fr_1.4fr]">
@@ -1440,20 +1440,23 @@ function SectionHeading({
 
 function HomeHero() {
   return (
-    <section className="relative overflow-hidden pb-[4.25rem] pt-7 sm:pb-[4rem] sm:pt-8 lg:pb-14 lg:pt-12">
+    <section className="relative overflow-hidden pb-[3.35rem] pt-4 sm:pb-[4rem] sm:pt-8 lg:pb-14 lg:pt-12">
       <div className="container hero-grid lg:items-center">
-        <div className="reveal-rise space-y-5 pb-1 lg:space-y-7 lg:pb-0">
+        <div className="reveal-rise space-y-4 pb-1 lg:space-y-7 lg:pb-0">
           <div className="copper-chip">
             <span className="inline-block size-2 rounded-full bg-primary" />
             {siteMeta.coverage.replace(/\.$/, "")}
           </div>
-          <div className="hero-mobile-card relative isolate flex items-center overflow-hidden rounded-[2rem] border border-white/10 px-4 py-6 min-h-[18.75rem] min-[390px]:px-5 min-[390px]:py-7 min-[390px]:min-h-[20rem] md:overflow-visible md:rounded-none md:border-0 md:bg-transparent md:px-0 md:py-0 md:min-h-0 md:shadow-none">
+          <div className="hero-mobile-card relative isolate flex items-center overflow-hidden rounded-[2rem] border border-white/10 px-4 py-6 min-h-[18.35rem] min-[390px]:px-5 min-[390px]:py-7 min-[390px]:min-h-[19.1rem] md:overflow-visible md:rounded-none md:border-0 md:bg-transparent md:px-0 md:py-0 md:min-h-0 md:shadow-none">
+            <div className="hero-mobile-media pointer-events-none absolute inset-0 z-0 md:hidden">
+              <img src={assets.userWellCleaningMain} alt="" className="h-full w-full object-cover object-center opacity-42" loading="eager" decoding="async" />
+            </div>
             <div className="hero-mobile-copy space-y-4">
               <h1 data-text="Чистка и ремонт колодцев" className="hero-mobile-title text-[clamp(2.34rem,8.1vw,5.8rem)] leading-[0.92] font-bold tracking-[-0.066em] max-md:text-center">
                 Чистка и ремонт колодцев
               </h1>
               <p className="hero-mobile-subtitle max-w-2xl text-[0.95rem] leading-[1.56] max-md:text-center sm:text-base lg:text-[1.05rem] lg:leading-8">
-                Откачка, мойка шахты до 400 бар, чистка дна, герметизация швов и восстановление колодцев.
+                Откачка воды, мойка шахты аппаратом высокого давления, чистка дна, герметизация швов и восстановление колодцев.
               </p>
             </div>
           </div>
@@ -1632,7 +1635,7 @@ function ServicesPreview() {
   ] as const;
 
   return (
-    <section id="services" className="scroll-mt-28 py-12 lg:py-16">
+    <section id="services" className="scroll-mt-20 py-10 lg:py-16 md:scroll-mt-28 md:py-12">
       <div className="container space-y-10">
         <SectionHeading
           eyebrow="Ключевые услуги"
@@ -1739,7 +1742,7 @@ function ProcessSection() {
       <div className="container space-y-10">
         <SectionHeading
           eyebrow="Этапы работ"
-          title="Выезд, откачка, мойка 400 бар и дезинфекция"
+          title="Выезд, откачка, мойка шахты под давлением и дезинфекция"
           description="Показываем обычный порядок работ: сначала осматриваем колодец и откачиваем воду, потом моем шахту, чистим дно, проверяем швы и объясняем, какие работы действительно нужны."
         />
         <div className="grid gap-5 lg:grid-cols-4">
@@ -1807,7 +1810,7 @@ function CasesSection() {
 
 function PricingSection() {
   return (
-    <section id="prices" className="scroll-mt-28 mb-8 py-10 md:mb-0 lg:py-14">
+    <section id="prices" className="scroll-mt-20 mb-6 py-9 md:mb-0 md:py-10 md:scroll-mt-28 lg:py-14">
       <div className="container grid gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-start">
         <div className="reveal-rise space-y-5">
           <div className="section-kicker">Прайс по частым работам</div>
@@ -2688,7 +2691,7 @@ function SupplementalServicePage({ slug }: { slug: SupplementalServiceKey }) {
 export function HomePage() {
   usePageSeo(
     "Чистка и ремонт колодцев в Московской области | WELLS-MO",
-    "Профессиональная чистка и ремонт колодцев по Московской области: откачка воды, мойка шахты до 400 бар, чистка дна, герметизация швов, скобирование колец, дезинфекция и восстановление старых шахт.",
+    "Профессиональная чистка и ремонт колодцев по Московской области: откачка воды, мойка шахты аппаратом высокого давления, чистка дна, герметизация швов, скобирование колец, дезинфекция и восстановление старых шахт.",
   );
 
   return (
