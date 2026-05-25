@@ -434,12 +434,29 @@ html {
 
   @media (max-width: 767px) {
     html {
-      scroll-padding-top: 5rem;
+      scroll-padding-top: calc(72px + env(safe-area-inset-top) + 0.65rem);
     }
 
     main > section:not(:first-of-type) {
       padding-top: clamp(2.5rem, 8vw, 3rem) !important;
       padding-bottom: clamp(2.75rem, 9vw, 3.25rem) !important;
+    }
+
+    .home-hero-section {
+      padding-bottom: clamp(1.05rem, 4vw, 1.35rem) !important;
+    }
+
+    .home-hero-cta-grid {
+      gap: 0.65rem;
+      padding-top: 0.7rem;
+    }
+
+    .home-services-section {
+      padding-top: clamp(1.15rem, 4vw, 1.45rem) !important;
+    }
+
+    .mobile-anchor-target {
+      scroll-margin-top: calc(72px + env(safe-area-inset-top) + 0.75rem);
     }
 
     footer {

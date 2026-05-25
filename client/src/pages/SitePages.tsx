@@ -468,6 +468,45 @@ function trackCtaClick(ctaId: string, placement?: string) {
   }
 }
 
+function getFixedHeaderOffset() {
+  if (typeof window === "undefined" || typeof document === "undefined") {
+    return 84;
+  }
+
+  const header = document.querySelector<HTMLElement>("[data-fixed-header='site']");
+  const headerHeight = header?.getBoundingClientRect().height ?? 72;
+  const breathingRoom = window.innerWidth < 768 ? 10 : 18;
+
+  return headerHeight + breathingRoom;
+}
+
+function scrollToHashTarget(hash: string, behavior: ScrollBehavior = "smooth") {
+  if (typeof window === "undefined" || typeof document === "undefined" || !hash) {
+    return false;
+  }
+
+  const normalizedHash = hash.startsWith("#") ? hash : `#${hash}`;
+  const target = document.querySelector<HTMLElement>(normalizedHash);
+
+  if (!target) {
+    return false;
+  }
+
+  const top = Math.max(getCurrentPageScrollTop() + target.getBoundingClientRect().top - getFixedHeaderOffset(), 0);
+
+  for (const element of getPageScrollContainers()) {
+    element.scrollTo({ top, behavior });
+  }
+
+  window.scrollTo({ top, behavior });
+
+  if (window.location.hash !== normalizedHash) {
+    window.history.replaceState(null, "", normalizedHash);
+  }
+
+  return true;
+}
+
 function ScrollToTop() {
   const [location] = useLocation();
 
@@ -476,10 +515,7 @@ function ScrollToTop() {
 
     if (hash) {
       requestAnimationFrame(() => {
-        const target = document.querySelector(hash);
-
-        if (target) {
-          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        if (scrollToHashTarget(hash)) {
           return;
         }
 
@@ -1157,6 +1193,7 @@ function Header() {
 
   return (
     <header
+      data-fixed-header="site"
       className={cn(
         "fixed top-0 left-0 right-0 z-50 border-b backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-300",
         isScrolled
@@ -1440,7 +1477,7 @@ function SectionHeading({
 
 function HomeHero() {
   return (
-    <section className="relative overflow-hidden pb-[3.35rem] pt-4 sm:pb-[4rem] sm:pt-8 lg:pb-14 lg:pt-12">
+    <section className="home-hero-section relative overflow-hidden pb-[1.2rem] pt-4 min-[390px]:pb-[1.35rem] sm:pb-[4rem] sm:pt-8 lg:pb-14 lg:pt-12">
       <div className="container hero-grid lg:items-center">
         <div className="reveal-rise space-y-4 pb-1 lg:space-y-7 lg:pb-0">
           <div className="copper-chip">
@@ -1460,7 +1497,7 @@ function HomeHero() {
               </p>
             </div>
           </div>
-          <div className="grid gap-2.5 pt-2.5 sm:grid-cols-2 xl:grid-cols-[1fr_1fr_1.15fr]">
+          <div className="home-hero-cta-grid grid gap-2.5 pt-2 sm:grid-cols-2 xl:grid-cols-[1fr_1fr_1.15fr]">
             <RequestDialogButton
               trackingId="hero_request"
               trackingPlacement="home_hero"
@@ -1473,7 +1510,11 @@ function HomeHero() {
               href="#prices"
               data-cta="hero_prices"
               data-cta-placement="home_hero"
-              onClick={() => trackCtaClick("hero_prices", "home_hero")}
+              onClick={(event) => {
+                event.preventDefault();
+                trackCtaClick("hero_prices", "home_hero");
+                scrollToHashTarget("#prices");
+              }}
               className="inline-flex min-h-[3rem] items-center justify-center gap-2 rounded-full border border-primary/24 bg-primary/12 px-5 py-3 text-sm font-semibold text-primary transition hover:translate-y-[-1px] hover:border-primary/40 hover:bg-primary/16 lg:min-h-[3.25rem] lg:px-6"
             >
               Посмотреть цены
@@ -1635,7 +1676,7 @@ function ServicesPreview() {
   ] as const;
 
   return (
-    <section id="services" className="scroll-mt-20 py-10 lg:py-16 md:scroll-mt-28 md:py-12">
+    <section id="services" className="home-services-section scroll-mt-20 py-10 lg:py-16 md:scroll-mt-28 md:py-12">
       <div className="container space-y-10">
         <SectionHeading
           eyebrow="Ключевые услуги"
@@ -1810,9 +1851,9 @@ function CasesSection() {
 
 function PricingSection() {
   return (
-    <section id="prices" className="scroll-mt-20 mb-6 py-9 md:mb-0 md:py-10 md:scroll-mt-28 lg:py-14">
+    <section className="mb-5 pt-5 pb-8 md:mb-0 md:py-10 lg:py-14">
       <div className="container grid gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-start">
-        <div className="reveal-rise space-y-5">
+        <div id="prices" className="mobile-anchor-target reveal-rise space-y-5">
           <div className="section-kicker">Прайс по частым работам</div>
           <h2 className="section-title text-white">Понятные цены по частым работам</h2>
           <p className="story-copy text-white/78">
