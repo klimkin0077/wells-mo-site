@@ -492,13 +492,12 @@ function scrollToHashTarget(hash: string, behavior: ScrollBehavior = "smooth") {
     return false;
   }
 
-  const top = Math.max(getCurrentPageScrollTop() + target.getBoundingClientRect().top - getFixedHeaderOffset(), 0);
-
-  for (const element of getPageScrollContainers()) {
-    element.scrollTo({ top, behavior });
+  if (typeof target.scrollIntoView === "function") {
+    target.scrollIntoView({ block: "start", inline: "nearest", behavior });
+  } else {
+    const top = Math.max(getCurrentPageScrollTop() + target.getBoundingClientRect().top - getFixedHeaderOffset(), 0);
+    window.scrollTo({ top, behavior });
   }
-
-  window.scrollTo({ top, behavior });
 
   if (window.location.hash !== normalizedHash) {
     window.history.replaceState(null, "", normalizedHash);
@@ -981,7 +980,7 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
       </button>
       <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent
-          className="request-dialog-content max-h-[min(100vh-1rem,60rem)] w-[calc(100vw-1rem)] max-w-none overflow-y-auto border border-white/10 bg-[#0d1219] p-0 text-white shadow-[0_32px_120px_rgba(0,0,0,0.58)] sm:w-[calc(100vw-2rem)] sm:max-w-none lg:w-[min(74rem,calc(100vw-3rem))] xl:w-[min(82rem,calc(100vw-4rem))]"
+          className="request-dialog-content w-[calc(100vw-1rem)] max-w-none overflow-y-auto overscroll-contain border border-white/10 bg-[#0d1219] p-0 text-white shadow-[0_32px_120px_rgba(0,0,0,0.58)] sm:w-[calc(100vw-2rem)] sm:max-w-none lg:w-[min(74rem,calc(100vw-3rem))] xl:w-[min(82rem,calc(100vw-4rem))]"
           showCloseButton
         >
           <div className="grid lg:grid-cols-[0.6fr_1.4fr]">
