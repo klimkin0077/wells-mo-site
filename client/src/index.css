@@ -463,8 +463,12 @@ html {
       min-height: clamp(34.9rem, 74.5svh, 41.5rem);
       display: flex;
       align-items: stretch;
+      overflow: hidden;
+      isolation: isolate;
       padding: clamp(1rem, 4.35vw, 1.65rem);
       border-radius: 1.85rem;
+      background-clip: padding-box;
+      -webkit-mask-image: -webkit-radial-gradient(white, black);
       background:
         radial-gradient(circle at 78% 18%, rgba(255, 210, 139, 0.18), transparent 26%),
         radial-gradient(circle at 82% 62%, rgba(72, 205, 238, 0.13), transparent 32%),
@@ -507,6 +511,17 @@ html {
     .hero-mobile-media {
       overflow: hidden;
       border-radius: inherit;
+      background-clip: padding-box;
+      -webkit-mask-image: -webkit-radial-gradient(white, black);
+    }
+
+    .hero-mobile-card::before,
+    .hero-mobile-card::after,
+    .hero-mobile-media::before,
+    .hero-mobile-media::after,
+    .hero-mobile-media-base {
+      border-radius: inherit;
+      -webkit-mask-image: -webkit-radial-gradient(white, black);
     }
 
     .hero-mobile-media::before {
