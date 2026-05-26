@@ -36,7 +36,7 @@ export const siteMeta = {
   maxUrl: "https://max.ru/u/f9LHodD0cOJMJamPyw0VYx8e_IXL2yxytuGOl_V-YFa97fSZkSofjnBFsW4",
   tagline: "Чистка и ремонт колодцев в Московской области",
   description:
-    "Профессиональная чистка и ремонт колодцев по Московской области: откачка воды, мойка шахты, чистка дна, ремонт швов, гидроизоляция, скобирование, углубление и восстановление старых шахт. Копка колодцев, септики и подводка воды остаются дополнительными услугами.",
+    "Профессиональная чистка и ремонт колодцев по Московской области: откачка воды, мойка шахты аппаратом высокого давления, чистка дна, ремонт швов, гидроизоляция, скобирование, углубление и восстановление старых шахт. Копка колодцев, септики и подводка воды остаются дополнительными услугами.",
 } as const;
 
 const publicAsset = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\//, "")}`;
@@ -70,6 +70,7 @@ export const assets = {
   userBottomShield: publicAsset("images/work/bottom-shield.webp"),
   userAfterWashing: publicAsset("images/work/after-washing.webp"),
   userLogo: publicAsset("images/brand/site-logo-round.webp"),
+  mobileHero3d: publicAsset("images/brand/mobile-hero-3d-well.webp"),
   userGravelBackfill: publicAsset("images/work/gravel-backfill.webp"),
   userCurrentJointProblem: publicAsset("images/work/current-joint-problem.webp"),
   userShiftedRingRepair: publicAsset("images/work/shifted-ring-repair.webp"),
@@ -700,7 +701,7 @@ export const processSteps = [
   },
   {
     number: "03",
-    title: "Мойка шахты",
+    title: "Мойка шахты аппаратом высокого давления",
     text: "Промываем стенки, убираем налёт, песок, ил и подготавливаем шахту к дальнейшему ремонту или дезинфекции.",
   },
   {

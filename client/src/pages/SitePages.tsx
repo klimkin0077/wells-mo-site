@@ -475,7 +475,7 @@ function getFixedHeaderOffset() {
 
   const header = document.querySelector<HTMLElement>("[data-fixed-header='site']");
   const headerHeight = header?.getBoundingClientRect().height ?? 72;
-  const breathingRoom = window.innerWidth < 768 ? 2 : 18;
+  const breathingRoom = window.innerWidth < 768 ? 10 : 18;
 
   return headerHeight + breathingRoom;
 }
@@ -1476,47 +1476,92 @@ function SectionHeading({
 }
 
 function HomeHero() {
-  const mobileHeroBenefits = [
-    { label: "Чистая вода", helper: "без ила", Icon: Droplets },
-    { label: "Гарантия", helper: "качества", Icon: ShieldCheck },
-    { label: "Быстрый", helper: "выезд", Icon: Phone },
-    { label: "Оборудование", helper: "профи", Icon: Wrench },
+  const mobileBenefits = [
+    { label: "Чистая вода", detail: "без ила", Icon: Droplets },
+    { label: "Гарантия", detail: "качества", Icon: ShieldCheck },
+    { label: "Быстрый", detail: "выезд", Icon: Phone },
+    { label: "Оборудование", detail: "профи", Icon: Wrench },
   ];
 
   return (
-    <section className="home-hero-section relative overflow-hidden pb-[1.2rem] pt-3 min-[390px]:pb-[1.35rem] sm:pb-[4rem] sm:pt-8 lg:pb-14 lg:pt-12">
+    <section className="home-hero-section relative overflow-hidden pb-[1rem] pt-3 sm:pb-[4rem] sm:pt-8 lg:pb-14 lg:pt-12">
       <div className="container hero-grid lg:items-center">
-        <div className="reveal-rise space-y-3.5 pb-1 lg:space-y-7 lg:pb-0">
+        <div className="reveal-rise space-y-3.5 pb-0 lg:space-y-7 lg:pb-0">
           <div className="copper-chip">
-            <MapPin className="size-3.5 text-primary" />
+            <MapPin className="size-3.5 shrink-0" aria-hidden="true" />
             {siteMeta.coverage.replace(/\.$/, "")}
           </div>
-          <div className="hero-mobile-card relative isolate flex items-center overflow-hidden rounded-[2rem] border border-white/10 px-4 py-5 min-h-[19.6rem] min-[390px]:px-5 min-[390px]:py-6 min-[390px]:min-h-[20.2rem] md:overflow-visible md:rounded-none md:border-0 md:bg-transparent md:px-0 md:py-0 md:min-h-0 md:shadow-none">
+
+          <div className="hero-mobile-card relative isolate overflow-hidden rounded-[2rem] border border-white/10 px-5 py-6 md:overflow-visible md:rounded-none md:border-0 md:bg-transparent md:px-0 md:py-0 md:min-h-0 md:shadow-none">
             <div className="hero-mobile-media pointer-events-none absolute inset-0 z-0 md:hidden">
-              <img src={assets.userShaftDiagnostics} alt="" className="hero-mobile-media-base h-full w-full object-cover object-center" loading="eager" decoding="async" />
+              <img src={assets.mobileHero3d} alt="" className="hero-mobile-media-base h-full w-full object-cover" loading="eager" decoding="async" />
             </div>
-            <div className="hero-mobile-content relative z-10 flex w-full flex-col justify-between gap-4">
-              <div className="hero-mobile-copy space-y-3.5">
-                <h1 data-text="Чистка и ремонт колодцев" className="hero-mobile-title text-[clamp(2.48rem,8.6vw,5.8rem)] leading-[0.9] font-bold tracking-[-0.07em] max-md:text-left">
-                  Чистка и ремонт колодцев
-                </h1>
-                <div className="hero-mobile-gold-line" aria-hidden="true" />
-                <p className="hero-mobile-subtitle max-w-2xl text-[0.94rem] leading-[1.52] max-md:text-left sm:text-base lg:text-[1.05rem] lg:leading-8">
-                  Откачка воды, мойка шахты, чистка дна, герметизация швов и восстановление колодцев.
-                </p>
-              </div>
-              <div className="hero-mobile-benefits" aria-label="Преимущества WELLS-MO">
-                {mobileHeroBenefits.map(({ label, helper, Icon }) => (
+            <div className="hero-mobile-copy">
+              <h1 data-text="Чистка и ремонт колодцев" className="hero-mobile-title text-[clamp(3.15rem,13.4vw,5.7rem)] leading-[0.88] font-bold tracking-[-0.075em]">
+                <span className="hero-title-gold">Чистка и ремонт</span>{" "}
+                <span className="hero-title-white">колодцев</span>
+              </h1>
+              <div className="hero-title-line md:hidden" />
+              <p className="hero-mobile-subtitle max-w-2xl text-[0.98rem] leading-[1.55] sm:text-base lg:text-[1.05rem] lg:leading-8">
+                Откачка воды, мойка шахты, чистка дна, герметизация швов и восстановление колодцев.
+              </p>
+
+              <div className="hero-mobile-benefits md:hidden">
+                {mobileBenefits.map(({ label, detail, Icon }) => (
                   <div key={label} className="hero-mobile-benefit">
-                    <Icon className="hero-mobile-benefit-icon" />
+                    <Icon className="size-5" aria-hidden="true" />
                     <span>{label}</span>
-                    <small>{helper}</small>
+                    <small>{detail}</small>
                   </div>
                 ))}
               </div>
+
+              <div className="hero-mobile-actions md:hidden">
+                <RequestDialogButton
+                  trackingId="hero_request"
+                  trackingPlacement="home_hero"
+                  className="hero-mobile-action hero-mobile-action-primary !w-full sm:!w-full"
+                >
+                  Оставить заявку
+                  <ArrowRight className="size-4" />
+                </RequestDialogButton>
+                <a
+                  href="#prices"
+                  data-cta="hero_prices"
+                  data-cta-placement="home_hero"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    trackCtaClick("hero_prices", "home_hero");
+                    scrollToHashTarget("#prices");
+                  }}
+                  className="hero-mobile-action hero-mobile-action-secondary"
+                >
+                  Посмотреть цены
+                  <ArrowRight className="size-4" />
+                </a>
+                <a
+                  href={AVITO_BRAND_PROFILE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-cta="hero_avito_reviews"
+                  data-cta-placement="home_hero"
+                  onClick={() => trackCtaClick("hero_avito_reviews", "home_hero")}
+                  className="hero-mobile-action hero-mobile-action-avito"
+                >
+                  <span className="relative flex size-5 shrink-0 items-center justify-center">
+                    <span className="absolute left-0 top-0 size-2 rounded-full bg-[#97cf26]" />
+                    <span className="absolute right-0 top-0.5 size-1.5 rounded-full bg-[#00aaef]" />
+                    <span className="absolute left-0.5 bottom-0 size-1.5 rounded-full bg-[#ff6163]" />
+                    <span className="absolute right-0 bottom-0 size-2 rounded-full bg-[#8dd6b7]" />
+                  </span>
+                  Честные отзывы на Авито
+                  <ArrowRight className="size-4" />
+                </a>
+              </div>
             </div>
           </div>
-          <div className="home-hero-cta-grid grid gap-2.5 pt-1.5 sm:grid-cols-2 xl:grid-cols-[1fr_1fr_1.15fr]">
+
+          <div className="home-hero-cta-grid hidden gap-2.5 pt-1.5 md:grid sm:grid-cols-2 xl:grid-cols-[1fr_1fr_1.15fr]">
             <RequestDialogButton
               trackingId="hero_request"
               trackingPlacement="home_hero"
@@ -1592,12 +1637,12 @@ function HomeHero() {
               </div>
               <div className="grid gap-3 sm:grid-cols-3">
                 {[
-                  "Понятно, сколько стоит работа",
-                  "Видно, что входит в чистку и ремонт",
-                  "Показываем реальные фото объектов",
-                ].map((item) => (
-                  <div key={item} className="rounded-2xl border border-white/10 bg-white/6 p-4 text-sm text-white/82">
-                    {item}
+                  "Сразу видны понятные цены по частым работам",
+                  "Под героем — реальные фото объектов и порядок работ",
+                  "Нижняя панель связи остаётся, поэтому первый экран не перегружен",
+                ].map((text) => (
+                  <div key={text} className="rounded-2xl border border-white/10 bg-white/6 px-4 py-3 text-sm leading-6 text-white/74">
+                    {text}
                   </div>
                 ))}
               </div>
@@ -1802,7 +1847,7 @@ function ProcessSection() {
       <div className="container space-y-10">
         <SectionHeading
           eyebrow="Этапы работ"
-          title="Выезд, откачка, мойка шахты и дезинфекция"
+          title="Выезд, откачка, мойка шахты под давлением и дезинфекция"
           description="Показываем обычный порядок работ: сначала осматриваем колодец и откачиваем воду, потом моем шахту, чистим дно, проверяем швы и объясняем, какие работы действительно нужны."
         />
         <div className="grid gap-5 lg:grid-cols-4">
@@ -1870,9 +1915,9 @@ function CasesSection() {
 
 function PricingSection() {
   return (
-    <section id="prices" className="home-pricing-section mb-5 pt-5 pb-8 md:mb-0 md:py-10 lg:py-14">
+    <section className="mb-5 pt-5 pb-8 md:mb-0 md:py-10 lg:py-14">
       <div className="container grid gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-start">
-        <div className="mobile-anchor-target reveal-rise space-y-5">
+        <div id="prices" className="mobile-anchor-target reveal-rise space-y-5">
           <div className="section-kicker">Прайс по частым работам</div>
           <h2 className="section-title text-white">Понятные цены по частым работам</h2>
           <p className="story-copy text-white/78">
@@ -2751,7 +2796,7 @@ function SupplementalServicePage({ slug }: { slug: SupplementalServiceKey }) {
 export function HomePage() {
   usePageSeo(
     "Чистка и ремонт колодцев в Московской области | WELLS-MO",
-    "Профессиональная чистка и ремонт колодцев по Московской области: откачка воды, мойка шахты, чистка дна, герметизация швов, скобирование колец, дезинфекция и восстановление старых шахт.",
+    "Профессиональная чистка и ремонт колодцев по Московской области: откачка воды, мойка шахты аппаратом высокого давления, чистка дна, герметизация швов, скобирование колец, дезинфекция и восстановление старых шахт.",
   );
 
   return (
