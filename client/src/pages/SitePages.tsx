@@ -1536,7 +1536,16 @@ function HomeHero() {
                   }}
                   className="hero-mobile-action hero-mobile-action-secondary"
                 >
-                  Посмотреть цены
+                  <span className="hero-mobile-action-main">
+                    <span className="hero-mobile-action-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M3 7.5A2.5 2.5 0 0 1 5.5 5h11A2.5 2.5 0 0 1 19 7.5v9a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 3 16.5z" />
+                        <path d="M19 8.5h1.5A2.5 2.5 0 0 1 23 11v2a2.5 2.5 0 0 1-2.5 2.5H19" />
+                        <path d="M16 12h.01" />
+                      </svg>
+                    </span>
+                    <span>Посмотреть цены</span>
+                  </span>
                   <ArrowRight className="size-4" />
                 </a>
                 <a
