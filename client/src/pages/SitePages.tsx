@@ -1484,9 +1484,9 @@ function HomeHero() {
   ];
 
   return (
-    <section className="home-hero-section relative overflow-hidden pb-[1rem] pt-3 sm:pb-[4rem] sm:pt-8 lg:pb-14 lg:pt-12">
+    <section className="home-hero-section relative overflow-hidden pb-4 pt-3 sm:pb-10 sm:pt-8 lg:pb-12 lg:pt-10 xl:pb-14">
       <div className="container hero-grid lg:items-center">
-        <div className="reveal-rise space-y-3.5 pb-0 lg:space-y-7 lg:pb-0">
+        <div className="reveal-rise home-hero-copy space-y-4 pb-0 lg:space-y-6 lg:pb-0">
           <div className="copper-chip">
             <MapPin className="size-3.5 shrink-0" aria-hidden="true" />
             {siteMeta.coverage.replace(/\.$/, "")}
@@ -1497,12 +1497,12 @@ function HomeHero() {
               <img src={assets.mobileHero3d} alt="" className="hero-mobile-media-base h-full w-full object-cover" loading="eager" decoding="async" />
             </div>
             <div className="hero-mobile-copy">
-              <h1 data-text="Чистка и ремонт колодцев" className="hero-mobile-title text-[clamp(3.15rem,13.4vw,5.7rem)] leading-[0.88] font-bold tracking-[-0.075em]">
+              <h1 data-text="Чистка и ремонт колодцев" className="hero-home-title hero-mobile-title text-[clamp(3.15rem,13.4vw,5.7rem)] leading-[0.88] font-bold tracking-[-0.075em] md:text-[clamp(3.3rem,5vw,4.95rem)] xl:text-[clamp(3.85rem,4.2vw,5.25rem)]">
                 <span className="hero-title-gold">Чистка и ремонт</span>{" "}
                 <span className="hero-title-white">колодцев</span>
               </h1>
               <div className="hero-title-line md:hidden" />
-              <p className="hero-mobile-subtitle max-w-2xl text-[0.98rem] leading-[1.55] sm:text-base lg:text-[1.05rem] lg:leading-8">
+              <p className="hero-mobile-subtitle max-w-2xl text-[clamp(0.98rem,2.5vw,1.08rem)] leading-[1.55] sm:text-base lg:max-w-[33rem] lg:text-[clamp(1rem,1.35vw,1.12rem)] lg:leading-[1.72]">
                 Откачка воды, мойка шахты, чистка дна, герметизация швов и восстановление колодцев.
               </p>
 
@@ -1570,7 +1570,7 @@ function HomeHero() {
             </div>
           </div>
 
-          <div className="home-hero-cta-grid hidden gap-2.5 pt-1.5 md:grid sm:grid-cols-2 xl:grid-cols-[1fr_1fr_1.15fr]">
+          <div className="home-hero-cta-grid hidden gap-3 pt-2 md:grid sm:grid-cols-2 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(15rem,1.12fr)]">
             <RequestDialogButton
               trackingId="hero_request"
               trackingPlacement="home_hero"
@@ -1622,8 +1622,8 @@ function HomeHero() {
           </div>
         </div>
 
-        <div className="what-client-visual reveal-rise reveal-rise-delay-1 hidden self-center page-frame overflow-hidden rounded-[2rem] p-3 md:block">
-          <div className="image-mask min-h-[300px] sm:min-h-[400px] lg:min-h-[500px] xl:min-h-[560px]">
+        <div className="what-client-visual reveal-rise reveal-rise-delay-1 hidden self-stretch page-frame overflow-hidden rounded-[2rem] p-3 md:block">
+          <div className="image-mask min-h-[320px] sm:min-h-[380px] lg:min-h-[460px] xl:min-h-[520px]">
             <img
               src={assets.hero}
               alt="Чистка и ремонт колодца в Московской области — объект WELLS-MO"
@@ -1644,7 +1644,7 @@ function HomeHero() {
               <div className="mb-3 text-xs uppercase tracking-[0.22em] text-primary/90">
                 Что важно клиенту
               </div>
-              <div className="grid gap-3 sm:grid-cols-3">
+              <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
                 {[
                   "Сразу видны понятные цены по частым работам",
                   "Под героем — реальные фото объектов и порядок работ",
@@ -1749,14 +1749,14 @@ function ServicesPreview() {
   ] as const;
 
   return (
-    <section id="services" className="home-services-section scroll-mt-20 py-10 lg:py-16 md:scroll-mt-28 md:py-12">
+    <section id="services" className="home-flow-section home-services-section scroll-mt-20 md:scroll-mt-28">
       <div className="container space-y-10">
         <SectionHeading
           eyebrow="Ключевые услуги"
           title="Главные направления работ по колодцу"
           description="Ниже собраны основные работы по колодцу: чистка, ремонт, герметизация швов, скобирование, углубление и восстановление нижней части шахты. Эти услуги чаще всего нужны, когда вода мутнеет, через швы идёт верховодка, кольца смещаются или колодец теряет нормальную работу."
         />
-        <div className="grid gap-5 lg:grid-cols-2 xl:grid-cols-4">
+        <div className="home-services-grid grid gap-5">
           {featuredCards.map((service) => {
             const Icon = iconMap[service.slug as keyof typeof iconMap] ?? Wrench;
 
@@ -1793,7 +1793,7 @@ function ServicesPreview() {
 
 function WhyChooseSection() {
   return (
-    <section className="py-12 lg:py-16">
+    <section className="home-flow-section">
       <div className="container grid gap-8 lg:grid-cols-[1fr_1.15fr] lg:items-start">
         <div className="page-frame rounded-[2rem] p-6 lg:p-8">
           <div className="section-kicker">Почему доверяют</div>
@@ -1852,14 +1852,14 @@ function WhyChooseSection() {
 
 function ProcessSection() {
   return (
-    <section className="py-12 lg:py-16">
+    <section className="home-flow-section">
       <div className="container space-y-10">
         <SectionHeading
           eyebrow="Этапы работ"
           title="Выезд, откачка, мойка шахты под давлением и дезинфекция"
           description="Показываем обычный порядок работ: сначала осматриваем колодец и откачиваем воду, потом моем шахту, чистим дно, проверяем швы и объясняем, какие работы действительно нужны."
         />
-        <div className="grid gap-5 lg:grid-cols-4">
+        <div className="home-process-grid grid gap-5">
           {processSteps.map((step) => (
             <div key={step.number} className="glass-panel rounded-[1.8rem] p-6">
               <div className="metric-value text-primary">{step.number}</div>
@@ -1875,14 +1875,14 @@ function ProcessSection() {
 
 function CasesSection() {
   return (
-    <section className="py-12 lg:py-16">
+    <section className="home-flow-section">
       <div className="container space-y-10">
         <SectionHeading
           eyebrow="Фотографии наших работ"
           title="Реальные объекты до и после работ"
           description="Сразу после прайса показываем реальные фотографии из объектов WELLS-MO, чтобы решение принималось по фактам: видно состояние шахты до работ и результат после чистки, герметизации и восстановления."
         />
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+        <div className="home-cases-grid grid gap-5">
           {cases.map((item) => (
             <figure key={item.title} className="page-frame overflow-hidden rounded-[1.8rem]">
               <div className="image-mask min-h-[300px] border-b border-white/10 bg-[#0f141d]">
@@ -1924,8 +1924,8 @@ function CasesSection() {
 
 function PricingSection() {
   return (
-    <section className="mb-5 pt-5 pb-8 md:mb-0 md:py-10 lg:py-14">
-      <div className="container grid gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-start">
+    <section className="home-flow-section home-pricing-section mb-0">
+      <div className="container home-pricing-grid grid gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-start">
         <div id="prices" className="mobile-anchor-target reveal-rise space-y-5">
           <div className="section-kicker">Прайс по частым работам</div>
           <h2 className="section-title text-white">Понятные цены по частым работам</h2>
@@ -1991,7 +1991,7 @@ function GuaranteeSection() {
   ];
 
   return (
-    <section className="py-12 lg:py-16">
+    <section className="home-flow-section">
       <div className="container grid gap-8 xl:grid-cols-[0.92fr_1.08fr]">
         <div className="space-y-5">
           <div className="section-kicker">Гарантия и состав работ</div>
@@ -2052,7 +2052,7 @@ function AvitoBrandIcon({ className }: { className?: string }) {
 
 function TestimonialsSection() {
   return (
-    <section className="py-10 lg:py-14">
+    <section className="home-flow-section">
       <div className="container space-y-10">
         <SectionHeading
           eyebrow="Отзывы и Avito"
@@ -2060,7 +2060,7 @@ function TestimonialsSection() {
           description="Отзывы помогают понять, как мы работаем на реальных объектах: что было с колодцем до выезда, какие работы выполнили и какой результат получил клиент."
         />
         <div className="space-y-6">
-          <div className="reveal-rise reveal-rise-delay-1 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          <div className="home-testimonials-grid reveal-rise reveal-rise-delay-1 grid gap-5">
             {testimonials.map((item) =>
               "image" in item && item.image ? (
                 <figure key={item.quote} className="page-frame overflow-hidden rounded-[1.8rem] border-white/12 bg-[#0d131b]/96">
@@ -2137,7 +2137,7 @@ function TestimonialsSection() {
 
 function FaqSection({ items = globalFaq }: { items?: readonly { question: string; answer: string }[] }) {
   return (
-    <section className="py-12 lg:py-16">
+    <section className="home-flow-section">
       <div className="container grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
         <div>
           <div className="section-kicker">FAQ</div>
