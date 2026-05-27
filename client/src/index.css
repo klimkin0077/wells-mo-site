@@ -1013,3 +1013,146 @@ html {
     }
   }
 }
+
+
+/* ===== WELLS-MO direct stabilization patch =====
+   Цель: убрать мобильное мерцание/скачки высоты, не ломать текущий premium hero,
+   вернуть нормальную форму заявки и убрать внутренний "разработческий" блок справа на desktop.
+*/
+@layer components {
+  .request-dialog-content {
+    overflow: hidden !important;
+  }
+
+  .request-dialog-scroll {
+    max-height: inherit;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .request-dialog-close {
+    position: fixed;
+    top: calc(env(safe-area-inset-top) + 0.75rem);
+    right: 0.75rem;
+    z-index: 10000;
+    display: inline-flex;
+    width: 2.85rem;
+    height: 2.85rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: rgba(7, 10, 16, 0.92);
+    color: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.42);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    touch-action: manipulation;
+  }
+
+  .task-dialog-open .mobile-sticky-cta {
+    pointer-events: none !important;
+    opacity: 0 !important;
+    transform: translateY(110%) !important;
+  }
+
+  .hero-desktop-visual img {
+    object-position: center;
+    filter: saturate(1.05) contrast(1.08) brightness(0.76);
+  }
+}
+
+@media (max-width: 767px) {
+  /* Убираем viewport-зависимые высоты, из-за которых мобильный браузер дёргал layout при скролле. */
+  .home-hero-section {
+    min-height: 0 !important;
+    height: auto !important;
+    padding-top: 0.8rem !important;
+    padding-bottom: 1rem !important;
+    overflow: visible !important;
+  }
+
+  .hero-mobile-card {
+    min-height: 0 !important;
+    height: auto !important;
+    display: block !important;
+    padding: clamp(1rem, 3.8vw, 1.28rem) !important;
+    border-radius: 1.75rem !important;
+    clip-path: inset(0 round 1.75rem);
+    contain: paint;
+  }
+
+  .hero-mobile-card::before,
+  .hero-mobile-card::after,
+  .hero-mobile-media,
+  .hero-mobile-media::before,
+  .hero-mobile-media::after,
+  .hero-mobile-media-base {
+    border-radius: inherit !important;
+  }
+
+  .hero-mobile-copy {
+    min-height: 0 !important;
+    justify-content: flex-start !important;
+    padding-top: clamp(2.2rem, 8vw, 3.4rem) !important;
+    padding-bottom: 0 !important;
+  }
+
+  .hero-mobile-title {
+    margin-top: 0 !important;
+    max-width: 16.4rem !important;
+  }
+
+  .hero-mobile-benefits {
+    margin-top: 0.8rem !important;
+  }
+
+  .hero-mobile-actions {
+    margin-top: 0.72rem !important;
+    padding-bottom: 0 !important;
+  }
+
+  .home-pricing-section {
+    padding-top: clamp(1.35rem, 5vw, 1.9rem) !important;
+  }
+
+  #prices,
+  .mobile-anchor-target {
+    scroll-margin-top: calc(76px + env(safe-area-inset-top)) !important;
+  }
+
+  .request-dialog-content {
+    width: min(calc(100vw - 0.75rem), 46rem) !important;
+    max-height: calc(100svh - 0.75rem - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+    border-radius: 1.35rem !important;
+  }
+
+  .request-dialog-scroll {
+    max-height: calc(100svh - 0.75rem - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+    padding-bottom: calc(env(safe-area-inset-bottom) + 1rem);
+  }
+
+  .request-dialog-scroll form {
+    padding-bottom: calc(env(safe-area-inset-bottom) + 1.25rem);
+  }
+}
+
+@media (max-width: 380px) {
+  .hero-mobile-title {
+    max-width: 15.2rem !important;
+    font-size: clamp(2.35rem, 11.4vw, 4rem) !important;
+  }
+
+  .hero-mobile-subtitle {
+    max-width: 15rem !important;
+  }
+
+  .hero-mobile-benefit span {
+    font-size: 0.62rem !important;
+  }
+
+  .hero-mobile-benefit small {
+    font-size: 0.55rem !important;
+  }
+}

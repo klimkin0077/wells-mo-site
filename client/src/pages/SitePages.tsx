@@ -22,7 +22,7 @@ import {
   Wrench,
   X,
 } from "lucide-react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -789,11 +789,27 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
       resetSubmitState();
     };
 
-  const handleChoiceChange = (field: "service" | "issue" | "depth" | "access" | "contactMethod", value: string) => {
+  const handleChoiceChange = (field: "service" | "depth" | "access" | "contactMethod", value: string) => {
     setFormData((current) => ({
       ...current,
       [field]: current[field] === value ? "" : value,
     }));
+
+    resetSubmitState();
+  };
+
+  const handleIssueToggle = (value: string) => {
+    setFormData((current) => {
+      const selected = current.issue.split("||").filter(Boolean);
+      const nextSelected = selected.includes(value)
+        ? selected.filter((item) => item !== value)
+        : [...selected, value];
+
+      return {
+        ...current,
+        issue: nextSelected.join("||"),
+      };
+    });
 
     resetSubmitState();
   };
@@ -858,6 +874,28 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  useEffect(() => {
+    if (typeof document === "undefined") {
+      return;
+    }
+
+    document.documentElement.classList.toggle("task-dialog-open", open);
+    document.body.classList.toggle("task-dialog-open", open);
+
+    const previousOverflow = document.body.style.overflow;
+    if (open) {
+      document.body.style.overflow = "hidden";
+    }
+
+    return () => {
+      document.documentElement.classList.remove("task-dialog-open");
+      document.body.classList.remove("task-dialog-open");
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [open]);
+
+  const selectedIssueOptions = formData.issue.split("||").filter(Boolean);
+
   const normalizedPhoneDigits = normalizeRussianPhoneDigits(formData.phone);
 
   const buildTaskMessage = () => {
@@ -868,7 +906,7 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
       address: formData.address.trim(),
       service: formData.service.trim(),
       depth: formData.depth.trim(),
-      issue: formData.issue.trim(),
+      issue: formData.issue.split("||").filter(Boolean).join(", ").trim(),
       access: formData.access.trim(),
       contactMethod: formData.contactMethod.trim(),
       details: formData.details.trim(),
@@ -980,10 +1018,15 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
       </button>
       <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent
-          className="request-dialog-content w-[calc(100vw-1rem)] max-w-none overflow-y-auto overscroll-contain border border-white/10 bg-[#0d1219] p-0 text-white shadow-[0_32px_120px_rgba(0,0,0,0.58)] sm:w-[calc(100vw-2rem)] sm:max-w-none lg:w-[min(74rem,calc(100vw-3rem))] xl:w-[min(82rem,calc(100vw-4rem))]"
-          showCloseButton
+          className="request-dialog-content max-h-[min(100svh-1rem,60rem)] w-[calc(100vw-1rem)] max-w-none overflow-hidden border border-white/10 bg-[#0d1219] p-0 text-white shadow-[0_32px_120px_rgba(0,0,0,0.58)] sm:w-[calc(100vw-2rem)] sm:max-w-none lg:w-[min(74rem,calc(100vw-3rem))] xl:w-[min(82rem,calc(100vw-4rem))]"
+          showCloseButton={false}
         >
-          <div className="grid lg:grid-cols-[0.6fr_1.4fr]">
+          <DialogClose asChild>
+            <button type="button" className="request-dialog-close" aria-label="Закрыть заявку">
+              <X className="size-5" aria-hidden="true" />
+            </button>
+          </DialogClose>
+          <div className="request-dialog-scroll grid lg:grid-cols-[0.6fr_1.4fr]">
             <div className="border-b border-white/8 bg-[radial-gradient(circle_at_top,_rgba(193,145,71,0.18),_transparent_55%),linear-gradient(180deg,#111723_0%,#0b0f15_100%)] p-5 sm:p-6 lg:border-b-0 lg:border-r lg:p-6 xl:p-7">
               <div className="section-kicker">Задать задачу</div>
               <DialogHeader className="mt-4 text-left">
@@ -1047,7 +1090,7 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
                   <div className="text-sm font-semibold uppercase tracking-[0.18em] text-primary/85">Что происходит</div>
                   <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-3">
                     {discussionIssueOptions.map((option) => (
-                      <button key={option} type="button" onClick={() => handleChoiceChange("issue", option)} className={cn("rounded-[1.3rem] border px-3.5 py-3 text-left text-[0.92rem] leading-6 font-medium transition", formData.issue === option ? "border-primary/45 bg-primary/14 text-primary shadow-[0_14px_32px_rgba(193,145,71,0.18)]" : "border-white/10 bg-white/4 text-white/78 hover:border-primary/30 hover:bg-white/7")}>{option}</button>
+                      <button key={option} type="button" onClick={() => handleIssueToggle(option)} className={cn("rounded-[1.3rem] border px-3.5 py-3 text-left text-[0.92rem] leading-6 font-medium transition", selectedIssueOptions.includes(option) ? "border-primary/45 bg-primary/14 text-primary shadow-[0_14px_32px_rgba(193,145,71,0.18)]" : "border-white/10 bg-white/4 text-white/78 hover:border-primary/30 hover:bg-white/7")}>{option}</button>
                     ))}
                   </div>
                 </div>
@@ -1622,16 +1665,16 @@ function HomeHero() {
         </div>
 
         <div className="what-client-visual reveal-rise reveal-rise-delay-1 hidden self-stretch page-frame overflow-hidden rounded-[2rem] p-3 md:block">
-          <div className="image-mask min-h-[320px] sm:min-h-[380px] lg:min-h-[460px] xl:min-h-[520px]">
+          <div className="image-mask hero-desktop-visual min-h-[320px] sm:min-h-[380px] lg:min-h-[460px] xl:min-h-[520px]">
             <img
-              src={assets.hero}
-              alt="Чистка и ремонт колодца в Московской области — объект WELLS-MO"
+              src={assets.mobileHero3d}
+              alt="Чистка и ремонт колодцев WELLS-MO"
               loading="eager"
               fetchPriority="high"
               decoding="async"
               className="absolute inset-0 h-full w-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f15] via-[#0b0f15]/42 to-transparent" />
+            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,10,16,0.92)_0%,rgba(7,10,16,0.34)_46%,rgba(7,10,16,0.08)_100%),linear-gradient(180deg,rgba(7,10,16,0.08)_0%,rgba(7,10,16,0.82)_100%)]" />
             <div className="absolute left-5 right-5 top-5 flex items-center justify-between rounded-full border border-white/14 bg-[#10151d]/84 px-4 py-3 backdrop-blur-md">
               <div>
                 <div className="text-xs uppercase tracking-[0.24em] text-primary/90">WELLS-MO</div>
@@ -1639,25 +1682,13 @@ function HomeHero() {
               </div>
               <ShieldCheck className="size-5 text-primary" />
             </div>
-            <div className="absolute inset-x-5 bottom-5 rounded-[1.6rem] border border-white/12 bg-[#0f141d]/84 p-5 backdrop-blur-xl">
-              <div className="mb-3 text-xs uppercase tracking-[0.22em] text-primary/90">
-                Что важно клиенту
-              </div>
-              <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-                {[
-                  "Сразу видны понятные цены по частым работам",
-                  "Под героем — реальные фото объектов и порядок работ",
-                  "Нижняя панель связи остаётся, поэтому первый экран не перегружен",
-                ].map((text) => (
-                  <div key={text} className="rounded-2xl border border-white/10 bg-white/6 px-4 py-3 text-sm leading-6 text-white/74">
-                    {text}
-                  </div>
-                ))}
-              </div>
+            <div className="absolute inset-x-5 bottom-5 rounded-[1.6rem] border border-white/12 bg-[#0f141d]/78 p-5 backdrop-blur-xl">
+              <div className="text-xs uppercase tracking-[0.22em] text-primary/90">Работаем по делу</div>
+              <div className="mt-2 text-2xl font-bold tracking-[-0.04em] text-white">Осмотр, чистка, ремонт и понятная смета</div>
+              <p className="mt-2 text-sm leading-6 text-white/72">Клиент сразу видит услугу, цену и варианты связи без лишнего текста.</p>
             </div>
           </div>
-        </div>
-      </div>
+        </div>      </div>
     </section>
   );
 }
