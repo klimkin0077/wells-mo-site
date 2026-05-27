@@ -1,4 +1,41 @@
+# WELLS-MO — чистка и ремонт колодцев в Московской области
+# https://wells-mo.ru/
+
 User-agent: *
+Allow: /
+Disallow: /404.html
+Disallow: /__manus__/
+Disallow: /*?redirect=
+Disallow: /*?utm_*
+Disallow: /*?yclid=
+Disallow: /*?gclid=
+Disallow: /*?from=
+Disallow: /*?fbclid=
+
+User-agent: Yandex
+Allow: /
+Disallow: /404.html
+Disallow: /__manus__/
+Disallow: /*?redirect=
+Clean-param: utm_source&utm_medium&utm_campaign&utm_content&utm_term&yclid&gclid&from&fbclid&_openstat /
+
+User-agent: Googlebot
+Allow: /
+Disallow: /404.html
+Disallow: /__manus__/
+Disallow: /*?redirect=
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
 Allow: /
 
 Sitemap: https://wells-mo.ru/sitemap.xml
+Host: https://wells-mo.ru

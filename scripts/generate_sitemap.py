@@ -1,8 +1,9 @@
 from pathlib import Path
 import re
+from datetime import date
 
 BASE_URL = "https://wells-mo.ru"
-ROOT = Path("/home/ubuntu/premium-wells-site")
+ROOT = Path(__file__).resolve().parent.parent
 CONTENT = ROOT / "client/src/lib/site-content.ts"
 OUTPUT = ROOT / "client/public/sitemap.xml"
 
@@ -33,6 +34,12 @@ def slugify(value: str) -> str:
     return re.sub(r'-+', '-', re.sub(r'\s+', '-', ''.join(translit.get(ch, ch) for ch in value.lower())).strip()).strip('-')
 
 
+def ensure_trailing_slash(path: str) -> str:
+    if path == "/":
+        return path
+    return path if path.endswith("/") else f"{path}/"
+
+
 city_names = [
     "Балашиха","Ногинск","Бронницы","Власиха","Воскресенск","Восход","Долгопрудный","Домодедово","Дубна","Жуковский","Звёздный городок","Кашира","Клин","Коломна","Королёв","Котельники","Красногорск","Краснознаменск","Видное","Лобня","Лосино-Петровский","Лыткарино","Люберцы","Молодёжный","Мытищи","Наро-Фоминск","Нахабино","Новая Рига","Одинцово","Орехово-Зуево","Павловская Слобода","Павловский Посад","Подольск","Пушкино","Реутов","Рублёвка","Сергиев Посад","Серпухов","Солнечногорск","Ступино","Дедовск","Талдом","Фрязино","Химки","Барвиха","Черноголовка","Щёлково","Электросталь","Звенигород"
 ]
@@ -43,49 +50,60 @@ district_names = [
 
 priority_city_slugs = ["odincovo", "krasnogorsk", "nahabino", "novaya-riga", "rublevka", "barviha", "zvenigorod", "dedovsk", "pavlovskaya-sloboda"]
 
-urls = {
-    "/",
-    "/uslugi",
-    "/price/",
-    "/contacts/",
-    "/nashi-raboty",
-    "/o-kompanii",
-    "/faq",
-    "/rajony-rabot",
-    "/cleaning/",
-    "/repair/",
-    "/seam-sealing/",
-    "/stapling/",
-    "/bottom-filter/",
-    "/disinfection/",
+# Static pages with custom priorities
+static_urls = {
+    "/": ("1.0", "weekly"),
+    "/uslugi/": ("0.9", "weekly"),
+    "/price/": ("0.9", "weekly"),
+    "/contacts/": ("0.8", "monthly"),
+    "/nashi-raboty/": ("0.7", "monthly"),
+    "/o-kompanii/": ("0.6", "monthly"),
+    "/faq/": ("0.7", "monthly"),
+    "/rajony-rabot/": ("0.8", "monthly"),
+    "/cleaning/": ("0.9", "weekly"),
+    "/repair/": ("0.9", "weekly"),
+    "/seam-sealing/": ("0.8", "weekly"),
+    "/stapling/": ("0.8", "weekly"),
+    "/bottom-filter/": ("0.7", "weekly"),
+    "/disinfection/": ("0.7", "weekly"),
 }
 
+urls = {}
+for path, (prio, freq) in static_urls.items():
+    urls[path] = (prio, freq)
+
 for slug in service_slugs:
-    urls.add(service_slug_aliases[slug])
+    p = service_slug_aliases[slug]
+    urls.setdefault(p, ("0.9", "weekly"))
 
 for name in city_names:
-    urls.add(f"/goroda/{slugify(name)}")
+    path = ensure_trailing_slash(f"/goroda/{slugify(name)}")
+    urls.setdefault(path, ("0.7", "monthly"))
 
-urls.add("/goroda/odintsovo")
+urls.setdefault("/goroda/odintsovo/", ("0.7", "monthly"))
 
 for name in district_names:
-    urls.add(f"/rajony/{slugify(name)}")
+    path = ensure_trailing_slash(f"/rajony/{slugify(name)}")
+    urls.setdefault(path, ("0.7", "monthly"))
 
 for city_slug in priority_city_slugs:
     for service_slug in service_slugs:
-        urls.add(f"/goroda/{city_slug}/{service_slug}")
+        path = ensure_trailing_slash(f"/goroda/{city_slug}/{service_slug}")
+        urls.setdefault(path, ("0.6", "monthly"))
 
-sorted_urls = sorted(urls)
+today = date.today().isoformat()
+sorted_urls = sorted(urls.items())
 
 xml_parts = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
-for url_path in sorted_urls:
+for url_path, (prio, freq) in sorted_urls:
     xml_parts.append("  <url>")
     xml_parts.append(f"    <loc>{BASE_URL}{url_path}</loc>")
-    xml_parts.append("    <changefreq>weekly</changefreq>")
-    xml_parts.append("    <priority>0.8</priority>")
+    xml_parts.append(f"    <lastmod>{today}</lastmod>")
+    xml_parts.append(f"    <changefreq>{freq}</changefreq>")
+    xml_parts.append(f"    <priority>{prio}</priority>")
     xml_parts.append("  </url>")
 xml_parts.append("</urlset>")
 
 OUTPUT.parent.mkdir(parents=True, exist_ok=True)
 OUTPUT.write_text("\n".join(xml_parts) + "\n", encoding="utf-8")
-print(f"Generated {len(sorted_urls)} URLs")
+print(f"Generated {len(sorted_urls)} URLs in {OUTPUT}")
