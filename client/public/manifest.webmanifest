@@ -1,0 +1,28 @@
+{
+  "name": "WELLS-MO — чистка и ремонт колодцев",
+  "short_name": "WELLS-MO",
+  "description": "Чистка и ремонт колодцев в Московской области. Откачка воды, мойка шахты, чистка дна, герметизация швов и восстановление колодцев.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#11141d",
+  "theme_color": "#11141d",
+  "orientation": "portrait-primary",
+  "lang": "ru-RU",
+  "dir": "ltr",
+  "categories": ["business", "utilities"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/brand/site-logo-round.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    }
+  ]
+}

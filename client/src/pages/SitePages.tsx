@@ -649,37 +649,48 @@ function usePageSeo(title: string, description: string) {
       return element;
     };
 
-    const currentUrl = typeof window !== "undefined" ? window.location.href : "https://wells-mo.ru";
     const canonicalUrl = (() => {
       if (typeof window === "undefined") {
-        return "https://wells-mo.ru";
+        return "https://wells-mo.ru/";
       }
 
       const { origin, pathname } = window.location;
       const canonicalPath = canonicalPathByRoute[pathname] ?? pathname;
+      const normalizedPath = canonicalPath.endsWith("/") ? canonicalPath : `${canonicalPath}/`;
 
-      return `${origin}${canonicalPath}`;
+      return `${origin}${normalizedPath}`;
     })();
+    const ogImageUrl = "https://wells-mo.ru/images/work/well-cleaning-main.webp";
     const keywordPool = [
       "чистка колодцев московская область",
       "ремонт колодцев московская область",
       "гидроизоляция швов колодца",
       "скобирование колец колодца",
       "углубление колодцев",
+      "копка колодцев",
       "одинцово",
       "истра",
       "дмитров",
+      "красногорск",
       title,
     ];
     const keywords = Array.from(new Set(keywordPool)).join(", ");
 
     ensureMeta('meta[name="description"]', "name", "description").setAttribute("content", description);
     ensureMeta('meta[name="keywords"]', "name", "keywords").setAttribute("content", keywords);
-    ensureMeta('meta[name="robots"]', "name", "robots").setAttribute("content", "index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1");
+    ensureMeta('meta[name="robots"]', "name", "robots").setAttribute("content", "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1");
+    ensureMeta('meta[name="author"]', "name", "author").setAttribute("content", siteMeta.name);
     ensureMeta('meta[property="og:title"]', "property", "og:title").setAttribute("content", title);
     ensureMeta('meta[property="og:description"]', "property", "og:description").setAttribute("content", description);
     ensureMeta('meta[property="og:url"]', "property", "og:url").setAttribute("content", canonicalUrl);
     ensureMeta('meta[property="og:type"]', "property", "og:type").setAttribute("content", "website");
+    ensureMeta('meta[property="og:site_name"]', "property", "og:site_name").setAttribute("content", siteMeta.name);
+    ensureMeta('meta[property="og:locale"]', "property", "og:locale").setAttribute("content", "ru_RU");
+    ensureMeta('meta[property="og:image"]', "property", "og:image").setAttribute("content", ogImageUrl);
+    ensureMeta('meta[name="twitter:card"]', "name", "twitter:card").setAttribute("content", "summary_large_image");
+    ensureMeta('meta[name="twitter:title"]', "name", "twitter:title").setAttribute("content", title);
+    ensureMeta('meta[name="twitter:description"]', "name", "twitter:description").setAttribute("content", description);
+    ensureMeta('meta[name="twitter:image"]', "name", "twitter:image").setAttribute("content", ogImageUrl);
     ensureLink('link[rel="canonical"]', "canonical").setAttribute("href", canonicalUrl);
 
     let schemaScript = document.head.querySelector<HTMLScriptElement>('script[data-schema="wellsmo-localbusiness"]');
@@ -693,11 +704,14 @@ function usePageSeo(title: string, description: string) {
     schemaScript.textContent = JSON.stringify({
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
+      "@id": `${canonicalUrl}#page-business`,
       name: siteMeta.name,
       description,
       url: canonicalUrl,
-      telephone: siteMeta.phoneHref.replace("tel:", "+"),
+      telephone: "+7-981-666-66-70",
       email: siteMeta.email,
+      image: ogImageUrl,
+      priceRange: "1500–14000 RUB",
       areaServed: ["Московская область", "Одинцово", "Истра", "Дмитров", "Красногорск", "Солнечногорск", "Химки", "Лобня"],
       address: {
         "@type": "PostalAddress",
@@ -1539,9 +1553,10 @@ function HomeHero() {
               <img src={assets.mobileHero3d} alt="" className="hero-mobile-media-base h-full w-full object-cover" loading="eager" decoding="async" />
             </div>
             <div className="hero-mobile-copy">
-              <h1 data-text="Чистка и ремонт колодцев" className="hero-home-title hero-mobile-title text-[clamp(3.15rem,13.4vw,5.7rem)] leading-[0.88] font-bold tracking-[-0.075em] md:text-[clamp(3.3rem,5vw,4.95rem)] xl:text-[clamp(3.85rem,4.2vw,5.25rem)]">
+              <h1 data-text="Чистка и ремонт колодцев в Московской области" className="hero-home-title hero-mobile-title text-[clamp(3.15rem,13.4vw,5.7rem)] leading-[0.88] font-bold tracking-[-0.075em] md:text-[clamp(3.3rem,5vw,4.95rem)] xl:text-[clamp(3.85rem,4.2vw,5.25rem)]">
                 <span className="hero-title-gold">Чистка и ремонт</span>{" "}
                 <span className="hero-title-white">колодцев</span>
+                <span className="sr-only"> в Московской области</span>
               </h1>
               <div className="hero-title-line md:hidden" />
               <p className="hero-mobile-subtitle max-w-2xl text-[clamp(0.98rem,2.5vw,1.08rem)] leading-[1.55] sm:text-base lg:max-w-[33rem] lg:text-[clamp(1rem,1.35vw,1.12rem)] lg:leading-[1.72]">
