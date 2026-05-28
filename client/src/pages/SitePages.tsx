@@ -1661,10 +1661,10 @@ function HomeHero() {
     { label: "Оборудование", detail: "профи", Icon: Wrench },
   ];
   const heroTrustItems = [
-    { icon: ShieldCheck, title: "Гарантия на работы", sub: "Срок подтверждаем перед merge" },
-    { icon: FileText, title: "Договор и чек", sub: "Формат выдачи подтверждаем перед merge" },
-    { icon: Wallet, title: "Без предоплаты", sub: "Условия по материалам подтверждаем перед merge" },
-    { icon: Clock, title: "Быстрый выезд", sub: "Точный срок подтверждаем перед merge" },
+    { icon: ShieldCheck, title: "Гарантия 1 год", sub: "При полном комплексе: скобирование колец + герметизация швов" },
+    { icon: FileText, title: "Договор по запросу", sub: "Оформим, если нужно" },
+    { icon: Wallet, title: "Без предоплаты", sub: "Оплата после всех работ" },
+    { icon: Clock, title: "Выезд за 1–2 дня", sub: "Иногда — в день обращения" },
   ];
 
   return (
