@@ -11,7 +11,9 @@ import {
   ArrowUp,
   Building2,
   ChevronDown,
+  Clock,
   Droplets,
+  FileText,
   Hammer,
   MapPin,
   Menu,
@@ -19,6 +21,7 @@ import {
   Phone,
   ShieldCheck,
   Sparkles,
+  Wallet,
   Wrench,
   X,
 } from "lucide-react";
@@ -55,7 +58,6 @@ import {
   services,
   siteMeta,
   testimonials,
-  trustMetrics,
   type LocalSeoLocation,
   type PriorityServiceCityPage,
   whyChooseUs,
@@ -1531,12 +1533,138 @@ function SectionHeading({
   );
 }
 
+function BeforeAfterSlider({
+  beforeSrc,
+  afterSrc,
+  beforeLabel = "До",
+  afterLabel = "После",
+  alt = "До и после работы",
+}: {
+  beforeSrc: string;
+  afterSrc: string;
+  beforeLabel?: string;
+  afterLabel?: string;
+  alt?: string;
+}) {
+  const [position, setPosition] = useState(50);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const draggingRef = useRef(false);
+
+  const updatePosition = (clientX: number) => {
+    const element = containerRef.current;
+    if (!element) return;
+    const rect = element.getBoundingClientRect();
+    const next = ((clientX - rect.left) / rect.width) * 100;
+    setPosition(Math.max(0, Math.min(100, next)));
+  };
+
+  const stopDragging = () => {
+    draggingRef.current = false;
+  };
+
+  return (
+    <div
+      ref={containerRef}
+      className="relative aspect-[4/5] w-full select-none overflow-hidden rounded-[1.6rem] border border-white/10 bg-[#0d1219] touch-none"
+      onPointerDown={(event) => {
+        draggingRef.current = true;
+        event.currentTarget.setPointerCapture?.(event.pointerId);
+        updatePosition(event.clientX);
+      }}
+      onPointerMove={(event) => {
+        if (draggingRef.current) {
+          updatePosition(event.clientX);
+        }
+      }}
+      onPointerUp={(event) => {
+        draggingRef.current = false;
+        event.currentTarget.releasePointerCapture?.(event.pointerId);
+      }}
+      onPointerCancel={stopDragging}
+      onPointerLeave={stopDragging}
+      role="slider"
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-valuenow={Math.round(position)}
+      aria-label={alt}
+      tabIndex={0}
+      onKeyDown={(event) => {
+        if (event.key === "ArrowLeft") {
+          event.preventDefault();
+          setPosition((value) => Math.max(0, value - 5));
+        }
+        if (event.key === "ArrowRight") {
+          event.preventDefault();
+          setPosition((value) => Math.min(100, value + 5));
+        }
+      }}
+    >
+      <img
+        src={afterSrc}
+        alt={`${alt} — после`}
+        className="absolute inset-0 h-full w-full object-cover"
+        loading="eager"
+        decoding="async"
+      />
+      <img
+        src={beforeSrc}
+        alt={`${alt} — до`}
+        className="absolute inset-0 h-full w-full object-cover"
+        style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}
+        loading="eager"
+        decoding="async"
+      />
+
+      <div className="absolute left-3 top-3 rounded-full bg-black/60 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-md">
+        {beforeLabel}
+      </div>
+      <div className="absolute right-3 top-3 rounded-full bg-primary/90 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-black backdrop-blur-md">
+        {afterLabel}
+      </div>
+
+      <div
+        className="absolute inset-y-0 w-[2px] bg-white shadow-[0_0_24px_rgba(255,255,255,0.6)]"
+        style={{ left: `calc(${position}% - 1px)` }}
+        aria-hidden="true"
+      />
+      <div
+        className="absolute top-1/2 flex size-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/40 bg-[#0f141d]/80 text-white shadow-[0_8px_24px_rgba(0,0,0,0.5)] backdrop-blur-md"
+        style={{ left: `${position}%` }}
+        aria-hidden="true"
+      >
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M7 6l-4 4 4 4M13 6l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </div>
+
+      <div className="pointer-events-none absolute inset-x-4 bottom-4 text-center text-xs text-white/72">
+        Потяните ползунок — увидите разницу
+      </div>
+      <input
+        type="range"
+        min={0}
+        max={100}
+        value={position}
+        onChange={(event) => setPosition(Number(event.target.value))}
+        className="sr-only"
+        aria-label={`${alt} — положение ползунка`}
+      />
+    </div>
+  );
+}
+
 function HomeHero() {
   const mobileBenefits = [
     { label: "Чистая вода", detail: "без ила", Icon: Droplets },
     { label: "Гарантия", detail: "качества", Icon: ShieldCheck },
     { label: "Быстрый", detail: "выезд", Icon: Phone },
     { label: "Оборудование", detail: "профи", Icon: Wrench },
+  ];
+  const heroTrustItems = [
+    { icon: ShieldCheck, title: "Гарантия на работы", sub: "Срок подтверждаем перед merge" },
+    { icon: FileText, title: "Договор и чек", sub: "Формат выдачи подтверждаем перед merge" },
+    { icon: Wallet, title: "Без предоплаты", sub: "Условия по материалам подтверждаем перед merge" },
+    { icon: Clock, title: "Быстрый выезд", sub: "Точный срок подтверждаем перед merge" },
   ];
 
   return (
@@ -1669,41 +1797,41 @@ function HomeHero() {
               <ArrowRight className="size-4" />
             </a>
           </div>
-          <div className="hidden gap-3 pt-3 md:grid md:grid-cols-2 xl:grid-cols-4">
-            {trustMetrics.map((item) => (
-              <div key={item.value} className="hero-stat p-4">
-                <div className="metric-value text-primary">{item.value}</div>
-                <div className="mt-2 text-sm leading-6 text-white/78">{item.label}</div>
+          <div className="grid grid-cols-2 gap-3 pt-3 md:grid-cols-4">
+            {heroTrustItems.map(({ icon: Icon, title, sub }) => (
+              <div key={title} className="rounded-[1.35rem] border border-white/8 bg-white/[0.04] p-4 backdrop-blur-sm">
+                <Icon className="size-5 text-primary" aria-hidden="true" />
+                <div className="mt-2 text-sm font-semibold text-white">{title}</div>
+                <div className="mt-1 text-xs leading-5 text-white/64">{sub}</div>
               </div>
             ))}
           </div>
         </div>
 
         <div className="what-client-visual reveal-rise reveal-rise-delay-1 hidden self-stretch page-frame overflow-hidden rounded-[2rem] p-3 md:block">
-          <div className="image-mask hero-desktop-visual min-h-[320px] sm:min-h-[380px] lg:min-h-[460px] xl:min-h-[520px]">
-            <img
-              src={assets.mobileHero3d}
-              alt="Чистка и ремонт колодцев WELLS-MO"
-              loading="eager"
-              fetchPriority="high"
-              decoding="async"
-              className="absolute inset-0 h-full w-full object-cover"
-            />
-            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,10,16,0.92)_0%,rgba(7,10,16,0.34)_46%,rgba(7,10,16,0.08)_100%),linear-gradient(180deg,rgba(7,10,16,0.08)_0%,rgba(7,10,16,0.82)_100%)]" />
-            <div className="absolute left-5 right-5 top-5 flex items-center justify-between rounded-full border border-white/14 bg-[#10151d]/84 px-4 py-3 backdrop-blur-md">
-              <div>
-                <div className="text-xs uppercase tracking-[0.24em] text-primary/90">WELLS-MO</div>
-                <div className="text-sm text-white/78">Чистка и ремонт колодцев</div>
+          <div className="hero-desktop-visual flex min-h-[320px] flex-col gap-4 sm:min-h-[380px] lg:min-h-[460px] xl:min-h-[520px]">
+            <div className="relative">
+              <BeforeAfterSlider
+                beforeSrc="/images/work/current-joint-problem.webp"
+                afterSrc="/images/work/joint-waterproofing.webp"
+                alt="Шов колодца до и после герметизации"
+              />
+              <div className="absolute left-5 right-5 top-5 flex items-center justify-between rounded-full border border-white/14 bg-[#10151d]/84 px-4 py-3 backdrop-blur-md">
+                <div>
+                  <div className="text-xs uppercase tracking-[0.24em] text-primary/90">WELLS-MO</div>
+                  <div className="text-sm text-white/78">Реальная работа, не рендер</div>
+                </div>
+                <ShieldCheck className="size-5 text-primary" />
               </div>
-              <ShieldCheck className="size-5 text-primary" />
             </div>
-            <div className="absolute inset-x-5 bottom-5 rounded-[1.6rem] border border-white/12 bg-[#0f141d]/78 p-5 backdrop-blur-xl">
+            <div className="rounded-[1.6rem] border border-white/12 bg-[#0f141d]/78 p-5 backdrop-blur-xl">
               <div className="text-xs uppercase tracking-[0.22em] text-primary/90">Работаем по делу</div>
               <div className="mt-2 text-2xl font-bold tracking-[-0.04em] text-white">Осмотр, чистка, ремонт и понятная смета</div>
-              <p className="mt-2 text-sm leading-6 text-white/72">Клиент сразу видит услугу, цену и варианты связи без лишнего текста.</p>
+              <p className="mt-2 text-sm leading-6 text-white/72">Сразу видно: что делаем, сколько стоит, как связаться. Без анкет и долгих расшифровок.</p>
             </div>
           </div>
-        </div>      </div>
+        </div>
+      </div>
     </section>
   );
 }
