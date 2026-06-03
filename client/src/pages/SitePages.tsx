@@ -803,7 +803,7 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
       resetSubmitState();
     };
 
-  const handleChoiceChange = (field: "service" | "depth" | "access" | "contactMethod", value: string) => {
+  const handleChoiceChange = (field: "depth" | "access" | "contactMethod", value: string) => {
     setFormData((current) => ({
       ...current,
       [field]: current[field] === value ? "" : value,
@@ -812,16 +812,16 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
     resetSubmitState();
   };
 
-  const handleIssueToggle = (value: string) => {
+  const handleMultiChoiceToggle = (field: "service" | "issue", value: string) => {
     setFormData((current) => {
-      const selected = current.issue.split("||").filter(Boolean);
+      const selected = current[field].split("||").filter(Boolean);
       const nextSelected = selected.includes(value)
         ? selected.filter((item) => item !== value)
         : [...selected, value];
 
       return {
         ...current,
-        issue: nextSelected.join("||"),
+        [field]: nextSelected.join("||"),
       };
     });
 
@@ -908,6 +908,7 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
     };
   }, [open]);
 
+  const selectedServiceOptions = formData.service.split("||").filter(Boolean);
   const selectedIssueOptions = formData.issue.split("||").filter(Boolean);
 
   const normalizedPhoneDigits = normalizeRussianPhoneDigits(formData.phone);
@@ -918,7 +919,7 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
       phone: formatRussianPhone(formData.phone),
       cityArea: formData.cityArea.trim(),
       address: formData.address.trim(),
-      service: formData.service.trim(),
+      service: formData.service.split("||").filter(Boolean).join(", ").trim(),
       depth: formData.depth.trim(),
       issue: formData.issue.split("||").filter(Boolean).join(", ").trim(),
       access: formData.access.trim(),
@@ -1028,7 +1029,7 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
         onClick={() => openTaskDialog({ trackingId: "desktop_floating_request", placement: "desktop_floating_cta" })}
         className="fixed bottom-8 right-8 z-[60] hidden rounded-full border border-primary/30 bg-[#111723]/88 px-5 py-3 text-sm font-semibold text-primary shadow-[0_18px_42px_rgba(0,0,0,0.32)] backdrop-blur-xl transition hover:-translate-y-1 hover:shadow-[0_24px_48px_rgba(193,145,71,0.2)] lg:inline-flex"
       >
-        Задать задачу
+        Рассчитать работы
       </button>
       <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent
@@ -1042,7 +1043,7 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
           </DialogClose>
           <div className="request-dialog-scroll grid lg:grid-cols-[0.6fr_1.4fr]">
             <div className="border-b border-white/8 bg-[radial-gradient(circle_at_top,_rgba(193,145,71,0.18),_transparent_55%),linear-gradient(180deg,#111723_0%,#0b0f15_100%)] p-5 sm:p-6 lg:border-b-0 lg:border-r lg:p-6 xl:p-7">
-              <div className="section-kicker">Задать задачу</div>
+              <div className="section-kicker">Рассчитать работы</div>
               <DialogHeader className="mt-4 text-left">
                 <DialogTitle className="font-heading text-[2.15rem] font-bold tracking-[-0.04em] text-white sm:text-[2.8rem] xl:text-[3rem]">
                   Заявка без лишних созвонов
@@ -1078,7 +1079,7 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
                   <div className="text-sm font-semibold uppercase tracking-[0.18em] text-primary/85">Тип услуги</div>
                   <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-3">
                     {discussionServiceOptions.map((option) => (
-                      <button key={option} type="button" onClick={() => handleChoiceChange("service", option)} className={cn("rounded-[1.3rem] border px-3.5 py-3 text-left text-[0.92rem] leading-6 font-medium transition", formData.service === option ? "border-primary/45 bg-primary/14 text-primary shadow-[0_14px_32px_rgba(193,145,71,0.18)]" : "border-white/10 bg-white/4 text-white/78 hover:border-primary/30 hover:bg-white/7")}>{option}</button>
+                      <button key={option} type="button" aria-pressed={selectedServiceOptions.includes(option)} onClick={() => handleMultiChoiceToggle("service", option)} className={cn("rounded-[1.3rem] border px-3.5 py-3 text-left text-[0.92rem] leading-6 font-medium transition", selectedServiceOptions.includes(option) ? "border-primary/45 bg-primary/14 text-primary shadow-[0_14px_32px_rgba(193,145,71,0.18)]" : "border-white/10 bg-white/4 text-white/78 hover:border-primary/30 hover:bg-white/7")}>{option}</button>
                     ))}
                   </div>
                 </div>
@@ -1104,7 +1105,7 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
                   <div className="text-sm font-semibold uppercase tracking-[0.18em] text-primary/85">Что происходит</div>
                   <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-3">
                     {discussionIssueOptions.map((option) => (
-                      <button key={option} type="button" onClick={() => handleIssueToggle(option)} className={cn("rounded-[1.3rem] border px-3.5 py-3 text-left text-[0.92rem] leading-6 font-medium transition", selectedIssueOptions.includes(option) ? "border-primary/45 bg-primary/14 text-primary shadow-[0_14px_32px_rgba(193,145,71,0.18)]" : "border-white/10 bg-white/4 text-white/78 hover:border-primary/30 hover:bg-white/7")}>{option}</button>
+                      <button key={option} type="button" aria-pressed={selectedIssueOptions.includes(option)} onClick={() => handleMultiChoiceToggle("issue", option)} className={cn("rounded-[1.3rem] border px-3.5 py-3 text-left text-[0.92rem] leading-6 font-medium transition", selectedIssueOptions.includes(option) ? "border-primary/45 bg-primary/14 text-primary shadow-[0_14px_32px_rgba(193,145,71,0.18)]" : "border-white/10 bg-white/4 text-white/78 hover:border-primary/30 hover:bg-white/7")}>{option}</button>
                     ))}
                   </div>
                 </div>
@@ -1708,6 +1709,42 @@ function HomeHero() {
   );
 }
 
+function ResponsiblePersonSection() {
+  const points = [
+    "Сначала разбираем задачу по фото или видео",
+    "Состав работ и цена согласуются до начала",
+    "После работ даём рекомендации по прокачке и обслуживанию колодца",
+  ] as const;
+
+  return (
+    <section className="home-flow-section home-trust-owner-section">
+      <div className="container">
+        <div className="page-frame overflow-hidden rounded-[2rem] p-6 lg:p-8">
+          <div className="grid gap-6 lg:grid-cols-[0.82fr_1.18fr] lg:items-center">
+            <div>
+              <div className="section-kicker">Ответственный за заявку</div>
+              <h2 className="mt-3 text-3xl font-bold tracking-[-0.04em] text-white md:text-4xl">Кто отвечает за работы</h2>
+            </div>
+            <div className="space-y-5">
+              <p className="story-copy">
+                Меня зовут Денис, я отвечаю за заявки, смету и контроль работ WELLS-MO. Перед выездом уточняем задачу по фото или видео, заранее согласовываем состав работ и цену. На объект выезжает профильная бригада с насосами, мойкой высокого давления и материалами для ремонта швов.
+              </p>
+              <div className="grid gap-3 md:grid-cols-3">
+                {points.map((point) => (
+                  <div key={point} className="rounded-[1.25rem] border border-primary/14 bg-primary/8 p-4 text-sm leading-6 text-white/78">
+                    <ShieldCheck className="mb-3 size-5 text-primary" aria-hidden="true" />
+                    {point}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function ServicesPreview() {
   const featuredCards = [
     {
@@ -2215,7 +2252,7 @@ function LocationHubSection() {
         <SectionHeading
           eyebrow="Города и районы"
           title="Работаем по Московской области и приоритетным направлениям"
-          description="Работаем по Московской области. Приоритетные выезды — Одинцово, Красногорск, Истра, Дмитров, Нахабино, Дедовск, Звенигород, Новорижское направление, Рублёвка и соседние районы."
+          description="Работаем по Московской области. Приоритетные направления: Одинцово, Красногорск, Истра, Дмитров, Новорижское направление. Возможность выезда в другие районы Московской области уточняем по адресу."
         />
         <div className="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
           <div className="page-frame rounded-[2rem] p-6 lg:p-8">
@@ -2284,7 +2321,7 @@ function CtaSection() {
               </p>
               <div className="flex flex-col gap-3 sm:flex-row">
                 <RequestDialogButton trackingId="final_request" trackingPlacement="final_cta">
-                  Задать задачу <ArrowRight className="size-4" />
+                  Оставить заявку <ArrowRight className="size-4" />
                 </RequestDialogButton>
                 <a
                   href={siteMeta.phoneHref}
@@ -2856,6 +2893,7 @@ export function HomePage() {
   return (
     <SiteLayout>
       <HomeHero />
+      <ResponsiblePersonSection />
       <PricingSection />
       <CasesSection />
       <ServicesPreview />
@@ -3087,9 +3125,10 @@ export function ContactsPage() {
                 {siteMeta.email}
               </a>
               <p className="story-copy">
-                Работаем по Московской области. Приоритет: Одинцово, Красногорск, Истра, Дмитров,
-                Новорижское направление и соседние районы. Сообщите район, задачу и текущее
-                состояние колодца, чтобы быстрее понять формат работ и сориентировать вас по выезду.
+                Работаем по Московской области. Приоритетные направления: Одинцово, Красногорск,
+                Истра, Дмитров, Новорижское направление. Возможность выезда в другие районы
+                Московской области уточняем по адресу. Сообщите район, задачу и текущее состояние
+                колодца, чтобы быстрее понять формат работ и сориентировать вас по выезду.
               </p>
               <div className="rounded-[1.4rem] border border-primary/18 bg-primary/8 p-4 text-sm leading-7 text-white/78">
                 Для предварительной оценки удобно сразу отправить фото или короткое видео шахты, воды, швов и нижней части колодца. Это не заменяет осмотр, но помогает быстрее понять, идёт ли речь о чистке, ремонте, донном фильтре или комплексной заявке.
@@ -3225,7 +3264,7 @@ export function ContactsPage() {
                 <a href={`mailto:${siteMeta.email}`} className="text-white transition hover:text-primary">
                   написать на {siteMeta.email}
                 </a>
-                . Работаем по Московской области. Приоритет: Одинцово, Красногорск, Истра, Дмитров, Новорижское направление и соседние районы.
+                . Работаем по Московской области. Приоритетные направления: Одинцово, Красногорск, Истра, Дмитров, Новорижское направление. Возможность выезда в другие районы Московской области уточняем по адресу.
               </p>
             </form>
           </div>

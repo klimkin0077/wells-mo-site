@@ -376,6 +376,10 @@ html {
     padding-block: clamp(2.7rem, 6vw, 4.25rem) !important;
   }
 
+  .home-trust-owner-section {
+    padding-block: clamp(2.1rem, 4.5vw, 3.4rem) !important;
+  }
+
   .home-pricing-grid {
     align-items: start;
     gap: clamp(1.5rem, 3vw, 2.25rem);
@@ -508,6 +512,10 @@ html {
 
     .home-flow-section {
       padding-block: clamp(2.25rem, 6vw, 3rem) !important;
+    }
+
+    .home-trust-owner-section {
+      padding-block: clamp(1.55rem, 5vw, 2.1rem) !important;
     }
 
     .home-services-section {
@@ -894,6 +902,10 @@ html {
     .glass-panel,
     .page-frame {
       backdrop-filter: blur(14px);
+    }
+
+    .page-frame {
+      border-radius: 1.55rem;
     }
 
     .copper-chip {
