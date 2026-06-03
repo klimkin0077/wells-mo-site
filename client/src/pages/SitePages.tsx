@@ -337,15 +337,13 @@ const initialTaskDiscussionFormState: TaskDiscussionFormState = {
 const discussionServiceOptions = [
   "Чистка колодцев",
   "Ремонт колодцев",
-  "Скобирование колец",
   "Гидроизоляция швов",
-  "Углубление колодцев",
-  "Донный щит и гравий",
-  "Копка колодцев",
-  "Септики из ЖБ колец",
-  "Дренажный колодец",
+  "Скобирование колец",
+  "Донный фильтр",
+  "Углубление",
+  "Копка",
   "Водоснабжение из колодца в дом",
-  "Другое",
+  "Септик / дренаж",
 ] as const;
 
 const discussionIssueOptions = [
@@ -803,11 +801,27 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
       resetSubmitState();
     };
 
-  const handleChoiceChange = (field: "service" | "depth" | "access" | "contactMethod", value: string) => {
+  const handleChoiceChange = (field: "depth" | "access" | "contactMethod", value: string) => {
     setFormData((current) => ({
       ...current,
       [field]: current[field] === value ? "" : value,
     }));
+
+    resetSubmitState();
+  };
+
+  const handleServiceToggle = (value: string) => {
+    setFormData((current) => {
+      const selected = current.service.split("||").filter(Boolean);
+      const nextSelected = selected.includes(value)
+        ? selected.filter((item) => item !== value)
+        : [...selected, value];
+
+      return {
+        ...current,
+        service: nextSelected.join("||"),
+      };
+    });
 
     resetSubmitState();
   };
@@ -908,6 +922,9 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
     };
   }, [open]);
 
+  const selectedServiceOptions = formData.service
+    .split("||")
+    .filter((value): value is (typeof discussionServiceOptions)[number] => discussionServiceOptions.includes(value as (typeof discussionServiceOptions)[number]));
   const selectedIssueOptions = formData.issue.split("||").filter(Boolean);
 
   const normalizedPhoneDigits = normalizeRussianPhoneDigits(formData.phone);
@@ -918,7 +935,7 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
       phone: formatRussianPhone(formData.phone),
       cityArea: formData.cityArea.trim(),
       address: formData.address.trim(),
-      service: formData.service.trim(),
+      service: selectedServiceOptions.join(", ").trim(),
       depth: formData.depth.trim(),
       issue: formData.issue.split("||").filter(Boolean).join(", ").trim(),
       access: formData.access.trim(),
@@ -1028,7 +1045,7 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
         onClick={() => openTaskDialog({ trackingId: "desktop_floating_request", placement: "desktop_floating_cta" })}
         className="fixed bottom-8 right-8 z-[60] hidden rounded-full border border-primary/30 bg-[#111723]/88 px-5 py-3 text-sm font-semibold text-primary shadow-[0_18px_42px_rgba(0,0,0,0.32)] backdrop-blur-xl transition hover:-translate-y-1 hover:shadow-[0_24px_48px_rgba(193,145,71,0.2)] lg:inline-flex"
       >
-        Задать задачу
+        Рассчитать работы
       </button>
       <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent
@@ -1042,7 +1059,7 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
           </DialogClose>
           <div className="request-dialog-scroll grid lg:grid-cols-[0.6fr_1.4fr]">
             <div className="border-b border-white/8 bg-[radial-gradient(circle_at_top,_rgba(193,145,71,0.18),_transparent_55%),linear-gradient(180deg,#111723_0%,#0b0f15_100%)] p-5 sm:p-6 lg:border-b-0 lg:border-r lg:p-6 xl:p-7">
-              <div className="section-kicker">Задать задачу</div>
+              <div className="section-kicker">Рассчитать работы</div>
               <DialogHeader className="mt-4 text-left">
                 <DialogTitle className="font-heading text-[2.15rem] font-bold tracking-[-0.04em] text-white sm:text-[2.8rem] xl:text-[3rem]">
                   Заявка без лишних созвонов
@@ -1075,11 +1092,31 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
                   <input name="address" autoComplete="street-address" value={formData.address} onChange={handleFieldChange("address")} className="h-14 rounded-2xl border border-white/10 bg-white/4 px-4 text-base text-white placeholder:text-white/34" placeholder="Адрес / ориентир" />
                 </div>
                 <div className="space-y-3">
-                  <div className="text-sm font-semibold uppercase tracking-[0.18em] text-primary/85">Тип услуги</div>
+                  <div className="flex flex-wrap items-baseline justify-between gap-2">
+                    <div className="text-sm font-semibold uppercase tracking-[0.18em] text-primary/85">Тип услуги</div>
+                    <div className="text-xs leading-6 text-white/48">Можно выбрать несколько вариантов</div>
+                  </div>
                   <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-3">
-                    {discussionServiceOptions.map((option) => (
-                      <button key={option} type="button" onClick={() => handleChoiceChange("service", option)} className={cn("rounded-[1.3rem] border px-3.5 py-3 text-left text-[0.92rem] leading-6 font-medium transition", formData.service === option ? "border-primary/45 bg-primary/14 text-primary shadow-[0_14px_32px_rgba(193,145,71,0.18)]" : "border-white/10 bg-white/4 text-white/78 hover:border-primary/30 hover:bg-white/7")}>{option}</button>
-                    ))}
+                    {discussionServiceOptions.map((option) => {
+                      const isSelected = selectedServiceOptions.includes(option);
+
+                      return (
+                        <button
+                          key={option}
+                          type="button"
+                          aria-pressed={isSelected}
+                          onClick={() => handleServiceToggle(option)}
+                          className={cn(
+                            "rounded-[1.3rem] border px-3.5 py-3 text-left text-[0.92rem] leading-6 font-medium transition",
+                            isSelected
+                              ? "border-primary/45 bg-primary/14 text-primary shadow-[0_14px_32px_rgba(193,145,71,0.18)]"
+                              : "border-white/10 bg-white/4 text-white/78 hover:border-primary/30 hover:bg-white/7",
+                          )}
+                        >
+                          {option}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
                 <div className="grid gap-3.5 lg:grid-cols-[1.05fr_0.95fr]">
@@ -1104,7 +1141,7 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
                   <div className="text-sm font-semibold uppercase tracking-[0.18em] text-primary/85">Что происходит</div>
                   <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-3">
                     {discussionIssueOptions.map((option) => (
-                      <button key={option} type="button" onClick={() => handleIssueToggle(option)} className={cn("rounded-[1.3rem] border px-3.5 py-3 text-left text-[0.92rem] leading-6 font-medium transition", selectedIssueOptions.includes(option) ? "border-primary/45 bg-primary/14 text-primary shadow-[0_14px_32px_rgba(193,145,71,0.18)]" : "border-white/10 bg-white/4 text-white/78 hover:border-primary/30 hover:bg-white/7")}>{option}</button>
+                      <button key={option} type="button" aria-pressed={selectedIssueOptions.includes(option)} onClick={() => handleIssueToggle(option)} className={cn("rounded-[1.3rem] border px-3.5 py-3 text-left text-[0.92rem] leading-6 font-medium transition", selectedIssueOptions.includes(option) ? "border-primary/45 bg-primary/14 text-primary shadow-[0_14px_32px_rgba(193,145,71,0.18)]" : "border-white/10 bg-white/4 text-white/78 hover:border-primary/30 hover:bg-white/7")}>{option}</button>
                     ))}
                   </div>
                 </div>
@@ -1294,7 +1331,7 @@ function Header() {
             Посмотреть цены
             <ArrowRight className="size-4" />
           </a>
-          <RequestDialogButton trackingId="header_request" trackingPlacement="header_desktop">Оставить заявку</RequestDialogButton>
+          <RequestDialogButton trackingId="header_request" trackingPlacement="header_desktop">Рассчитать работы</RequestDialogButton>
           <button
             type="button"
             onClick={() => setOpen((value) => !value)}
@@ -1359,7 +1396,7 @@ function Header() {
                     {siteMeta.phone}
                   </a>
                   <RequestDialogButton trackingId="header_request_menu" trackingPlacement="header_menu" className="w-full justify-center">
-                    Оставить заявку
+                    Рассчитать работы
                   </RequestDialogButton>
                   <a
                     href="/price/"
@@ -1579,7 +1616,7 @@ function HomeHero() {
                   trackingPlacement="home_hero"
                   className="hero-mobile-action hero-mobile-action-primary !w-full sm:!w-full"
                 >
-                  Оставить заявку
+                  Рассчитать работы
                   <ArrowRight className="size-4" />
                 </RequestDialogButton>
                 <a
@@ -1633,7 +1670,7 @@ function HomeHero() {
               trackingPlacement="home_hero"
               className="min-h-[3rem] bg-primary px-5 py-3 text-sm font-semibold text-[#11141d] hover:bg-primary/90 hover:shadow-none lg:min-h-[3.25rem] lg:px-6"
             >
-              Оставить заявку
+              Рассчитать работы
               <ArrowRight className="size-4" />
             </RequestDialogButton>
             <a
@@ -1836,6 +1873,41 @@ function ServicesPreview() {
   );
 }
 
+function ResponsiblePersonSection() {
+  const denisTrustPoints = [
+    "Сначала разбираем задачу по фото или видео.",
+    "Состав работ и цена согласуются до начала.",
+    "После работ даём рекомендации по прокачке и обслуживанию колодца.",
+  ];
+
+  return (
+    <section className="home-flow-section pt-2 lg:pt-4">
+      <div className="container grid gap-6 lg:grid-cols-[1.02fr_0.98fr] lg:items-start">
+        <div className="page-frame rounded-[2rem] p-6 lg:p-8">
+          <div className="section-kicker">Кто отвечает за работы</div>
+          <h2 className="mt-4 text-4xl font-bold tracking-[-0.04em] text-white md:text-5xl">
+            Заявки, смету и контроль работ ведёт <span className="text-gradient-metal">Денис</span>
+          </h2>
+          <p className="story-copy mt-5 max-w-3xl">
+            Меня зовут Денис. Я отвечаю за заявки, предварительную оценку, смету и контроль работ WELLS-MO. Перед выездом разбираем задачу по фото или видео, заранее согласовываем состав работ и цену. На объект выезжает профильная бригада с насосами, мойкой высокого давления и материалами для ремонта швов.
+          </p>
+          <div className="mt-6 rounded-[1.5rem] border border-white/10 bg-white/5 p-5 text-sm leading-7 text-white/70">
+            Спокойно объясняем, что реально нужно делать на объекте, а что можно не включать в смету. Без лишних обещаний и без формата «сначала приезжаем, потом разбираемся на месте».
+          </div>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
+          {denisTrustPoints.map((item, index) => (
+            <div key={item} className="glass-panel rounded-[1.5rem] p-5">
+              <div className="metric-value text-primary">0{index + 1}</div>
+              <p className="mt-3 text-sm leading-7 text-white/72">{item}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function WhyChooseSection() {
   return (
     <section className="home-flow-section">
@@ -1941,22 +2013,47 @@ function CasesSection() {
               </div>
               <figcaption className="space-y-4 p-5 sm:p-6">
                 <div className="flex flex-wrap gap-2">
-                  <span
-                    className={cn(
-                      "inline-flex items-center rounded-full border px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.18em]",
-                      item.stage === "До работ"
-                        ? "border-rose-400/28 bg-rose-500/10 text-rose-100"
-                        : "border-emerald-400/28 bg-emerald-500/10 text-emerald-100",
-                    )}
-                  >
+                  <span className="inline-flex items-center rounded-full border border-primary/24 bg-primary/10 px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-primary">
                     {item.stage}
                   </span>
                   <span className="inline-flex items-center rounded-full border border-white/10 bg-white/6 px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-white/78">
                     {item.service}
                   </span>
                 </div>
-                <div className="text-xs uppercase tracking-[0.2em] text-primary/88">{item.location}</div>
+                <div className="grid gap-2 rounded-[1.2rem] border border-white/8 bg-white/4 p-4 text-sm leading-6 text-white/72 sm:grid-cols-2">
+                  <div>
+                    <div className="text-[0.65rem] uppercase tracking-[0.18em] text-white/40">Дата</div>
+                    <div className="mt-1">{item.date}</div>
+                  </div>
+                  <div>
+                    <div className="text-[0.65rem] uppercase tracking-[0.18em] text-white/40">Локация</div>
+                    <div className="mt-1">{item.location}</div>
+                  </div>
+                  <div>
+                    <div className="text-[0.65rem] uppercase tracking-[0.18em] text-white/40">Тип объекта</div>
+                    <div className="mt-1">{item.objectType}</div>
+                  </div>
+                  <div>
+                    <div className="text-[0.65rem] uppercase tracking-[0.18em] text-white/40">Глубина / кольца</div>
+                    <div className="mt-1">{item.depth}</div>
+                  </div>
+                </div>
                 <h3 className="text-xl font-semibold text-white sm:text-2xl">{item.title}</h3>
+                <div className="space-y-3">
+                  <div className="text-xs uppercase tracking-[0.18em] text-primary/88">Что сделали</div>
+                  <ul className="space-y-2 text-sm leading-7 text-white/74">
+                    {item.workDone.map((workItem) => (
+                      <li key={workItem} className="flex gap-3">
+                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" aria-hidden="true" />
+                        <span>{workItem}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="rounded-[1.2rem] border border-white/8 bg-white/4 p-4 text-sm leading-7 text-white/74">
+                  <div className="text-[0.65rem] uppercase tracking-[0.18em] text-white/40">Итоговая стоимость</div>
+                  <div className="mt-2 text-base font-semibold text-white">{item.total}</div>
+                </div>
                 <p className="text-sm leading-7 text-white/74">{item.result}</p>
               </figcaption>
             </figure>
@@ -2003,6 +2100,9 @@ function PricingSection() {
                 </div>
               </div>
             ))}
+          </div>
+          <div className="border-t border-white/10 bg-white/[0.03] px-5 py-4 text-sm leading-7 text-white/66">
+            Окончательная смета зависит от глубины, состояния шахты, количества швов, наличия течей, плывуна и доступа к участку. Предварительно оцениваем по фото или видео, окончательную цену согласовываем до начала работ.
           </div>
         </div>
       </div>
@@ -2215,7 +2315,7 @@ function LocationHubSection() {
         <SectionHeading
           eyebrow="Города и районы"
           title="Работаем по Московской области и приоритетным направлениям"
-          description="Работаем по Московской области. Приоритетные выезды — Одинцово, Красногорск, Истра, Дмитров, Нахабино, Дедовск, Звенигород, Новорижское направление, Рублёвка и соседние районы."
+          description="Работаем по Московской области, ориентир — до 100 км от МКАД. Приоритетные выезды — Одинцово, Красногорск, Истра, Дмитров, Нахабино, Дедовск, Звенигород и Новорижское направление. Возможность выезда в другие районы уточняем по адресу, объёму работ и состоянию объекта."
         />
         <div className="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
           <div className="page-frame rounded-[2rem] p-6 lg:p-8">
@@ -2284,7 +2384,7 @@ function CtaSection() {
               </p>
               <div className="flex flex-col gap-3 sm:flex-row">
                 <RequestDialogButton trackingId="final_request" trackingPlacement="final_cta">
-                  Задать задачу <ArrowRight className="size-4" />
+                  Оставить заявку <ArrowRight className="size-4" />
                 </RequestDialogButton>
                 <a
                   href={siteMeta.phoneHref}
@@ -2856,8 +2956,11 @@ export function HomePage() {
   return (
     <SiteLayout>
       <HomeHero />
+      <ResponsiblePersonSection />
       <PricingSection />
+      <GuaranteeSection />
       <CasesSection />
+      <LocationHubSection />
       <ServicesPreview />
       <ProcessSection />
       <TestimonialsSection />
@@ -3087,9 +3190,7 @@ export function ContactsPage() {
                 {siteMeta.email}
               </a>
               <p className="story-copy">
-                Работаем по Московской области. Приоритет: Одинцово, Красногорск, Истра, Дмитров,
-                Новорижское направление и соседние районы. Сообщите район, задачу и текущее
-                состояние колодца, чтобы быстрее понять формат работ и сориентировать вас по выезду.
+                Работаем по Московской области, ориентир — до 100 км от МКАД. Приоритетные направления: Одинцово, Красногорск, Истра, Дмитров и Новорижское направление. Возможность выезда в другие районы уточняем по адресу, объёму работ и состоянию объекта. Сообщите район, задачу и текущее состояние колодца, чтобы быстрее понять формат работ и сориентировать вас по выезду.
               </p>
               <div className="rounded-[1.4rem] border border-primary/18 bg-primary/8 p-4 text-sm leading-7 text-white/78">
                 Для предварительной оценки удобно сразу отправить фото или короткое видео шахты, воды, швов и нижней части колодца. Это не заменяет осмотр, но помогает быстрее понять, идёт ли речь о чистке, ремонте, донном фильтре или комплексной заявке.
@@ -3100,13 +3201,13 @@ export function ContactsPage() {
                 {
                   label: "Мутная вода, запах или длительный простой",
                   presetIssue: "Вода мутная",
-                  presetService: "Чистка колодца",
+                  presetService: "Чистка колодцев",
                   presetDetails: "Вода мутная, появился запах или колодец долго стоял без обслуживания.",
                 },
                 {
                   label: "Течь через швы, смещение колец или деформация шахты",
                   presetIssue: "Течь по швам",
-                  presetService: "Ремонт швов",
+                  presetService: "Ремонт колодцев||Гидроизоляция швов",
                   presetDetails: "Есть течь через швы, смещение колец или нужна герметизация шахты.",
                 },
                 {
@@ -3225,7 +3326,7 @@ export function ContactsPage() {
                 <a href={`mailto:${siteMeta.email}`} className="text-white transition hover:text-primary">
                   написать на {siteMeta.email}
                 </a>
-                . Работаем по Московской области. Приоритет: Одинцово, Красногорск, Истра, Дмитров, Новорижское направление и соседние районы.
+                . Работаем по Московской области, ориентир — до 100 км от МКАД. Приоритетные направления: Одинцово, Красногорск, Истра, Дмитров и Новорижское направление. Возможность выезда в другие районы уточняем по адресу, объёму работ и состоянию объекта.
               </p>
             </form>
           </div>
