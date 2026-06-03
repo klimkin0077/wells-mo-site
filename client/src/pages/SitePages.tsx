@@ -342,6 +342,7 @@ const discussionServiceOptions = [
   "Донный фильтр",
   "Углубление",
   "Копка",
+  "Водоснабжение из колодца в дом",
   "Септик / дренаж",
 ] as const;
 
@@ -2957,12 +2958,12 @@ export function HomePage() {
       <HomeHero />
       <ResponsiblePersonSection />
       <PricingSection />
+      <GuaranteeSection />
       <CasesSection />
-      <WhyChooseSection />
+      <LocationHubSection />
       <ServicesPreview />
       <ProcessSection />
       <TestimonialsSection />
-      <CtaSection />
     </SiteLayout>
   );
 }
@@ -3188,8 +3189,8 @@ export function ContactsPage() {
               <a href={`mailto:${siteMeta.email}`} className="block text-base transition hover:text-white">
                 {siteMeta.email}
               </a>
-              <p className="story-copy">                Работаем по Московской области, ориентир — до 100 км от МКАД. Приоритетные направления: Одинцово, Красногорск, Истра, Дмитров и Новорижское направление. Возможность выезда в другие районы уточняем по адресу, объёму работ и состоянию объекта.
-ь вас по выезду.
+              <p className="story-copy">
+                Работаем по Московской области, ориентир — до 100 км от МКАД. Приоритетные направления: Одинцово, Красногорск, Истра, Дмитров и Новорижское направление. Возможность выезда в другие районы уточняем по адресу, объёму работ и состоянию объекта. Сообщите район, задачу и текущее состояние колодца, чтобы быстрее понять формат работ и сориентировать вас по выезду.
               </p>
               <div className="rounded-[1.4rem] border border-primary/18 bg-primary/8 p-4 text-sm leading-7 text-white/78">
                 Для предварительной оценки удобно сразу отправить фото или короткое видео шахты, воды, швов и нижней части колодца. Это не заменяет осмотр, но помогает быстрее понять, идёт ли речь о чистке, ремонте, донном фильтре или комплексной заявке.
@@ -3212,7 +3213,7 @@ export function ContactsPage() {
                 {
                   label: "Нужно провести воду в дом из существующего колодца",
                   presetIssue: "Нужно провести воду в дом",
-                  presetService: "Септик / дренаж",
+                  presetService: "Водоснабжение из колодца в дом",
                   presetDetails: "Нужно обсудить подачу воды в дом из существующего колодца.",
                 },
               ].map((item) => (
