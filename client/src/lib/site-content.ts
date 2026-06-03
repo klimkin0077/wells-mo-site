@@ -34,6 +34,7 @@ export const siteMeta = {
   email: "info@wells-mo.ru",
   telegramUrl: "https://t.me/nenaity",
   maxUrl: "https://max.ru/u/f9LHodD0cOJMJamPyw0VYx8e_IXL2yxytuGOl_V-YFa97fSZkSofjnBFsW4",
+  whatsappUrl: "https://wa.me/79816666670",
   tagline: "Чистка и ремонт колодцев в Московской области",
   description:
     "Профессиональная чистка и ремонт колодцев по Московской области: откачка воды, мойка шахты аппаратом высокого давления, чистка дна, ремонт швов, гидроизоляция, скобирование, углубление и восстановление старых шахт. Копка колодцев, септики и подводка воды остаются дополнительными услугами.",
