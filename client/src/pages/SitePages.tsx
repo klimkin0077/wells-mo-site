@@ -776,9 +776,10 @@ function SecondaryLink({
 function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState<TaskDiscussionFormState>(initialTaskDiscussionFormState);
-  const [submitState, setSubmitState] = useState<"idle" | "success" | "error">("idle");
+  const [submitState, setSubmitState] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [submitMessage, setSubmitMessage] = useState("");
   const [dialogPlacement, setDialogPlacement] = useState("");
+  const [dialogTrackingId, setDialogTrackingId] = useState("");
   const leadTrackedRef = useRef(false);
 
   const resetSubmitState = () => {
@@ -871,6 +872,7 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
     const resolvedTrackingId = options.trackingId ?? "task_dialog_open";
 
     setDialogPlacement(resolvedPlacement);
+    setDialogTrackingId(resolvedTrackingId);
     setFormData({
       ...initialTaskDiscussionFormState,
       service: options.presetService ?? "",
@@ -899,6 +901,7 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
     if (!nextOpen) {
       setSubmitState("idle");
       setSubmitMessage("");
+      setDialogTrackingId("");
     }
   };
 
@@ -942,6 +945,8 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
       contactMethod: formData.contactMethod.trim(),
       details: formData.details.trim(),
       botcheck: formData.botcheck.trim(),
+      placement: dialogPlacement || (typeof window !== "undefined" ? window.location.pathname : "wells-mo.ru"),
+      trackingId: dialogTrackingId || "task_dialog_open",
     };
 
     if (normalizedData.botcheck) {
@@ -972,13 +977,14 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
       `Подъезд: ${normalizedData.access}`,
       `Удобная связь: ${normalizedData.contactMethod}`,
       `Комментарий: ${normalizedData.details || "Без комментария"}`,
-      `Страница отправки: ${dialogPlacement || (typeof window !== "undefined" ? window.location.pathname : "wells-mo.ru")}`,
+      `Страница отправки: ${normalizedData.placement}`,
+      `Tracking ID: ${normalizedData.trackingId}`,
     ].join("\n");
 
-    return { ok: true as const, message: "", text };
+    return { ok: true as const, message: "", text, normalizedData };
   };
 
-  const copyRequestToClipboard = async () => {
+  const copyPreparedTaskText = async (successMessage: string) => {
     const payload = buildTaskMessage();
 
     if (!payload.ok) {
@@ -989,37 +995,23 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
 
     try {
       await navigator.clipboard.writeText(payload.text);
-      trackSuccessfulLead();
       setSubmitState("success");
-      setSubmitMessage("Заявка собрана и скопирована. Теперь можно отправить её через Telegram, MAX или почту.");
-      return payload.text;
+      setSubmitMessage(successMessage);
+      return payload;
     } catch {
       setSubmitState("error");
-      setSubmitMessage("Не удалось скопировать заявку автоматически. Попробуйте ещё раз или отправьте её по телефону.");
+      setSubmitMessage("Не удалось отправить заявку. Попробуйте Telegram, MAX, WhatsApp или позвоните.");
       return null;
     }
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    await copyRequestToClipboard();
-  };
 
-  const handleOpenTelegram = async () => {
-    const text = await copyRequestToClipboard();
-    if (!text) return;
-    trackCtaClick("dialog_telegram", dialogPlacement || "task_dialog");
-    window.open(siteMeta.telegramUrl, "_blank", "noopener,noreferrer");
-  };
+    if (submitState === "loading") {
+      return;
+    }
 
-  const handleOpenMax = async () => {
-    const text = await copyRequestToClipboard();
-    if (!text) return;
-    trackCtaClick("dialog_max", dialogPlacement || "task_dialog");
-    window.open(siteMeta.maxUrl, "_blank", "noopener,noreferrer");
-  };
-
-  const handleOpenMail = async () => {
     const payload = buildTaskMessage();
 
     if (!payload.ok) {
@@ -1028,11 +1020,83 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    const mailtoHref = `mailto:${siteMeta.email}?subject=${encodeURIComponent("Заявка с сайта WELLS-MO")}&body=${encodeURIComponent(payload.text)}`;
+    setSubmitState("loading");
+    setSubmitMessage("Отправляем заявку. Обычно это занимает несколько секунд.");
+
+    try {
+      const response = await fetch(WEB3FORMS_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_ACCESS_KEY,
+          subject: `Новая заявка с ${siteMeta.name}`,
+          from_name: siteMeta.name,
+          name: payload.normalizedData.name,
+          phone: payload.normalizedData.phone,
+          city_area: payload.normalizedData.cityArea,
+          address: payload.normalizedData.address,
+          service: payload.normalizedData.service,
+          depth: payload.normalizedData.depth,
+          issue: payload.normalizedData.issue,
+          access: payload.normalizedData.access,
+          preferred_contact: payload.normalizedData.contactMethod,
+          details: payload.normalizedData.details || "Без комментария",
+          message: payload.text,
+          page: payload.normalizedData.placement,
+          placement: payload.normalizedData.placement,
+          tracking_id: payload.normalizedData.trackingId,
+          site: "wells-mo.ru",
+          recipient: siteMeta.email,
+          botcheck: payload.normalizedData.botcheck,
+        }),
+      });
+
+      const result = (await response.json()) as { success?: boolean; message?: string };
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || "Сервис отправки не подтвердил приём заявки.");
+      }
+
+      setFormData(initialTaskDiscussionFormState);
+      trackSuccessfulLead();
+      setSubmitState("success");
+      setSubmitMessage("Заявка отправлена. Мы свяжемся с вами в ближайшее время.");
+    } catch (error) {
+      console.error("Ошибка отправки заявки", error);
+      setSubmitState("error");
+      setSubmitMessage("Не удалось отправить заявку. Попробуйте Telegram, MAX, WhatsApp или позвоните.");
+    }
+  };
+
+  const handleCopyText = async () => {
+    await copyPreparedTaskText("Текст заявки скопирован. Если нужно, отправьте его через Telegram, MAX или WhatsApp.");
+  };
+
+  const handleOpenTelegram = async () => {
+    const payload = await copyPreparedTaskText("Заявка скопирована — вставьте её в мессенджер и отправьте.");
+    if (!payload) return;
     trackSuccessfulLead();
-    window.location.href = mailtoHref;
-    setSubmitState("success");
-    setSubmitMessage("Почтовый клиент открыт. Если нужно, сначала можно скопировать заявку и отправить её в Telegram или MAX.");
+    trackCtaClick("dialog_telegram", dialogPlacement || "task_dialog");
+    window.open(siteMeta.telegramUrl, "_blank", "noopener,noreferrer");
+  };
+
+  const handleOpenMax = async () => {
+    const payload = await copyPreparedTaskText("Заявка скопирована — вставьте её в мессенджер и отправьте.");
+    if (!payload) return;
+    trackSuccessfulLead();
+    trackCtaClick("dialog_max", dialogPlacement || "task_dialog");
+    window.open(siteMeta.maxUrl, "_blank", "noopener,noreferrer");
+  };
+
+  const handleOpenWhatsApp = async () => {
+    const payload = await copyPreparedTaskText("Заявка скопирована — вставьте её в мессенджер и отправьте.");
+    if (!payload) return;
+    trackSuccessfulLead();
+    trackCtaClick("dialog_whatsapp", dialogPlacement || "task_dialog");
+    window.open(siteMeta.whatsappUrl, "_blank", "noopener,noreferrer");
   };
 
   const contextValue = useMemo(() => ({ openTaskDialog }), []);
@@ -1065,8 +1129,9 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
                   Заявка без лишних созвонов
                 </DialogTitle>
                 <DialogDescription className="max-w-md text-sm leading-7 text-white/62">
-                  Заполните объект по делу. Мы соберём текст заявки, чтобы вы могли сразу отправить его в Telegram, MAX или на почту.
+                  Заполните объект по делу. Основная кнопка отправит заявку на info@wells-mo.ru, а Telegram, MAX и WhatsApp останутся дополнительными каналами.
                 </DialogDescription>
+
               </DialogHeader>
               <div className="mt-5 grid gap-2">
                 {[
@@ -1154,12 +1219,33 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
                   </div>
                 </div>
                 <textarea name="details" value={formData.details} onChange={handleFieldChange("details")} className="min-h-[7rem] rounded-2xl border border-white/10 bg-white/4 px-4 py-3.5 text-base text-white placeholder:text-white/34" placeholder="Комментарий: что уже делали, когда появилась проблема, есть ли фото/видео, какая точка на карте..." />
-                {submitState !== "idle" ? <div className={cn("rounded-[1.4rem] border px-4 py-3 text-sm leading-7", submitState === "success" && "border-emerald-400/30 bg-emerald-500/10 text-emerald-50", submitState === "error" && "border-rose-400/30 bg-rose-500/10 text-rose-50")}>{submitMessage}</div> : null}
-                <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
-                  <button type="submit" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition hover:translate-y-[-1px]">Скопировать заявку</button>
-                  <button type="button" onClick={handleOpenMail} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/12 bg-white/4 px-5 py-3 text-sm font-semibold text-white/90 transition hover:border-primary/40 hover:bg-white/8">На почту</button>
-                  <button type="button" onClick={handleOpenTelegram} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/12 bg-white/4 px-5 py-3 text-sm font-semibold text-white/90 transition hover:border-primary/40 hover:bg-white/8">Telegram</button>
-                  <button type="button" onClick={handleOpenMax} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/12 bg-white/4 px-5 py-3 text-sm font-semibold text-white/90 transition hover:border-primary/40 hover:bg-white/8">MAX</button>
+                {submitState !== "idle" ? (
+                  <div
+                    className={cn(
+                      "rounded-[1.4rem] border px-4 py-3 text-sm leading-7",
+                      submitState === "success" && "border-emerald-400/30 bg-emerald-500/10 text-emerald-50",
+                      submitState === "error" && "border-rose-400/30 bg-rose-500/10 text-rose-50",
+                      submitState === "loading" && "border-white/10 bg-white/5 text-white/78",
+                    )}
+                  >
+                    {submitMessage}
+                  </div>
+                ) : null}
+                <div className="grid gap-2.5">
+                  <button
+                    type="submit"
+                    disabled={submitState === "loading"}
+                    className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition hover:translate-y-[-1px] disabled:cursor-not-allowed disabled:opacity-70"
+                  >
+                    {submitState === "loading" ? "Отправляем заявку..." : "Отправить заявку"}
+                  </button>
+                  <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-5">
+                    <button type="button" onClick={handleCopyText} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/12 bg-white/4 px-4 py-3 text-sm font-semibold text-white/90 transition hover:border-primary/40 hover:bg-white/8">Скопировать текст</button>
+                    <button type="button" onClick={handleOpenTelegram} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/12 bg-white/4 px-4 py-3 text-sm font-semibold text-white/90 transition hover:border-primary/40 hover:bg-white/8">Telegram</button>
+                    <button type="button" onClick={handleOpenMax} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/12 bg-white/4 px-4 py-3 text-sm font-semibold text-white/90 transition hover:border-primary/40 hover:bg-white/8">MAX</button>
+                    <button type="button" onClick={handleOpenWhatsApp} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/12 bg-white/4 px-4 py-3 text-sm font-semibold text-white/90 transition hover:border-primary/40 hover:bg-white/8">WhatsApp</button>
+                    <a href={siteMeta.phoneHref} onClick={() => trackCtaClick("dialog_phone", dialogPlacement || "task_dialog")} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/12 bg-white/4 px-4 py-3 text-sm font-semibold text-white/90 transition hover:border-primary/40 hover:bg-white/8">Позвонить</a>
+                  </div>
                 </div>
               </form>
             </div>
