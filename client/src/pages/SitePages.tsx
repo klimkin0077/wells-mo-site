@@ -1825,124 +1825,85 @@ function HomeHero() {
 }
 
 function ServicesPreview() {
-  const featuredCards = [
+  const heroCards = [
     {
       slug: "chistka-kolodcev",
       href: "/cleaning/",
-      eyebrow: "Главная услуга",
       title: "Чистка колодцев",
-      description:
-        "Полная чистка шахты: откачка воды, мойка стенок, очистка дна и разбор реального состояния колодца без поверхностных решений.",
+      description: "Откачка воды, мойка шахты аппаратом высокого давления, очистка дна. Разбираем реальное состояние колодца и объясняем, что нужно делать дальше.",
       price: "14 000 ₽",
+      image: assets.userWellCleaningMain,
     },
     {
       slug: "remont-kolodcev",
       href: "/repair/",
-      eyebrow: "Главная услуга",
       title: "Ремонт колодцев",
-      description:
-        "Ремонт швов, устранение течей, восстановление шахты и понятная логика работ, когда колодцу уже мало одной чистки.",
+      description: "Герметизация швов, скобирование смещённых колец, устранение течей. Работаем по реальному состоянию шахты — без лишних услуг.",
       price: "от 3 000 ₽ за шов",
-    },
-    {
-      slug: "skobirovanie-kolodca",
-      href: "/stapling/",
-      eyebrow: "Внутри ремонта",
-      title: "Скобирование колец",
-      description:
-        "Фиксируем смещённые кольца, чтобы остановить движение шахты и подготовить колодец к нормальному ремонту швов.",
-      price: "от 1 500 ₽ / шов",
-    },
-    {
-      slug: "gidroizolyaciya-shvov",
-      href: "/seam-sealing/",
-      eyebrow: "Внутри ремонта",
-      title: "Гидроизоляция швов",
-      description:
-        "Закрываем текущие и сухие швы, убираем подсос верховодки и работаем по фактическому состоянию стыков внутри шахты.",
-      price: "от 3 000 ₽",
-    },
-    {
-      slug: "uglublenie-kolodcev",
-      href: "/uglublenie-kolodcev",
-      eyebrow: "Внутри ремонта",
-      title: "Углубление колодцев",
-      description:
-        "Оцениваем пересохший колодец, проверяем состояние шахты и углубляем его только там, где это действительно безопасно и оправдано.",
-      price: "по результатам осмотра",
-    },
-    {
-      slug: "donny-shchit-i-graviy",
-      href: "/remont-kolodcev#donny-shchit-i-graviy",
-      eyebrow: "Внутри ремонта",
-      title: "Донный щит и гравий",
-      description:
-        "Ставим донный щит из лиственницы и засыпаем речной гравий, когда нужно восстановить нижнюю часть колодца и фильтрующий слой.",
-      price: "от 10 000 ₽",
-    },
-    {
-      slug: "kopka-kolodcev",
-      href: "/kopka-kolodcev",
-      eyebrow: "Дополнительная услуга",
-      title: "Копка колодцев",
-      description:
-        "Копка новых колодцев — отдельная услуга для участков, где нужен новый источник воды из ЖБ колец.",
-      price: "от 8 500 ₽ за кольцо",
-    },
-    {
-      slug: "septik-iz-zhbi-kolec",
-      href: "/septik-iz-zhbi-kolec",
-      eyebrow: "Дополнительная услуга",
-      title: "Септики из ЖБ колец",
-      description:
-        "Собираем септики из ЖБ колец под ключ: доставка, монтаж, переливы и подготовка конструкции под эксплуатацию.",
-      price: "от 11 000 ₽ за кольцо Ø1 м",
-    },
-    {
-      slug: "vodosnabzhenie-iz-kolodca-v-dom",
-      href: "/vodosnabzhenie-iz-kolodca-v-dom",
-      eyebrow: "Дополнительная услуга",
-      title: "Водоснабжение из колодца в дом",
-      description:
-        "Подводим воду из колодца в дом: траншея, труба, подключение, насосное оборудование и запуск системы по согласованной схеме.",
-      price: "от 2 500 ₽ / пог. м",
+      image: assets.userShiftedRingRepair,
     },
   ] as const;
 
-  return (
-    <section id="services" className="home-flow-section home-services-section scroll-mt-20 md:scroll-mt-28">
-      <div className="container space-y-10">
-        <SectionHeading
-          eyebrow="Ключевые услуги"
-          title="Главные направления работ по колодцу"
-          description="Ниже собраны основные работы по колодцу: чистка, ремонт, герметизация швов, скобирование, углубление и восстановление нижней части шахты. Эти услуги чаще всего нужны, когда вода мутнеет, через швы идёт верховодка, кольца смещаются или колодец теряет нормальную работу."
-        />
-        <div className="home-services-grid grid gap-5">
-          {featuredCards.map((service) => {
-            const Icon = iconMap[service.slug as keyof typeof iconMap] ?? Wrench;
+  const extraCards = [
+    { slug: "gidroizolyaciya-shvov", href: "/seam-sealing/", title: "Гидроизоляция швов", price: "от 3 000 ₽" },
+    { slug: "skobirovanie-kolodca", href: "/stapling/", title: "Скобирование колец", price: "от 1 500 ₽ / шов" },
+    { slug: "uglublenie-kolodcev", href: "/uglublenie-kolodcev", title: "Углубление колодца", price: "по осмотру" },
+    { slug: "kopka-kolodcev", href: "/kopka-kolodcev", title: "Копка колодцев", price: "от 8 500 ₽ / кольцо" },
+    { slug: "septik-iz-zhbi-kolec", href: "/septik-iz-zhbi-kolec", title: "Септик из ЖБ колец", price: "от 11 000 ₽ / кольцо" },
+    { slug: "vodosnabzhenie-iz-kolodca-v-dom", href: "/vodosnabzhenie-iz-kolodca-v-dom", title: "Вода в дом из колодца", price: "от 2 500 ₽ / м" },
+  ] as const;
 
-            return (
-              <Link
-                key={service.slug}
-                href={service.href}
-                className="glass-panel card-hover flex h-full flex-col rounded-[1.8rem] p-5"
-              >
-                <div className="mb-5 flex items-center justify-between gap-3">
-                  <div className="flex size-12 items-center justify-center rounded-2xl border border-primary/18 bg-primary/10 text-primary">
-                    <Icon className="size-5" />
-                  </div>
-                  <div className="text-right text-xs uppercase tracking-[0.2em] text-white/46">
-                    {service.eyebrow}
-                  </div>
-                </div>
-                <h3 className="service-card-title text-white">{service.title}</h3>
-                <p className="mt-4 text-sm leading-7 text-white/72">{service.description}</p>
-                <div className="mt-6 flex items-center justify-between text-sm">
-                  <span className="text-primary/88">Что входит в работу</span>
-                  <span className="inline-flex items-center gap-2 text-white/68">
+  return (
+    <section id="services" className="home-flow-section scroll-mt-20">
+      <div className="container space-y-5">
+        <div className="section-kicker">Услуги</div>
+        <h2 className="text-4xl font-bold tracking-[-0.04em] text-white md:text-5xl">Что мы делаем</h2>
+
+        <div className="grid gap-5 md:grid-cols-2">
+          {heroCards.map((card) => (
+            <Link
+              key={card.slug}
+              href={card.href}
+              className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#0d131b] transition hover:border-primary/30"
+            >
+              <div className="aspect-[16/9] w-full overflow-hidden">
+                <img
+                  src={card.image}
+                  alt={card.title}
+                  loading="lazy"
+                  decoding="async"
+                  className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0d131b] via-[#0d131b]/40 to-transparent" />
+              </div>
+              <div className="p-6">
+                <h3 className="text-2xl font-bold text-white">{card.title}</h3>
+                <p className="mt-3 text-sm leading-7 text-white/65">{card.description}</p>
+                <div className="mt-5 flex items-center justify-between">
+                  <span className="font-heading text-2xl font-bold text-primary">{card.price}</span>
+                  <span className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-4 py-2 text-sm font-semibold text-white/80 transition group-hover:border-primary/30 group-hover:text-white">
                     Подробнее <ArrowRight className="size-4" />
                   </span>
                 </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+          {extraCards.map((card) => {
+            const Icon = iconMap[card.slug as keyof typeof iconMap] ?? Wrench;
+            return (
+              <Link
+                key={card.slug}
+                href={card.href}
+                className="glass-panel card-hover flex flex-col rounded-[1.5rem] p-4"
+              >
+                <div className="flex size-10 items-center justify-center rounded-xl border border-primary/18 bg-primary/10 text-primary">
+                  <Icon className="size-4" />
+                </div>
+                <div className="mt-3 text-base font-semibold text-white leading-6">{card.title}</div>
+                <div className="mt-2 text-sm font-medium text-primary/85">{card.price}</div>
               </Link>
             );
           })}
@@ -2072,68 +2033,40 @@ function ProcessSection() {
 function CasesSection() {
   return (
     <section className="home-flow-section">
-      <div className="container space-y-10">
-        <SectionHeading
-          eyebrow="Фотографии наших работ"
-          title="Реальные объекты до и после работ"
-          description="Сразу после прайса показываем реальные фотографии из объектов WELLS-MO, чтобы решение принималось по фактам: видно состояние шахты до работ и результат после чистки, герметизации и восстановления."
-        />
-        <div className="home-cases-grid grid gap-5">
+      <div className="container space-y-6">
+        <div>
+          <div className="section-kicker">Фото работ</div>
+          <h2 className="mt-3 text-4xl font-bold tracking-[-0.04em] text-white md:text-5xl">Реальные объекты до и после</h2>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-white/62">
+            Реальные фото с объектов — состояние шахты до работ и результат после чистки, ремонта и восстановления.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {cases.map((item) => (
-            <figure key={item.title} className="page-frame overflow-hidden rounded-[1.8rem]">
-              <div className="image-mask min-h-[300px] border-b border-white/10 bg-[#0f141d]">
+            <figure key={item.title} className="overflow-hidden rounded-[1.8rem] border border-white/10 bg-[#0d131b]">
+              <div className="aspect-[4/3] w-full overflow-hidden bg-[#0f141d]">
                 <img
                   src={item.image}
-                  alt={`${item.service} в Московской области — ${item.stage} — ${item.title}`}
+                  alt={`${item.service} — ${item.stage} — ${item.location}`}
                   loading="lazy"
                   decoding="async"
-                  className="absolute inset-0 h-full w-full object-cover"
+                  className="h-full w-full object-cover"
                 />
               </div>
-              <figcaption className="space-y-4 p-5 sm:p-6">
+              <figcaption className="p-5">
                 <div className="flex flex-wrap gap-2">
                   <span className="inline-flex items-center rounded-full border border-primary/24 bg-primary/10 px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-primary">
                     {item.stage}
                   </span>
-                  <span className="inline-flex items-center rounded-full border border-white/10 bg-white/6 px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-white/78">
+                  <span className="inline-flex items-center rounded-full border border-white/10 bg-white/6 px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-white/70">
                     {item.service}
                   </span>
                 </div>
-                <div className="grid gap-2 rounded-[1.2rem] border border-white/8 bg-white/4 p-4 text-sm leading-6 text-white/72 sm:grid-cols-2">
-                  <div>
-                    <div className="text-[0.65rem] uppercase tracking-[0.18em] text-white/40">Дата</div>
-                    <div className="mt-1">{item.date}</div>
-                  </div>
-                  <div>
-                    <div className="text-[0.65rem] uppercase tracking-[0.18em] text-white/40">Локация</div>
-                    <div className="mt-1">{item.location}</div>
-                  </div>
-                  <div>
-                    <div className="text-[0.65rem] uppercase tracking-[0.18em] text-white/40">Тип объекта</div>
-                    <div className="mt-1">{item.objectType}</div>
-                  </div>
-                  <div>
-                    <div className="text-[0.65rem] uppercase tracking-[0.18em] text-white/40">Глубина / кольца</div>
-                    <div className="mt-1">{item.depth}</div>
-                  </div>
+                <h3 className="mt-3 text-base font-semibold leading-6 text-white">{item.title}</h3>
+                <div className="mt-2 flex items-center justify-between text-xs text-white/48">
+                  <span>{item.location}</span>
+                  <span>{item.total}</span>
                 </div>
-                <h3 className="text-xl font-semibold text-white sm:text-2xl">{item.title}</h3>
-                <div className="space-y-3">
-                  <div className="text-xs uppercase tracking-[0.18em] text-primary/88">Что сделали</div>
-                  <ul className="space-y-2 text-sm leading-7 text-white/74">
-                    {item.workDone.map((workItem) => (
-                      <li key={workItem} className="flex gap-3">
-                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" aria-hidden="true" />
-                        <span>{workItem}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="rounded-[1.2rem] border border-white/8 bg-white/4 p-4 text-sm leading-7 text-white/74">
-                  <div className="text-[0.65rem] uppercase tracking-[0.18em] text-white/40">Итоговая стоимость</div>
-                  <div className="mt-2 text-base font-semibold text-white">{item.total}</div>
-                </div>
-                <p className="text-sm leading-7 text-white/74">{item.result}</p>
               </figcaption>
             </figure>
           ))}
@@ -2145,43 +2078,36 @@ function CasesSection() {
 
 function PricingSection() {
   return (
-    <section className="home-flow-section home-pricing-section mb-0">
-      <div className="container home-pricing-grid grid gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-start">
-        <div id="prices" className="mobile-anchor-target reveal-rise space-y-5">
-          <div className="section-kicker">Прайс по частым работам</div>
-          <h2 className="section-title text-white">Понятные цены по частым работам</h2>
-          <p className="story-copy text-white/78">
-            Показываем единый прайс по самым частым работам с понятным ориентиром по бюджету ещё до звонка.
-          </p>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {[
-              "Понятные цены по частым работам",
-              "Фиксированная стоимость — там, где её можно назвать заранее",
-              "Нижняя граница — там, где цена зависит от глубины, состояния шахты, объёма ила, активных течей, плывуна, количества материалов и сложности подъезда",
-              "Один раздел с ценами для всех переходов по сайту",
-            ].map((item) => (
-              <div key={item} className="rounded-[1.35rem] border border-white/10 bg-white/6 p-4 text-sm leading-6 text-white/82">
-                {item}
-              </div>
-            ))}
+    <section id="prices" className="home-flow-section mb-0 scroll-mt-20">
+      <div className="container space-y-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <div className="section-kicker">Цены</div>
+            <h2 className="mt-3 text-4xl font-bold tracking-[-0.04em] text-white md:text-5xl">Что и сколько стоит</h2>
+            <p className="mt-3 max-w-2xl text-sm leading-7 text-white/62">
+              Ориентиры по бюджету до звонка. Точная смета — после осмотра объекта по фото или видео.
+            </p>
           </div>
+          <RequestDialogButton trackingId="pricing_request" trackingPlacement="pricing_section" className="shrink-0">
+            Рассчитать под мой объект <ArrowRight className="size-4" />
+          </RequestDialogButton>
         </div>
-        <div className="reveal-rise reveal-rise-delay-1 page-frame overflow-hidden rounded-[2rem] border-white/12 bg-[#0d131b]/96">
+        <div className="page-frame overflow-hidden rounded-[2rem] border-white/12 bg-[#0d131b]/96">
           <div className="divide-y divide-white/10">
             {pricing.map((item) => (
-              <div key={item.service} className="grid gap-3 p-5 md:grid-cols-[1.12fr_190px] md:items-center">
+              <div key={item.service} className="grid gap-2 p-5 sm:grid-cols-[1fr_auto] sm:items-center">
                 <div>
-                  <h3 className="text-lg font-semibold text-white">{item.service}</h3>
-                  <div className="mt-2 text-sm leading-6 text-white/74">{item.note}</div>
+                  <div className="text-base font-semibold text-white">{item.service}</div>
+                  <div className="mt-1 text-sm leading-6 text-white/58">{item.note}</div>
                 </div>
-                <div className="text-left font-heading text-2xl font-bold text-primary md:text-right">
+                <div className="font-heading text-2xl font-bold text-primary sm:text-right">
                   {item.price}
                 </div>
               </div>
             ))}
           </div>
-          <div className="border-t border-white/10 bg-white/[0.03] px-5 py-4 text-sm leading-7 text-white/66">
-            Окончательная смета зависит от глубины, состояния шахты, количества швов, наличия течей, плывуна и доступа к участку. Предварительно оцениваем по фото или видео, окончательную цену согласовываем до начала работ.
+          <div className="border-t border-white/10 bg-white/[0.03] px-5 py-4 text-xs leading-6 text-white/50">
+            Цена зависит от глубины, состояния шахты, количества швов и доступа к участку. Смету согласовываем до начала работ.
           </div>
         </div>
       </div>
@@ -2275,6 +2201,9 @@ function AvitoBrandIcon({ className }: { className?: string }) {
 }
 
 function TestimonialsSection() {
+  const avitoReviews = testimonials.filter((item) => "image" in item && item.image && item.author !== "Подтверждённая обратная связь по объектам");
+  const reviewsScreenshot = testimonials.find((item) => "image" in item && item.image && !("author" in item && item.author !== "Подтверждённая обратная связь по объектам"));
+
   return (
     <section className="home-flow-section">
       <div className="container space-y-10">
@@ -2283,44 +2212,29 @@ function TestimonialsSection() {
           title="Отзывы клиентов и профиль на Авито"
           description="Отзывы помогают понять, как мы работаем на реальных объектах: что было с колодцем до выезда, какие работы выполнили и какой результат получил клиент."
         />
-        <div className="space-y-6">
-          <div className="home-testimonials-grid reveal-rise reveal-rise-delay-1 grid gap-5">
-            {testimonials.map((item) =>
-              "image" in item && item.image ? (
-                <figure key={item.quote} className="page-frame overflow-hidden rounded-[1.8rem] border-white/12 bg-[#0d131b]/96">
-                  <div className="image-mask min-h-[280px] border-b border-white/10 bg-[#0f141d]">
-                    <img
-                      src={item.image}
-                      alt={item.alt ?? "Реальный отзыв клиента о чистке и ремонте колодца в Московской области"}
-                      loading="lazy"
-                      decoding="async"
-                      className="absolute inset-0 h-full w-full object-cover"
-                    />
-                  </div>
-                  <figcaption className="space-y-3 p-6">
-                    {"service" in item && item.service ? (
-                      <div className="inline-flex w-fit items-center rounded-full border border-primary/22 bg-primary/10 px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-primary">
-                        {item.service}
-                      </div>
-                    ) : null}
-                    <p className="text-sm leading-7 text-white/78">{item.quote}</p>
-                    <div className="text-sm uppercase tracking-[0.18em] text-primary/85">{item.author}</div>
-                  </figcaption>
-                </figure>
-              ) : (
-                <blockquote key={item.quote} className="glass-panel rounded-[1.8rem] p-6">
+        <div className="space-y-5">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {testimonials.filter((item) => "image" in item && !!item.image).map((item) => (
+              <figure key={item.quote} className="overflow-hidden rounded-[2rem] border border-white/10 bg-[#0d131b]">
+                <div className="aspect-[4/3] w-full overflow-hidden bg-[#0f141d]">
+                  <img
+                    src={"image" in item ? item.image : ""}
+                    alt={"alt" in item ? item.alt : "Отзыв клиента"}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+                <figcaption className="p-5">
                   {"service" in item && item.service ? (
-                    <div className="mb-4 inline-flex w-fit items-center rounded-full border border-primary/22 bg-primary/10 px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-primary">
+                    <div className="inline-flex w-fit items-center rounded-full border border-primary/22 bg-primary/10 px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-primary">
                       {item.service}
                     </div>
                   ) : null}
-                  <p className="text-base leading-8 text-white/82">“{item.quote}”</p>
-                  <footer className="mt-6 text-sm uppercase tracking-[0.18em] text-primary/85">
-                    {item.author}
-                  </footer>
-                </blockquote>
-              ),
-            )}
+                  {"author" in item ? <div className="mt-3 text-sm font-semibold text-white/85">{item.author}</div> : null}
+                </figcaption>
+              </figure>
+            ))}
           </div>
           <a
             href={AVITO_BRAND_PROFILE_URL}
@@ -3035,14 +2949,12 @@ export function HomePage() {
   return (
     <SiteLayout>
       <HomeHero />
-      <ResponsiblePersonSection />
       <PricingSection />
-      <GuaranteeSection />
-      <CasesSection />
-      <LocationHubSection />
       <ServicesPreview />
-      <ProcessSection />
+      <ResponsiblePersonSection />
+      <CasesSection />
       <TestimonialsSection />
+      <CtaSection />
     </SiteLayout>
   );
 }
