@@ -1104,13 +1104,6 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
   return (
     <TaskDiscussionDialogContext.Provider value={contextValue}>
       {children}
-      <button
-        type="button"
-        onClick={() => openTaskDialog({ trackingId: "desktop_floating_request", placement: "desktop_floating_cta" })}
-        className="fixed bottom-8 right-8 z-[60] hidden rounded-full border border-primary/30 bg-[#111723]/88 px-5 py-3 text-sm font-semibold text-primary shadow-[0_18px_42px_rgba(0,0,0,0.32)] backdrop-blur-xl transition hover:-translate-y-1 hover:shadow-[0_24px_48px_rgba(193,145,71,0.2)] lg:inline-flex"
-      >
-        Рассчитать работы
-      </button>
       <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent
           className="request-dialog-content max-h-[min(100svh-1rem,60rem)] w-[calc(100vw-1rem)] max-w-none overflow-hidden border border-white/10 bg-[#0d1219] p-0 text-white shadow-[0_32px_120px_rgba(0,0,0,0.58)] sm:w-[calc(100vw-2rem)] sm:max-w-none lg:w-[min(74rem,calc(100vw-3rem))] xl:w-[min(82rem,calc(100vw-4rem))]"
@@ -1673,7 +1666,7 @@ function HomeHero() {
 
           <div className="hero-mobile-card relative isolate overflow-hidden rounded-[2rem] border border-white/10 px-5 py-6 md:overflow-visible md:rounded-none md:border-0 md:bg-transparent md:px-0 md:py-0 md:min-h-0 md:shadow-none">
             <div className="hero-mobile-media pointer-events-none absolute inset-0 z-0 md:hidden">
-              <img src={assets.mobileHero3d} alt="" className="hero-mobile-media-base h-full w-full object-cover" loading="eager" decoding="async" />
+              <img src={assets.userWellCleaningMain} alt="" className="hero-mobile-media-base h-full w-full object-cover" loading="eager" decoding="async" />
             </div>
             <div className="hero-mobile-copy">
               <h1 data-text="Чистка и ремонт колодцев в Московской области" className="hero-home-title hero-mobile-title text-[clamp(3.15rem,13.4vw,5.7rem)] leading-[0.88] font-bold tracking-[-0.075em] md:text-[clamp(3.3rem,5vw,4.95rem)] xl:text-[clamp(3.85rem,4.2vw,5.25rem)]">
@@ -1805,7 +1798,7 @@ function HomeHero() {
         <div className="what-client-visual reveal-rise reveal-rise-delay-1 hidden self-stretch page-frame overflow-hidden rounded-[2rem] p-3 md:block">
           <div className="image-mask hero-desktop-visual min-h-[320px] sm:min-h-[380px] lg:min-h-[460px] xl:min-h-[520px]">
             <img
-              src={assets.mobileHero3d}
+              src={assets.userWellCleaningMain}
               alt="Чистка и ремонт колодцев WELLS-MO"
               loading="eager"
               fetchPriority="high"
@@ -2021,20 +2014,20 @@ function WhyChooseSection() {
         <div className="grid gap-5 md:grid-cols-2">
           {[
             {
-              src: assets.fieldCrew,
-              alt: "Бригада WELLS-MO выполняет чистку и ремонт колодцев в Московской области",
+              src: assets.userShaftWashing,
+              alt: "Мойка шахты колодца после откачки воды — WELLS-MO",
             },
             {
-              src: assets.wellDigging,
-              alt: "Копка колодца из ЖБ колец в Московской области",
+              src: assets.userFinishedWell,
+              alt: "Готовый колодец после восстановительных работ в Московской области",
             },
             {
-              src: assets.septic,
-              alt: "Монтаж септика из ЖБ колец в Московской области",
+              src: assets.userGravelBackfill,
+              alt: "Промывка щебёнки и обратная засыпка нижней части колодца",
             },
             {
-              src: assets.waterSupply,
-              alt: "Водоснабжение из колодца в частный дом в Московской области",
+              src: assets.userJointWaterproofing,
+              alt: "Гидроизоляция швов колодца после ремонта в Московской области",
             },
           ].map((asset, index) => (
             <div key={asset.src} className={cn("image-mask page-frame overflow-hidden rounded-[1.8rem]", index === 0 ? "md:col-span-2 min-h-[260px]" : "min-h-[240px]")}>
@@ -3066,7 +3059,7 @@ export function ServicesPage() {
         eyebrow="Основные услуги"
         title="Чистка и ремонт колодцев и дополнительные работы"
         description="Главные направления сайта — чистка и ремонт колодцев. Отдельно раскрываем гидроизоляцию швов, скобирование, углубление, донный щит и гравий. Дополнительно показываем копку колодцев, септики из ЖБ колец, дренажные колодцы и водоснабжение из колодца в дом."
-        image={assets.fieldCrew}
+        image={assets.userShaftWashing}
         price="8 направлений работ"
       />
       <ServicesPreview />
@@ -3088,7 +3081,7 @@ export function PricingPage() {
         eyebrow="Цены и условия"
         title="Цены на чистку и ремонт колодцев"
         description="На странице собраны стартовые цены по основным работам. Точная смета зависит от глубины шахты, состояния швов, дна, объёма загрязнений, материалов и дополнительных операций после осмотра объекта."
-        image={assets.repair}
+        image={assets.userShiftedRingRepair}
         price="Стартовые ориентиры"
         compact
       />
@@ -3112,7 +3105,7 @@ export function WorksPage() {
           eyebrow="Портфолио"
           title="Наши работы"
           description="Кейсы и реальные фотографии усиливают доверие лучше любых общих обещаний. Здесь видно задачу, процесс и результат по настоящим объектам."
-          image={assets.cleaning}
+          image={assets.userWellCleaningMain}
           price="Реальные объекты"
         />
       <CasesSection />
@@ -3254,7 +3247,7 @@ export function ContactsPage() {
         eyebrow="Связь и заявка"
         title="Контакты для чистки и ремонта колодцев"
         description="Позвоните, напишите в Telegram или MAX либо оставьте заявку. Если есть фото или видео колодца, сразу пришлите их вместе с адресом и описанием проблемы — так проще дать предварительную оценку и понять порядок работ."
-        image={assets.fieldCrew}
+        image={assets.userShaftDiagnostics}
         price={siteMeta.coverage}
         compact
       />
@@ -3435,7 +3428,7 @@ export function AboutPage() {
         eyebrow="О подходе"
         title="О компании"
         description="Здесь кратко объяснён подход к работе: сначала осмотр, затем понятное решение и после этого — аккуратное выполнение задачи без лишних услуг."
-        image={assets.hero}
+        image={assets.userShaftDiagnostics}
         price="Спокойный профессиональный тон"
       />
       <section className="py-12 lg:py-16">
@@ -3476,7 +3469,7 @@ export function FAQPage() {
           eyebrow="Ответы заранее"
           title="Частые вопросы"
           description="FAQ помогает снять тревогу заранее, понять порядок работ и быстрее принять спокойное решение без давления и недосказанности."
-          image={assets.repair}
+          image={assets.userShiftedRingRepair}
           price="Вопросы и ответы"
         />
       <FaqSection />
@@ -3843,7 +3836,7 @@ export function SeoAreasPage() {
         eyebrow="География работ"
         title="Города и районы Московской области"
         description="Принимаем заявки по городам и районам Московской области на чистку, ремонт, гидроизоляцию, скобирование и углубление колодцев. Дополнительные работы — копка колодцев, септики из ЖБ колец и водоснабжение из колодца в дом."
-        image={assets.hero}
+        image={assets.userShaftDiagnostics}
         price={`${allSeoLocations.length} направлений`}
         compact
       />
