@@ -289,7 +289,7 @@ export const services: ServiceItem[] = [
     description:
       "Организуем стабильную подачу воды из колодца в частный дом или дачу. Услуга подаётся как полноценное инженерное решение: от подбора схемы до запуска и проверки системы.",
     price: "от 2 500 ₽ / пог. м",
-    image: assets.waterSupply,
+    image: assets.userJointWaterproofing,
     highlights: [
       "Подводка воды в дом от 2 500 ₽ / пог. м",
       "Насос, автоматика, фильтрация и ввод в дом",
@@ -348,7 +348,7 @@ export const services: ServiceItem[] = [
     description:
       "Если нужен новый колодец на участке, важно не просто выкопать яму, а собрать рабочую шахту из нормальных колец, с доставкой, монтажом и понятным объяснением, что входит в цену. Работаем быстро, по факту и без лишней теории.",
     price: "от 8 500 ₽ за кольцо",
-    image: assets.wellDigging,
+    image: assets.userFinishedWell,
     highlights: [
       "Копка колодца из ЖБ колец под ключ",
       "Доставка колец, монтаж и сборка шахты",
@@ -407,7 +407,7 @@ export const services: ServiceItem[] = [
     description:
       "Если на участке нужен рабочий септик, мы собираем решение из ЖБ колец под ключ: выезд, копка, монтаж, материалы и комплектующие. Объясняем цену прямо: от 11 000 ₽ за кольцо Ø1 м, материалы по факту и конфигурации объекта.",
     price: "от 11 000 ₽ за кольцо Ø1 м",
-    image: assets.septic,
+    image: assets.userGravelBackfill,
     highlights: [
       "Септик из ЖБ колец под ключ для частного дома или дачи",
       "Материалы, доставка, копка и монтаж считаются прозрачно",
@@ -584,7 +584,7 @@ export const services: ServiceItem[] = [
     description:
       "Если участок сырой, подтапливает зону вокруг дома или дренаж уже забился, нужен не разговор про абстрактный комфорт, а нормальная рабочая схема отвода воды. Делаем дренажные колодцы под задачу участка и объясняем, что влияет на цену и срок.",
     price: "от 18 000 ₽",
-    image: assets.fieldCrew,
+    image: assets.userShaftWashing,
     highlights: [
       "Чистка дренажного колодца от 18 000 ₽",
       "Новый дренажный колодец под схему участка",
@@ -955,7 +955,7 @@ export const serviceGalleryItems: ServiceGalleryItem[] = [
     title: "Подводка воды в дом с настройкой автоматики",
     location: "Домодедово",
     result: "Собрали линию подачи воды из колодца и подключили дом к стабильной инженерной системе.",
-    image: assets.waterSupply,
+    image: assets.userJointWaterproofing,
   },
   {
     id: "water-02",
@@ -963,7 +963,7 @@ export const serviceGalleryItems: ServiceGalleryItem[] = [
     title: "Монтаж гидробака и узла давления для частного дома",
     location: "Мытищи",
     result: "Смонтировали оборудование в помещении и добились ровной подачи воды для бытовых сценариев.",
-    image: assets.galleryWaterSupplyDetail,
+    image: assets.userAfterWashing,
   },
   {
     id: "digging-01",
@@ -971,7 +971,7 @@ export const serviceGalleryItems: ServiceGalleryItem[] = [
     title: "Копка нового колодца с монтажом бетонных колец",
     location: "Дмитров",
     result: "Организовали копку и монтаж шахты из ЖБ колец на участке с понятной последовательностью работ и аккуратным результатом.",
-    image: assets.wellDigging,
+    image: assets.userFinishedWell,
   },
   {
     id: "septic-01",
@@ -979,7 +979,7 @@ export const serviceGalleryItems: ServiceGalleryItem[] = [
     title: "Монтаж септика из ЖБ колец под ключ",
     location: "Истра",
     result: "Подготовили котлован, смонтировали кольца и собрали септик с доставкой материалов и понятным составом работ.",
-    image: assets.septic,
+    image: assets.userGravelBackfill,
   },
 ];
 
@@ -1184,7 +1184,7 @@ export const citySeoLocations: LocalSeoLocation[] = [
   ["Электросталь", "Городской округ Электросталь"],
   ["Звенигород", "Городской округ Звенигород"],
 ].map(([name, officialName], index) =>
-  buildLocation(name, officialName, "city", index % 3 === 0 ? assets.cleaning : index % 3 === 1 ? assets.repair : assets.waterSupply, index),
+  buildLocation(name, officialName, "city", index % 3 === 0 ? assets.userWellCleaningMain : index % 3 === 1 ? assets.userShiftedRingRepair : assets.userJointWaterproofing, index),
 );
 
 export const districtSeoLocations: LocalSeoLocation[] = [
@@ -1203,7 +1203,7 @@ export const districtSeoLocations: LocalSeoLocation[] = [
   ["Шатура", "Муниципальный округ Шатура"],
   ["Шаховская", "Муниципальный округ Шаховская"],
 ].map(([name, officialName], index) =>
-  buildLocation(name, officialName, "district", index % 2 === 0 ? assets.hero : assets.waterSupply, index),
+  buildLocation(name, officialName, "district", index % 2 === 0 ? assets.userShaftDiagnostics : assets.userJointWaterproofing, index),
 );
 
 export const featuredSeoLocations = [
