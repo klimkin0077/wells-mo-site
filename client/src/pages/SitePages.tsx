@@ -2076,7 +2076,15 @@ function CasesSection() {
   );
 }
 
+const FEATURED_PRICING = [
+  { label: "Чистка колодца", note: "до 10 колец включительно", price: "14 000 ₽" },
+  { label: "Гидроизоляция шва", note: "локальная герметизация стандартного шва", price: "3 000 ₽" },
+  { label: "Скобирование колодца", note: "стяжка смещённых колец, 1 скоба", price: "1 500 ₽" },
+];
+
 function PricingSection() {
+  const [expanded, setExpanded] = useState(false);
+
   return (
     <section id="prices" className="home-flow-section mb-0 scroll-mt-20">
       <div className="container space-y-6">
@@ -2092,7 +2100,25 @@ function PricingSection() {
             Рассчитать под мой объект <ArrowRight className="size-4" />
           </RequestDialogButton>
         </div>
-        <div className="page-frame overflow-hidden rounded-[2rem] border-white/12 bg-[#0d131b]/96">
+
+        <div className="grid gap-4 sm:grid-cols-3">
+          {FEATURED_PRICING.map((item) => (
+            <div key={item.label} className="page-frame flex flex-col justify-between gap-4 rounded-[2rem] p-6">
+              <div>
+                <div className="text-base font-semibold text-white">{item.label}</div>
+                <div className="mt-2 text-sm leading-6 text-white/58">{item.note}</div>
+              </div>
+              <div className="font-heading text-3xl font-bold text-primary">{item.price}</div>
+            </div>
+          ))}
+        </div>
+
+        <div
+          className={cn(
+            "page-frame overflow-hidden rounded-[2rem] border-white/12 bg-[#0d131b]/96 transition-all duration-500",
+            expanded ? "max-h-[9999px] opacity-100" : "max-h-0 opacity-0 pointer-events-none",
+          )}
+        >
           <div className="divide-y divide-white/10">
             {pricing.map((item) => (
               <div key={item.service} className="grid gap-2 p-5 sm:grid-cols-[1fr_auto] sm:items-center">
@@ -2100,15 +2126,24 @@ function PricingSection() {
                   <div className="text-base font-semibold text-white">{item.service}</div>
                   <div className="mt-1 text-sm leading-6 text-white/58">{item.note}</div>
                 </div>
-                <div className="font-heading text-2xl font-bold text-primary sm:text-right">
-                  {item.price}
-                </div>
+                <div className="font-heading text-2xl font-bold text-primary sm:text-right">{item.price}</div>
               </div>
             ))}
           </div>
           <div className="border-t border-white/10 bg-white/[0.03] px-5 py-4 text-xs leading-6 text-white/50">
             Цена зависит от глубины, состояния шахты, количества швов и доступа к участку. Смету согласовываем до начала работ.
           </div>
+        </div>
+
+        <div className="flex justify-center">
+          <button
+            type="button"
+            onClick={() => setExpanded((v) => !v)}
+            className="inline-flex items-center gap-2 rounded-full border border-white/14 bg-white/5 px-6 py-3 text-sm font-semibold text-white/80 transition hover:border-white/25 hover:bg-white/9 hover:text-white"
+          >
+            {expanded ? "Скрыть" : "Показать все цены"}
+            <ChevronDown className={cn("size-4 transition-transform duration-300", expanded && "rotate-180")} />
+          </button>
         </div>
       </div>
     </section>
@@ -2442,14 +2477,14 @@ function HeroPageBlock({
           </div>
         </div>
         <div className={cn("page-frame overflow-hidden rounded-[2rem] p-3", compact && "lg:p-2.5")}>
-          <div className={cn("image-mask min-h-[340px] lg:min-h-[480px]", compact && "min-h-[280px] lg:min-h-[390px] xl:min-h-[420px]")}>
+          <div className={cn("aspect-[4/3] w-full overflow-hidden rounded-[1.4rem]", compact && "aspect-[16/9]")}>
             <img
               src={image}
               alt={`${title} в Московской области — WELLS-MO`}
               loading="eager"
               fetchPriority="high"
               decoding="async"
-              className="absolute inset-0 h-full w-full object-cover"
+              className="h-full w-full object-cover"
             />
           </div>
         </div>
@@ -2527,13 +2562,13 @@ function ServiceGallerySection({ defaultServiceSlug }: { defaultServiceSlug: str
 
             return (
               <article key={item.id} className="page-frame card-hover overflow-hidden rounded-[1.8rem]">
-                <div className="image-mask min-h-[220px] border-b border-white/8">
+                <div className="aspect-[4/3] w-full overflow-hidden border-b border-white/8">
                   <img
                   src={item.image}
                   alt={`${item.title} — ${serviceInfo?.title ?? "услуги WELLS-MO"} в Московской области`}
                   loading="lazy"
                   decoding="async"
-                  className="absolute inset-0 h-full w-full object-cover"
+                  className="h-full w-full object-cover"
                 />
                 </div>
                 <div className="space-y-4 p-5">
@@ -2595,9 +2630,6 @@ function ServiceContent({ slug }: { slug: string }) {
   }
 
   const related = services.filter((item) => item.slug !== slug).slice(0, 3);
-  const priorityPagesForService = priorityServiceCities
-    .map((city) => ({ city, page: findPriorityServiceCityPage(city.slug, slug) }))
-    .filter((item): item is { city: LocalSeoLocation; page: PriorityServiceCityPage } => Boolean(item.page));
 
   return (
     <SiteLayout>
@@ -2664,28 +2696,6 @@ function ServiceContent({ slug }: { slug: string }) {
       <ServiceGallerySection defaultServiceSlug={service.slug} />
 
       <FaqSection items={service.faq} />
-
-      <section className="py-12 lg:py-16">
-        <div className="container space-y-10">
-            <SectionHeading
-              eyebrow="Города выезда"
-              title={`${service.title} по основным направлениям Подмосковья`}
-              description="Выезжаем по основным направлениям Подмосковья и берём в работу объекты с разным состоянием шахты, воды и инженерной части."
-            />
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {priorityPagesForService.map(({ city, page }) => (
-              <Link key={page.path} href={page.path} className="glass-panel card-hover rounded-[1.8rem] p-6">
-                <div className="section-kicker">{city.officialName}</div>
-                <div className="mt-4 text-2xl font-semibold text-white">{page.title}</div>
-                <p className="mt-4 text-sm leading-7 text-white/62">{page.focus}</p>
-                  <div className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary">
-                    Открыть страницу по городу <ArrowRight className="size-4" />
-                  </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
 
       <section className="py-12 lg:py-16">
         <div className="container space-y-10">
