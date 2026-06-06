@@ -1866,13 +1866,13 @@ function ServicesPreview() {
               href={card.href}
               className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#0d131b] transition hover:border-primary/30"
             >
-              <div className="aspect-[16/9] w-full overflow-hidden">
+              <div className="relative aspect-[16/9] w-full overflow-hidden">
                 <img
                   src={card.image}
                   alt={card.title}
                   loading="lazy"
                   decoding="async"
-                  className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                  className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0d131b] via-[#0d131b]/40 to-transparent" />
               </div>
@@ -2257,7 +2257,7 @@ function TestimonialsSection() {
                     alt={"alt" in item ? item.alt : "Отзыв клиента"}
                     loading="lazy"
                     decoding="async"
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-contain"
                   />
                 </div>
                 <figcaption className="p-5">
