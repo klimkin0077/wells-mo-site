@@ -3509,15 +3509,24 @@ export function PrivacyPolicyPage() {
 
   return (
     <SiteLayout>
-      <section className="relative overflow-hidden pb-14 pt-16 lg:pb-20 lg:pt-24">
+      <section className="relative overflow-hidden pb-16 pt-16 lg:pb-24 lg:pt-24">
+        <div className="legal-grid-backdrop pointer-events-none absolute inset-0" />
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute left-1/2 top-[-6rem] size-[36rem] -translate-x-1/2 rounded-full bg-primary/14 blur-[120px]" />
-          <div className="absolute right-[-6rem] top-1/3 size-72 rounded-full bg-sky-400/10 blur-[100px]" />
+          <div className="absolute left-1/2 top-[-8rem] size-[42rem] -translate-x-1/2 rounded-full bg-primary/16 blur-[130px]" />
+          <div className="absolute right-[-8rem] top-1/3 size-80 rounded-full bg-sky-400/10 blur-[110px]" />
+          <div className="absolute left-[-6rem] bottom-[-4rem] size-72 rounded-full bg-emerald-400/8 blur-[110px]" />
         </div>
-        <div className="container relative max-w-3xl space-y-6 text-center">
-          <div className="reveal-rise mx-auto flex size-20 items-center justify-center rounded-[1.7rem] border border-primary/25 bg-primary/10 text-primary shadow-[0_0_60px_rgba(193,145,71,0.28)]">
-            <ShieldCheck className="size-10 animate-pulse" />
+
+        <div className="container relative max-w-3xl space-y-7 text-center">
+          <div className="relative mx-auto flex size-32 items-center justify-center">
+            <div className="legal-orbit-ring absolute inset-0 rounded-full border border-dashed border-primary/25" />
+            <div className="legal-orbit-ring-reverse absolute inset-3 rounded-full border border-primary/15" />
+            <div className="legal-orbit-glow absolute inset-6 rounded-full bg-primary/18 blur-xl" />
+            <div className="relative flex size-20 items-center justify-center rounded-[1.7rem] border border-primary/30 bg-[#11151d] text-primary shadow-[0_0_70px_rgba(193,145,71,0.32)]">
+              <ShieldCheck className="size-10" />
+            </div>
           </div>
+
           <div className="reveal-rise reveal-rise-delay-1 section-kicker">Документы</div>
           <h1 className="reveal-rise reveal-rise-delay-1 hero-title text-white">
             Политика <span className="text-gradient-metal">конфиденциальности</span>
@@ -3531,27 +3540,28 @@ export function PrivacyPolicyPage() {
         </div>
       </section>
 
-      <section className="py-12 lg:py-16">
-        <div className="container max-w-4xl">
-          <div className="grid gap-5 sm:grid-cols-2">
+      <section className="py-12 lg:py-20">
+        <div className="container max-w-3xl">
+          <div className="relative space-y-5">
+            <div className="absolute bottom-2 left-[1.85rem] top-2 hidden w-px bg-gradient-to-b from-primary/40 via-white/10 to-transparent sm:block" />
             {sections.map((item, index) => {
               const Icon = item.icon;
               return (
                 <div
                   key={item.title}
-                  className="glass-panel card-hover group relative overflow-hidden rounded-[1.8rem] p-6 transition duration-300 hover:-translate-y-1"
-                  style={{ animationDelay: `${index * 60}ms` }}
+                  className="reveal-rise group relative flex gap-5 rounded-[1.8rem] p-1 sm:p-2"
+                  style={{ animationDelay: `${index * 90}ms` }}
                 >
-                  <div className="absolute -right-6 -top-6 font-heading text-7xl font-bold text-white/[0.04] transition duration-300 group-hover:text-primary/10">
-                    {String(index + 1).padStart(2, "0")}
+                  <div className="relative z-10 flex size-[3.7rem] shrink-0 items-center justify-center rounded-[1.2rem] border border-primary/25 bg-[#11151d] text-primary shadow-[0_14px_36px_rgba(2,8,12,0.4)] transition duration-300 group-hover:border-primary/45 group-hover:shadow-[0_0_36px_rgba(193,145,71,0.3)]">
+                    <Icon className="size-6" />
                   </div>
-                  <div className="relative flex items-center gap-3">
-                    <div className="flex size-11 shrink-0 items-center justify-center rounded-[1rem] border border-primary/20 bg-primary/10 text-primary transition duration-300 group-hover:scale-110 group-hover:bg-primary/16">
-                      <Icon className="size-5" />
+                  <div className="glass-panel card-hover relative flex-1 overflow-hidden rounded-[1.8rem] p-6">
+                    <div className="absolute -right-4 -top-8 font-heading text-8xl font-bold text-white/[0.045] transition duration-300 group-hover:text-primary/10">
+                      {String(index + 1).padStart(2, "0")}
                     </div>
                     <h2 className="relative text-lg font-semibold text-white">{item.title}</h2>
+                    <p className="relative mt-3 text-sm leading-7 text-white/64">{item.text}</p>
                   </div>
-                  <p className="relative mt-4 text-sm leading-7 text-white/64">{item.text}</p>
                 </div>
               );
             })}

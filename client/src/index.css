@@ -414,6 +414,58 @@ html {
     color: rgba(243, 221, 187, 0.95);
   }
 
+  @keyframes spin-slow {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spin-slow-reverse {
+    to {
+      transform: rotate(-360deg);
+    }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% {
+      opacity: 0.55;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.08);
+    }
+  }
+
+  @keyframes grid-drift {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: 48px 48px;
+    }
+  }
+
+  .legal-grid-backdrop {
+    background-image: linear-gradient(rgba(193, 145, 71, 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(193, 145, 71, 0.08) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 60% 70% at 50% 30%, black 0%, transparent 75%);
+    animation: grid-drift 9s linear infinite;
+  }
+
+  .legal-orbit-ring {
+    animation: spin-slow 16s linear infinite;
+  }
+
+  .legal-orbit-ring-reverse {
+    animation: spin-slow-reverse 22s linear infinite;
+  }
+
+  .legal-orbit-glow {
+    animation: pulse-glow 3.4s ease-in-out infinite;
+  }
+
   .story-copy {
     color: rgba(226, 230, 235, 0.78);
     font-size: 0.98rem;
