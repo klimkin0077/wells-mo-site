@@ -157,6 +157,8 @@ const staticRouteLabels: Record<string, string> = {
   "/contacts": "Контакты",
   "/contacts/": "Контакты",
   "/kontakty": "Контакты",
+  "/privacy-policy": "Политика конфиденциальности",
+  "/privacy-policy/": "Политика конфиденциальности",
   "/faq": "FAQ",
   "/goroda": "Города",
   "/rajony-rabot": "Районы работ",
@@ -3492,14 +3494,21 @@ export function PrivacyPolicyPage() {
 
   return (
     <SiteLayout>
-      <HeroPageBlock
-        eyebrow="Документы"
-        title="Политика конфиденциальности"
-        description="Как обрабатываются персональные данные и используются файлы cookie на сайте WELLS-MO."
-        image={assets.userShaftDiagnostics}
-        price="Обновлено в 2026 году"
-        compact
-      />
+      <section className="pb-10 pt-14 lg:pb-12 lg:pt-20">
+        <div className="container max-w-3xl space-y-5">
+          <div className="flex size-16 items-center justify-center rounded-[1.4rem] border border-primary/22 bg-primary/10 text-primary">
+            <ShieldCheck className="size-8" />
+          </div>
+          <div className="section-kicker">Документы</div>
+          <h1 className="hero-title text-white">Политика конфиденциальности</h1>
+          <p className="max-w-2xl text-lg leading-8 text-white/68">
+            Как обрабатываются персональные данные и используются файлы cookie на сайте WELLS-MO.
+          </p>
+          <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-5 py-3 text-sm font-semibold text-primary">
+            Обновлено в 2026 году
+          </div>
+        </div>
+      </section>
       <section className="py-12 lg:py-16">
         <div className="container max-w-3xl space-y-8">
           {sections.map((item) => (
