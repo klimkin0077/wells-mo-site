@@ -11,14 +11,21 @@ import {
   ArrowUp,
   Building2,
   ChevronDown,
+  Cookie,
+  Database,
   Droplets,
+  FileText,
   Hammer,
+  Lock,
   MapPin,
   Menu,
   MoveDown,
   Phone,
+  RefreshCw,
+  Share2,
   ShieldCheck,
   Sparkles,
+  UserCheck,
   Wrench,
   X,
 } from "lucide-react";
@@ -3459,64 +3466,96 @@ export function PrivacyPolicyPage() {
 
   const sections = [
     {
-      title: "1. Общие положения",
+      title: "Общие положения",
+      icon: FileText,
       text: `Настоящая политика определяет порядок обработки персональных данных и иной информации пользователей сайта wells-mo.ru (далее — «Сайт»), принадлежащего ${siteMeta.name} (далее — «Оператор»). Используя Сайт и оставляя заявку, пользователь подтверждает согласие с условиями настоящей политики.`,
     },
     {
-      title: "2. Какие данные собираются",
+      title: "Какие данные собираются",
+      icon: Database,
       text: "При заполнении формы заявки на Сайте Оператор может собирать: имя, номер телефона, адрес или ориентир объекта, описание задачи и иные данные, указанные пользователем добровольно. Также Сайт автоматически собирает технические данные: IP-адрес, тип устройства и браузера, файлы cookie, данные счётчиков посещаемости (Яндекс.Метрика).",
     },
     {
-      title: "3. Цели обработки данных",
+      title: "Цели обработки данных",
+      icon: UserCheck,
       text: "Персональные данные обрабатываются исключительно для связи с пользователем по поданной заявке, расчёта стоимости работ, согласования выезда и оказания услуг по чистке и ремонту колодцев. Технические данные используются для анализа посещаемости и улучшения работы Сайта.",
     },
     {
-      title: "4. Передача данных третьим лицам",
+      title: "Передача данных третьим лицам",
+      icon: Share2,
       text: "Персональные данные не передаются третьим лицам, за исключением случаев, предусмотренных законодательством РФ, и сервисов, технически обеспечивающих работу формы обратной связи (сервис отправки заявок на электронную почту).",
     },
     {
-      title: "5. Файлы cookie",
+      title: "Файлы cookie",
+      icon: Cookie,
       text: "Сайт использует файлы cookie и сервис Яндекс.Метрика для анализа посещаемости и улучшения качества контента. Продолжая использовать Сайт, пользователь соглашается на использование cookie. Cookie можно отключить в настройках браузера — это не помешает основной работе Сайта.",
     },
     {
-      title: "6. Хранение и защита данных",
+      title: "Хранение и защита данных",
+      icon: Lock,
       text: "Оператор принимает разумные организационные и технические меры для защиты персональных данных от несанкционированного доступа, изменения или удаления. Данные хранятся не дольше, чем это необходимо для целей обработки заявки.",
     },
     {
-      title: "7. Права пользователя",
+      title: "Права пользователя",
+      icon: ShieldCheck,
       text: `Пользователь имеет право запросить уточнение, блокировку или удаление своих персональных данных, а также отозвать согласие на их обработку, написав на ${siteMeta.email} или позвонив по телефону ${siteMeta.phone}.`,
     },
     {
-      title: "8. Изменение политики",
+      title: "Изменение политики",
+      icon: RefreshCw,
       text: "Оператор может обновлять настоящую политику. Действующая редакция всегда доступна на этой странице.",
     },
   ];
 
   return (
     <SiteLayout>
-      <section className="pb-10 pt-14 lg:pb-12 lg:pt-20">
-        <div className="container max-w-3xl space-y-5">
-          <div className="flex size-16 items-center justify-center rounded-[1.4rem] border border-primary/22 bg-primary/10 text-primary">
-            <ShieldCheck className="size-8" />
+      <section className="relative overflow-hidden pb-14 pt-16 lg:pb-20 lg:pt-24">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute left-1/2 top-[-6rem] size-[36rem] -translate-x-1/2 rounded-full bg-primary/14 blur-[120px]" />
+          <div className="absolute right-[-6rem] top-1/3 size-72 rounded-full bg-sky-400/10 blur-[100px]" />
+        </div>
+        <div className="container relative max-w-3xl space-y-6 text-center">
+          <div className="reveal-rise mx-auto flex size-20 items-center justify-center rounded-[1.7rem] border border-primary/25 bg-primary/10 text-primary shadow-[0_0_60px_rgba(193,145,71,0.28)]">
+            <ShieldCheck className="size-10 animate-pulse" />
           </div>
-          <div className="section-kicker">Документы</div>
-          <h1 className="hero-title text-white">Политика конфиденциальности</h1>
-          <p className="max-w-2xl text-lg leading-8 text-white/68">
+          <div className="reveal-rise reveal-rise-delay-1 section-kicker">Документы</div>
+          <h1 className="reveal-rise reveal-rise-delay-1 hero-title text-white">
+            Политика <span className="text-gradient-metal">конфиденциальности</span>
+          </h1>
+          <p className="reveal-rise reveal-rise-delay-2 mx-auto max-w-2xl text-lg leading-8 text-white/68">
             Как обрабатываются персональные данные и используются файлы cookie на сайте WELLS-MO.
           </p>
-          <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-5 py-3 text-sm font-semibold text-primary">
+          <div className="reveal-rise reveal-rise-delay-2 inline-flex items-center justify-center rounded-full border border-primary/20 bg-primary/10 px-5 py-3 text-sm font-semibold text-primary">
             Обновлено в 2026 году
           </div>
         </div>
       </section>
+
       <section className="py-12 lg:py-16">
-        <div className="container max-w-3xl space-y-8">
-          {sections.map((item) => (
-            <div key={item.title} className="page-frame rounded-[2rem] p-6 lg:p-8">
-              <h2 className="text-xl font-semibold text-white">{item.title}</h2>
-              <p className="story-copy mt-4">{item.text}</p>
-            </div>
-          ))}
+        <div className="container max-w-4xl">
+          <div className="grid gap-5 sm:grid-cols-2">
+            {sections.map((item, index) => {
+              const Icon = item.icon;
+              return (
+                <div
+                  key={item.title}
+                  className="glass-panel card-hover group relative overflow-hidden rounded-[1.8rem] p-6 transition duration-300 hover:-translate-y-1"
+                  style={{ animationDelay: `${index * 60}ms` }}
+                >
+                  <div className="absolute -right-6 -top-6 font-heading text-7xl font-bold text-white/[0.04] transition duration-300 group-hover:text-primary/10">
+                    {String(index + 1).padStart(2, "0")}
+                  </div>
+                  <div className="relative flex items-center gap-3">
+                    <div className="flex size-11 shrink-0 items-center justify-center rounded-[1rem] border border-primary/20 bg-primary/10 text-primary transition duration-300 group-hover:scale-110 group-hover:bg-primary/16">
+                      <Icon className="size-5" />
+                    </div>
+                    <h2 className="relative text-lg font-semibold text-white">{item.title}</h2>
+                  </div>
+                  <p className="relative mt-4 text-sm leading-7 text-white/64">{item.text}</p>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </section>
     </SiteLayout>
