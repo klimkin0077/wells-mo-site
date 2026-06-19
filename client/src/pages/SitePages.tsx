@@ -3528,7 +3528,7 @@ export function PrivacyPolicyPage() {
           </div>
 
           <div className="reveal-rise reveal-rise-delay-1 section-kicker">Документы</div>
-          <h1 className="reveal-rise reveal-rise-delay-1 hero-title text-white">
+          <h1 className="reveal-rise reveal-rise-delay-1 text-balance text-[clamp(2.3rem,6.2vw,4.2rem)] font-bold leading-[1.05] tracking-[-0.03em] text-white">
             Политика <span className="text-gradient-metal">конфиденциальности</span>
           </h1>
           <p className="reveal-rise reveal-rise-delay-2 mx-auto max-w-2xl text-lg leading-8 text-white/68">
