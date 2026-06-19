@@ -1232,6 +1232,13 @@ function TaskDiscussionDialogProvider({ children }: { children: ReactNode }) {
                   >
                     {submitState === "loading" ? "Отправляем заявку..." : "Отправить заявку"}
                   </button>
+                  <p className="text-xs leading-5 text-white/45">
+                    Отправляя заявку, вы соглашаетесь с{" "}
+                    <Link href="/privacy-policy/" className="text-primary/85 underline-offset-2 hover:underline">
+                      политикой конфиденциальности
+                    </Link>{" "}
+                    и обработкой персональных данных.
+                  </p>
                   <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-5">
                     <button type="button" onClick={handleCopyText} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/12 bg-white/4 px-4 py-3 text-sm font-semibold text-white/90 transition hover:border-primary/40 hover:bg-white/8">Скопировать текст</button>
                     <button type="button" onClick={handleOpenTelegram} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/12 bg-white/4 px-4 py-3 text-sm font-semibold text-white/90 transition hover:border-primary/40 hover:bg-white/8">Telegram</button>
@@ -1604,7 +1611,62 @@ function Footer() {
           </div>
         </div>
       </div>
+      <div className="container mt-8 border-t border-white/8 pt-5">
+        <Link href="/privacy-policy/" className="text-xs text-white/45 transition hover:text-white/70">
+          Политика конфиденциальности
+        </Link>
+      </div>
     </footer>
+  );
+}
+
+const COOKIE_CONSENT_KEY = "wells-mo-cookie-consent";
+
+function CookieConsentBanner() {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    try {
+      if (!window.localStorage.getItem(COOKIE_CONSENT_KEY)) {
+        setVisible(true);
+      }
+    } catch {
+      setVisible(true);
+    }
+  }, []);
+
+  const accept = () => {
+    try {
+      window.localStorage.setItem(COOKIE_CONSENT_KEY, "accepted");
+    } catch {
+      // ignore storage errors (private mode etc.)
+    }
+    setVisible(false);
+  };
+
+  if (!visible) {
+    return null;
+  }
+
+  return (
+    <div className="fixed inset-x-0 bottom-0 z-[60] px-4 pb-[calc(env(safe-area-inset-bottom)+1rem)] sm:px-6">
+      <div className="mx-auto flex max-w-3xl flex-col gap-3 rounded-[1.6rem] border border-white/12 bg-[#0d131b]/97 p-5 shadow-[0_28px_80px_rgba(2,8,12,0.45)] sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-sm leading-6 text-white/76">
+          Сайт использует файлы cookie для аналитики и улучшения работы. Продолжая пользоваться сайтом, вы соглашаетесь с{" "}
+          <Link href="/privacy-policy/" className="text-primary underline-offset-2 hover:underline">
+            политикой конфиденциальности
+          </Link>
+          .
+        </p>
+        <button
+          type="button"
+          onClick={accept}
+          className="inline-flex shrink-0 items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition hover:translate-y-[-1px]"
+        >
+          Принять
+        </button>
+      </div>
+    </div>
   );
 }
 
@@ -1624,6 +1686,7 @@ function SiteLayout({ children }: { children: ReactNode }) {
         <ScrollTopFloatingButton />
         <MobileStickyBar />
         <Footer />
+        <CookieConsentBanner />
       </div>
     </TaskDiscussionDialogProvider>
   );
@@ -3312,6 +3375,13 @@ export function ContactsPage() {
                 {submitState === "loading" ? "Отправляем заявку..." : "Отправить заявку"}
                 <ArrowRight className="size-4" />
               </button>
+              <p className="text-xs leading-5 text-white/45">
+                Отправляя заявку, вы соглашаетесь с{" "}
+                <Link href="/privacy-policy/" className="text-primary/85 underline-offset-2 hover:underline">
+                  политикой конфиденциальности
+                </Link>{" "}
+                и обработкой персональных данных.
+              </p>
               <p className="text-sm leading-7 text-white/45">
                 Для быстрого контакта можно сразу{" "}                <a
                   href={siteMeta.phoneHref}
@@ -3375,6 +3445,71 @@ export function AboutPage() {
         </div>
       </section>
       <CtaSection />
+    </SiteLayout>
+  );
+}
+
+export function PrivacyPolicyPage() {
+  usePageSeo(
+    `Политика конфиденциальности — ${siteMeta.name}`,
+    "Политика обработки персональных данных и использования cookie на сайте WELLS-MO.",
+  );
+
+  const sections = [
+    {
+      title: "1. Общие положения",
+      text: `Настоящая политика определяет порядок обработки персональных данных и иной информации пользователей сайта wells-mo.ru (далее — «Сайт»), принадлежащего ${siteMeta.name} (далее — «Оператор»). Используя Сайт и оставляя заявку, пользователь подтверждает согласие с условиями настоящей политики.`,
+    },
+    {
+      title: "2. Какие данные собираются",
+      text: "При заполнении формы заявки на Сайте Оператор может собирать: имя, номер телефона, адрес или ориентир объекта, описание задачи и иные данные, указанные пользователем добровольно. Также Сайт автоматически собирает технические данные: IP-адрес, тип устройства и браузера, файлы cookie, данные счётчиков посещаемости (Яндекс.Метрика).",
+    },
+    {
+      title: "3. Цели обработки данных",
+      text: "Персональные данные обрабатываются исключительно для связи с пользователем по поданной заявке, расчёта стоимости работ, согласования выезда и оказания услуг по чистке и ремонту колодцев. Технические данные используются для анализа посещаемости и улучшения работы Сайта.",
+    },
+    {
+      title: "4. Передача данных третьим лицам",
+      text: "Персональные данные не передаются третьим лицам, за исключением случаев, предусмотренных законодательством РФ, и сервисов, технически обеспечивающих работу формы обратной связи (сервис отправки заявок на электронную почту).",
+    },
+    {
+      title: "5. Файлы cookie",
+      text: "Сайт использует файлы cookie и сервис Яндекс.Метрика для анализа посещаемости и улучшения качества контента. Продолжая использовать Сайт, пользователь соглашается на использование cookie. Cookie можно отключить в настройках браузера — это не помешает основной работе Сайта.",
+    },
+    {
+      title: "6. Хранение и защита данных",
+      text: "Оператор принимает разумные организационные и технические меры для защиты персональных данных от несанкционированного доступа, изменения или удаления. Данные хранятся не дольше, чем это необходимо для целей обработки заявки.",
+    },
+    {
+      title: "7. Права пользователя",
+      text: `Пользователь имеет право запросить уточнение, блокировку или удаление своих персональных данных, а также отозвать согласие на их обработку, написав на ${siteMeta.email} или позвонив по телефону ${siteMeta.phone}.`,
+    },
+    {
+      title: "8. Изменение политики",
+      text: "Оператор может обновлять настоящую политику. Действующая редакция всегда доступна на этой странице.",
+    },
+  ];
+
+  return (
+    <SiteLayout>
+      <HeroPageBlock
+        eyebrow="Документы"
+        title="Политика конфиденциальности"
+        description="Как обрабатываются персональные данные и используются файлы cookie на сайте WELLS-MO."
+        image={assets.userShaftDiagnostics}
+        price="Обновлено в 2026 году"
+        compact
+      />
+      <section className="py-12 lg:py-16">
+        <div className="container max-w-3xl space-y-8">
+          {sections.map((item) => (
+            <div key={item.title} className="page-frame rounded-[2rem] p-6 lg:p-8">
+              <h2 className="text-xl font-semibold text-white">{item.title}</h2>
+              <p className="story-copy mt-4">{item.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
     </SiteLayout>
   );
 }

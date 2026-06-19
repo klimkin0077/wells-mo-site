@@ -25,6 +25,7 @@ import {
   LocalCityServicePage,
   LocalDistrictPage,
   PricingPage,
+  PrivacyPolicyPage,
   RepairPage,
   SeoAreasPage,
   ServicesPage,
@@ -99,6 +100,8 @@ function SiteRouter() {
       <Route path="/kontakty/" component={ContactsPage} />
       <Route path="/contacts" component={ContactsPage} />
       <Route path="/contacts/" component={ContactsPage} />
+      <Route path="/privacy-policy" component={PrivacyPolicyPage} />
+      <Route path="/privacy-policy/" component={PrivacyPolicyPage} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
